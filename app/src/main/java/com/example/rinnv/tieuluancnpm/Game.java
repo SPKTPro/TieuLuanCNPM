@@ -192,6 +192,10 @@ public class Game extends AppCompatActivity {
 
         word1 = listWord.get(x1);
         word2 = listWord.get(x2);
+
+
+        //typeQuiz=1, Quiz Anh Viet
+        //typeQuiz=2, Quiz Viet Anh
         if (typeQuiz == 1) {
 
             QuizQuestion = word1.getWord_Title();
@@ -260,6 +264,10 @@ public class Game extends AppCompatActivity {
     protected int LaysoRandom(ArrayList<Word> listWord, int mode) {
         // mode 1 lay random xem nut nao se luu gia tri dung, nut nao luu gia tri sai
         // mode 2 lay random cac tu trong listWord
+
+
+
+
         if (mode == 1) {
             int x = listWord.size() - 1;
             int result = 0 + (int) (Math.random() * ((x) + 1));
