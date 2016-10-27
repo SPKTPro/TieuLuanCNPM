@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return "Main Topic";
                 case 1:
-                    return "Remenber word";
+                    return "Remember word";
 
             }
             return null;
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             int tab = getArguments().getInt(ARG_SECTION_NUMBER);
             if (tab == 1) {
-                final ListView listView_Maintopic = (ListView) rootView.findViewById(R.id.list_item);
+                final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
                 Adapter_Maintopic adapterMaintopic = new Adapter_Maintopic(getContext(), db.getListMainTopic());
                 listView_Maintopic.setAdapter(adapterMaintopic);
                 listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -259,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
                 if (tab == 2) {
-                    final ListView listView_Maintopic = (ListView) rootView.findViewById(R.id.list_item);
+                    final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
                     Adapter_Word adapterMaintopic = new Adapter_Word(getContext(), db.getLisCheckedtWord());
                     listView_Maintopic.setAdapter(adapterMaintopic);
                     listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {

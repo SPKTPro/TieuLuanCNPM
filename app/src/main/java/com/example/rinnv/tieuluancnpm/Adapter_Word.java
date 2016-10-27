@@ -11,6 +11,7 @@ import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,19 +49,19 @@ public class Adapter_Word extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
 
-        LinearLayout Layout = (LinearLayout) itemInflater.inflate(R.layout.item_layout_word,
+        RelativeLayout Layout = (RelativeLayout) itemInflater.inflate(R.layout.item_layout_word,
                 parent,
                 false);
 
         TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
-
+        TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
 
 
         final Word item = items.get(position);
-        titleView.setText(item.getWord_Title() + ":" + item.getWord_Title_VN() );
-        titleView.setTextSize(20);
+        titleView.setText(item.getWord_Title() );
+        titleView2.setText(item.getWord_Title_VN() );
         CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
         checkBox.setFocusable(false);
         checkBox.setFocusableInTouchMode(false);

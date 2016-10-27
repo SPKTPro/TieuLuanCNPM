@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -87,7 +88,7 @@ public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnI
 
 
 
-        final ListView listView_Word = (ListView) findViewById(R.id.list_item) ;
+        final GridView listView_Word = (GridView) findViewById(R.id.list_item) ;
         listView_Word.setAdapter(new Adapter_Word(this,db.getListWord(SaveObject.saveTopic)));
 
         listView_Word.setOnItemClickListener(new AdapterView.OnItemClickListener() {

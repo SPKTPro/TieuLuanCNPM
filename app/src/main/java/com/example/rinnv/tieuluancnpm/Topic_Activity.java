@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -32,7 +33,7 @@ public class Topic_Activity extends AppCompatActivity {
 
 
         SQLiteDataController db = new SQLiteDataController(this);
-        final ListView listView_Topic = (ListView) findViewById(R.id.list_item);
+        final GridView listView_Topic = (GridView) findViewById(R.id.list_item);
         Adapter_Topic adapter_topic = new Adapter_Topic(this,db.getListTopic(Maintopic_choosen));
         listView_Topic.setAdapter(adapter_topic);
 

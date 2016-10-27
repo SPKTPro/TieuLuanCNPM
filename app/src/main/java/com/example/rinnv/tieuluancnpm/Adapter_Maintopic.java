@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,18 +46,17 @@ public class Adapter_Maintopic extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LinearLayout Layout = (LinearLayout)itemInflater.inflate(R.layout.item_layout,
-                parent,
-                false);
+        RelativeLayout Layout = (RelativeLayout)itemInflater.inflate(R.layout.item_layout,parent,false);
+        ImageView imageView = (ImageView) Layout.findViewById(R.id.imageView);
 
-        TextView titleView  = (TextView)Layout.findViewById(R.id.itemtitle);
+        TextView titleView2  = (TextView)Layout.findViewById(R.id.itemtitle2);
         ProgressBar progressBar = (ProgressBar) Layout.findViewById(R.id.seekBar);
-
+        TextView titleView  = (TextView)Layout.findViewById(R.id.itemtitle);
 
         Maintopic item = items.get(position);
-        titleView.setText(item.getMaintopic_Tittle() + " - " + item.getMaintopic_Tittle_VN());
-        titleView.setTextSize(20);
-
+        titleView.setText(item.getMaintopic_Tittle());
+        titleView2.setText(item.getMaintopic_Tittle_VN());
+        imageView.setImageResource(R.drawable.life);
         progressBar.setMax(100);
         progressBar.setProgress(item.getMaintopic_Process()+ 50);
 
