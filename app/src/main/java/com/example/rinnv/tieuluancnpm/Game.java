@@ -31,19 +31,6 @@ public class Game extends AppCompatActivity {
     // startQuiz =0 la chua ban nut Start, = 1 la da ban nut
 
 
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        Log.d("Tag", "onKeyDown: ");
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,7 +193,7 @@ public class Game extends AppCompatActivity {
             dialog.show();
         }catch (Exception e)
         {
-            Log.d("Tag", "end_Game: "+e.getMessage());
+
         }
 
     }
