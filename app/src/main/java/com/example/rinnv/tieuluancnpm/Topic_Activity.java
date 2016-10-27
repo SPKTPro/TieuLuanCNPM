@@ -84,6 +84,9 @@ public class Topic_Activity extends AppCompatActivity {
             public void onClick(View v) {
                 //TODO something when floating action menu third item clicked
 
+                Intent intent = new Intent(Topic_Activity.this, Test.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 

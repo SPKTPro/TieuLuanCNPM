@@ -100,6 +100,7 @@ public class Game extends AppCompatActivity {
         circularProgressBar.setSubTitle("Score");
 
     }
+
     private void StartGame() {
         final Thread ThreadGame = new Thread(new Runnable() {
             @Override
@@ -108,11 +109,11 @@ public class Game extends AppCompatActivity {
                     for (count = 100; count >= 0; count--) {
 
                         try {
-                            if (QuizLevel*10 < Score)                            {
+                            if (QuizLevel * 10 < Score) {
                                 QuizLevel++;
 
                             }
-                                Thread.sleep(timeDelay); //every 1sec
+                            Thread.sleep(timeDelay); //every 1sec
                             // here you check for the result if correct
                             //i use count == 5 as an example, uncomment to see
 
@@ -132,7 +133,6 @@ public class Game extends AppCompatActivity {
                         } catch (Exception i) {
                             i.printStackTrace();
                         }
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -160,6 +160,7 @@ public class Game extends AppCompatActivity {
         );
         ThreadGame.start();
     }
+
     public void end_Game(int score) {
 
 
@@ -183,6 +184,7 @@ public class Game extends AppCompatActivity {
         dialog.show();
 
     }
+
     public void CreatQuiz() {
         int x1 = LaysoRandom(listWord, 1);
         int x2 = 0;
@@ -227,6 +229,7 @@ public class Game extends AppCompatActivity {
         StartGame();
 
     }
+
     private void SetControlInterface() {
         question.setText(QuizQuestion);
         btn1.setText(Answer1);
@@ -235,6 +238,7 @@ public class Game extends AppCompatActivity {
         circularProgressBar.setTitle(Score + "");
         circularProgressBar.setSubTitle("Score");
     }
+
     private int WaitForClic() {
         int returnValue = 0;
         if (Clicked == 1) {
@@ -261,11 +265,10 @@ public class Game extends AppCompatActivity {
 
         return returnValue;
     }
+
     protected int LaysoRandom(ArrayList<Word> listWord, int mode) {
         // mode 1 lay random xem nut nao se luu gia tri dung, nut nao luu gia tri sai
         // mode 2 lay random cac tu trong listWord
-
-
 
 
         if (mode == 1) {
