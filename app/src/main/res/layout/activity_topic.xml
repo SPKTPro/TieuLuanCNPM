@@ -79,7 +79,7 @@
             android:id="@+id/material_design_floating_action_menu_item2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_upload_you_tube"
+            android:src="@android:drawable/ic_popup_disk_full"
             fab:fab_label="Game Viet - Anh"
             fab:fab_size="mini" />
 
@@ -90,5 +90,15 @@
             android:src="@drawable/fab_add"
             fab:fab_label="Game test chinh ta"
             fab:fab_size="mini" />
+
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/material_design_floating_action_menu_item4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_label="Them Chu De"
+            fab:fab_size="mini" />
+
     </com.github.clans.fab.FloatingActionMenu>
 </android.support.design.widget.CoordinatorLayout>

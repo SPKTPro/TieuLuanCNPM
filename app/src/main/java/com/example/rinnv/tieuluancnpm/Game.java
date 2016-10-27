@@ -24,8 +24,10 @@ public class Game extends AppCompatActivity {
     private TextView question;
     private CircularProgressBar circularProgressBar;
     private String QuizQuestion, Answer1, Answer2, RightAnswer;
-    private int count, QuizID, QuizNow, typeQuiz, timeDelay, QuizLevel;
+    private int count, QuizID, QuizNow, typeQuiz, timeDelay, QuizLevel, startQuiz;
     //typeQuiz=1, Quiz Anh-Viet, typeQuiz=2 Quiz Viet Anh
+    // bien startQuiz dung de ngan tinh trang nhan nut start nhieu lan
+    // startQuiz =0 la chua ban nut Start, = 1 la da ban nut
 
 
     @Override
@@ -43,6 +45,7 @@ public class Game extends AppCompatActivity {
         // level = topic thì lấy tat ca cac từ trong topic đó,
         // level = maintopic thi lay tat ca cac tu trong maintopic do
 
+        startQuiz = 0;
         if (level.equals("maintopic")) {
             Maintopic m = SaveObject.saveMaintopic;
             listWord = db.getListWord(m);
@@ -80,12 +83,17 @@ public class Game extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QuizID = 1;
-                QuizNow = 0;
-                Score = 0;
-                timeDelay = 50;
-                QuizLevel = 0;
-                CreatQuiz();
+                if (startQuiz == 0) {
+                    QuizID = 1;
+                    QuizNow = 0;
+                    Score = 0;
+                    timeDelay = 50;
+                    QuizLevel = 0;
+                    startQuiz = 1;
+                    CreatQuiz();
+                } else {
+
+                }
             }
         });
 
@@ -162,7 +170,7 @@ public class Game extends AppCompatActivity {
     }
 
     public void end_Game(int score) {
-
+        startQuiz = 0;
 
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.score_final_layout);

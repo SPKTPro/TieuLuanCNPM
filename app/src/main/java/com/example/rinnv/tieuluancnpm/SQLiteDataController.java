@@ -309,4 +309,33 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    public boolean insertTopic(String Topic_Title,String Topic_Title_VN,int MainTopic_Id) {
+        boolean result = false;
+        try {
+
+            openDataBase();
+            ContentValues values = new ContentValues();
+
+            values.put("Topic_Title", Topic_Title);
+            values.put("Topic_Title_VN", Topic_Title_VN);
+            values.put("MainTopic_Id",MainTopic_Id);
+            values.put("Topic_Process", 0);
+
+            long rs = database.insert("Topic", null, values);
+
+            if (rs > 0) {
+                result = true;
+                Log.d("Tag", "insertMaintopic: compele");
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return result;
+    }
+
 }

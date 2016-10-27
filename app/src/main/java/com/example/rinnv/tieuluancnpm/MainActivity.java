@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private static SQLiteDataController db;
     final Context context = this;
-    public static boolean allowAInsert;
     static View rootView;
     private static GridView listView_Maintopic;
     private static Adapter_Maintopic adapterMaintopic;
@@ -124,12 +123,7 @@ public class MainActivity extends AppCompatActivity {
                                                 .setActionTextColor(Color.RED)
                                                 .show();
 
-                                        if (allowAInsert) {
-                                            /*db.insertMaintopic(Maintopic_EN.getText().toString().trim(),
-                                                    Maintopic_VN.getText().toString().trim());*/
 
-                                            Toast.makeText(context, "Insert Complete", Toast.LENGTH_SHORT).show();
-                                        }
                                     }
                                 })
                         .setNegativeButton("Cancel",
