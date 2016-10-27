@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
+        // test
         createDB();
         db = new SQLiteDataController(this);
 
