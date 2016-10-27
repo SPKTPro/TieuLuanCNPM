@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
+
     tools:context="com.example.rinnv.tieuluancnpm.Topic_Activity">
 
     <android.support.design.widget.AppBarLayout

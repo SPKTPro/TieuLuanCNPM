@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class Adapter_Topic extends BaseAdapter {
     private ArrayList<Topic> items;
     private LayoutInflater itemInflater;
+    private Context context;
 
     @Override
     public int getCount() {
@@ -28,6 +29,7 @@ public class Adapter_Topic extends BaseAdapter {
 
     public Adapter_Topic(Context c, ArrayList<Topic> the_Items)
     {
+        context = c;
         items = the_Items;
         itemInflater = LayoutInflater.from(c);
     }
@@ -56,7 +58,13 @@ public class Adapter_Topic extends BaseAdapter {
         Topic item = items.get(position);
         titleView.setText(item.getTopic_Title());
         titleView2.setText(item.getTopic_Title_VN());
-        imageView.setImageResource(R.drawable.life);
+        String s= item.getTopic_Title().toLowerCase();
+        int imageResource = Layout.getResources().getIdentifier(s, "drawable",context.getPackageName());
+        if(imageResource==0) {
+            imageView.setImageResource(R.drawable.newtopic);
+        }
+        else
+            imageView.setImageResource(imageResource);
 
         progressBar.setMax(100);
         progressBar.setProgress(item.getTopic_Process()+ 50);

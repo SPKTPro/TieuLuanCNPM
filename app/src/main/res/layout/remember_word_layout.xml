@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:weightSum="2"
+    android:padding="10dp"
+    android:background="@drawable/word_bg">
+
+
+    <TextView
+        android:id="@+id/itemtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:text="English"
+        android:layout_marginStart="25dp"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/colorPrimaryDark" />
+
+    <TextView
+        android:text="VietNamese"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemtitle2"
+        android:textSize="15sp"
+        android:layout_below="@+id/itemtitle"
+        android:layout_alignStart="@+id/itemtitle"
+        android:layout_marginTop="3dp" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/clock"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/checkBox"
+        android:id="@+id/imageView2"
+        android:layout_marginTop="3dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:layout_marginEnd="17dp"
+        android:checked="false"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>

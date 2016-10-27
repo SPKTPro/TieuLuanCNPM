@@ -261,8 +261,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 if (tab == 2) {
                     final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
-                    Adapter_Word adapterMaintopic = new Adapter_Word(getContext(), db.getLisCheckedtWord());
-                    listView_Maintopic.setAdapter(adapterMaintopic);
+                    Adapter_Remember adapterRemember = new Adapter_Remember(getContext(), db.getLisCheckedtWord());
+                    listView_Maintopic.setAdapter(adapterRemember);
                     listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
