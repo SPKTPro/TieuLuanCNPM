@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,6 +30,19 @@ public class Game extends AppCompatActivity {
     // bien startQuiz dung de ngan tinh trang nhan nut start nhieu lan
     // startQuiz =0 la chua ban nut Start, = 1 la da ban nut
 
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        Log.d("Tag", "onKeyDown: ");
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +114,6 @@ public class Game extends AppCompatActivity {
     }
 
     private void PrepareforGame() {
-        Log.d("Tag", "PrepareforGame: 123");
         question.setText("Question is here");
         btn1.setText("Answer 1 is here");
         btn2.setText("Answer 2 is here");
@@ -170,26 +183,31 @@ public class Game extends AppCompatActivity {
     }
 
     public void end_Game(int score) {
-        startQuiz = 0;
+        try {
+            startQuiz = 0;
 
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.score_final_layout);
-        dialog.setTitle("Score");
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.score_final_layout);
+            dialog.setTitle("Score");
 
-        TextView text = (TextView) dialog.findViewById(R.id.textView);
-        text.setText(Score + " Score");
-        text.setTextSize(20);
-        Button dialogButton = (Button) dialog.findViewById(R.id.button);
-        // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Score = 0;
-                PrepareforGame();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+            TextView text = (TextView) dialog.findViewById(R.id.textView);
+            text.setText(Score + " Score");
+            text.setTextSize(20);
+            Button dialogButton = (Button) dialog.findViewById(R.id.button);
+            // if button is clicked, close the custom dialog
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Score = 0;
+                    PrepareforGame();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }catch (Exception e)
+        {
+            Log.d("Tag", "end_Game: "+e.getMessage());
+        }
 
     }
 

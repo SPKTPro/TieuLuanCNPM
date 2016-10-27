@@ -66,7 +66,7 @@ public class Adapter_Maintopic extends BaseAdapter {
             } else
                 imageView.setImageResource(imageResource);
         } catch (Exception e) {
-            Log.d("Tag", "getView: " + e.getMessage());
+
         }
         progressBar.setMax(100);
         progressBar.setProgress(item.getMaintopic_Process() + 50);

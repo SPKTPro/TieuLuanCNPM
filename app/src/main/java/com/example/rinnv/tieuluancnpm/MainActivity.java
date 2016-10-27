@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -88,9 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-
                                         // bien kiem tra cho phep luu
-
                                         Snackbar.make(view, "Tap to undo this add", Snackbar.LENGTH_LONG)
                                                 .setCallback(new Snackbar.Callback() {
                                                     @Override
@@ -252,6 +251,16 @@ public class MainActivity extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                         startActivity(intent);
+                    }
+                });
+
+                listView_Maintopic.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        // Xoa main topic
+
+
+                        return true;
                     }
                 });
 
