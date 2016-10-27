@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private static SQLiteDataController db;
     final Context context = this;
     public static boolean allowAInsert;
+    static View rootView;
+    private static GridView listView_Maintopic;
+    private static Adapter_Maintopic adapterMaintopic;
 
 
     @Override
@@ -77,12 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         context);
-
-
-
                 final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
                 final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
-
                 // set dialog message
                 alertDialogBuilder
                         .setView(promptsView)
@@ -105,7 +104,12 @@ public class MainActivity extends AppCompatActivity {
 
                                                                 boolean x = db.insertMaintopic(Maintopic_EN.getText().toString().trim(),
                                                                         Maintopic_VN.getText().toString().trim());
-                                                                Toast.makeText(context,x ? "Add Main topic Successfull":"Fail to do this", Toast.LENGTH_LONG).show();
+
+                                                               adapterMaintopic=new Adapter_Maintopic(context,db.getListMainTopic());
+                                                                listView_Maintopic.setAdapter(adapterMaintopic);
+                                                                listView_Maintopic.invalidate();
+
+                                                                Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
                                                                 break;
                                                         }
                                                     }
@@ -237,11 +241,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            rootView = inflater.inflate(R.layout.fragment_main, container, false);
             int tab = getArguments().getInt(ARG_SECTION_NUMBER);
             if (tab == 1) {
-                final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
-                Adapter_Maintopic adapterMaintopic = new Adapter_Maintopic(getContext(), db.getListMainTopic());
+                listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
+                adapterMaintopic = new Adapter_Maintopic(getContext(), db.getListMainTopic());
                 listView_Maintopic.setAdapter(adapterMaintopic);
                 listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

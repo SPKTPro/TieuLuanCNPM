@@ -95,8 +95,6 @@ public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnI
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Word word= (Word) listView_Word.getItemAtPosition(position);
-
-                Log.d("Tag", "onItemClick:"+word.getWord_Title_VN());
                 mTts.setLanguage(Locale.ENGLISH);
                 mTts.speak(word.getWord_Title().trim(), TextToSpeech.QUEUE_FLUSH, null);
 
