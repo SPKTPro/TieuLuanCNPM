@@ -180,6 +180,20 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
     }
+    public void CheckWordRemind(boolean ischeck, Word word) {
+        try {
+
+            openDataBase();
+            ContentValues values = new ContentValues();
+            values.put("Word_Remind", ischeck ? 1 : 0);
+            int rs = database.update("Word", values, "Word_Id=" + word.getWord_Id(), null);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    }
 
     public ArrayList<Word> getLisCheckedtWord() {
         ArrayList<Word> list = new ArrayList<>();
@@ -189,7 +203,27 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
+                list.add(topic);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+
+        return list;
+
+    }
+    public ArrayList<Word> getListRemindWord() {
+        ArrayList<Word> list = new ArrayList<>();
+        try {
+            openDataBase();
+            Cursor cs = database.rawQuery("select * from Word where Word.Word_Remind = 1", null);
+            Word topic;
+            while (cs.moveToNext()) {
+                topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -211,7 +245,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -245,7 +279,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 Word word;
                 while (cs.moveToNext()) {
                     word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                            cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6));
+                            cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
                     list.add(word);
                 }
             }
@@ -362,7 +396,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
                 if (rs > 0) {
                     result = true;
-                    Log.d("Tag", "insertMaintopic: compele");
+                    Log.d("Tag", "insertMaintopic: complete");
                 }
             }
 

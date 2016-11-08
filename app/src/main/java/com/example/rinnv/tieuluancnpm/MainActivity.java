@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return "Main Topic";
                 case 1:
-                    return "Remember word";
+                    return "Learned word";
 
             }
             return null;

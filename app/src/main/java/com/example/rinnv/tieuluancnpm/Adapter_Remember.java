@@ -60,16 +60,16 @@ public class Adapter_Remember extends BaseAdapter {
 
 
         final Word item = items.get(position);
-        titleView.setText(item.getWord_Title() );
+        titleView.setText(item.getWord_Title());
         titleView2.setText(item.getWord_Title_VN() );
         CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
         checkBox.setFocusable(false);
         checkBox.setFocusableInTouchMode(false);
-        checkBox.setChecked(item.getWord_check());
+        checkBox.setChecked(item.getWord_Remind());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                db.CheckWord(isChecked,item);
+                db.CheckWordRemind(isChecked,item);
             }
         });
         Layout.setTag(position);

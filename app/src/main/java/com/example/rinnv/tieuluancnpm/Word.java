@@ -10,6 +10,7 @@ public class Word {
     private String Word_Title;
     private String Word_Title_VN;
     private int Word_check;
+    private int Word_Remind;
     private String Example;
     private String Example_VN;
 
@@ -20,7 +21,8 @@ public class Word {
              String Word_Title_VN,
              int Word_check,
              String Example,
-             String Example_VN
+             String Example_VN,
+             int Word_Remind
     )
     {
         this.Topic_Id =Topic_Id;
@@ -30,6 +32,7 @@ public class Word {
         this.Word_check=Word_check;
         this.Example=Example;
         this.Example_VN=Example_VN;
+        this.Word_Remind=Word_Remind;
     }
 
 
@@ -60,5 +63,11 @@ public class Word {
 
     public String getWord_Title_VN() {
         return Word_Title_VN;
+    }
+
+
+    public boolean getWord_Remind() {
+
+        return (Word_Remind==1) ? true: false;
     }
 }

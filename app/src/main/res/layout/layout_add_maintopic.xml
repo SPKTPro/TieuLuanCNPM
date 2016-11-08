@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Main topic in English"
+        android:hint="English"
         android:ems="10"
         android:id="@+id/mainTopic_EN"
         />
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Main topic in VietNamese"
+        android:hint="VietNamese"
         android:ems="10"
         android:id="@+id/mainTopic_VN" />
 
