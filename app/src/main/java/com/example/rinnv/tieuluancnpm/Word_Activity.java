@@ -162,6 +162,9 @@ public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnI
                         context);
                 final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
                 final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
+
+                Maintopic_EN.setText("english");
+                Maintopic_VN.setText("viet nam");
                 // set dialog message
                 alertDialogBuilder
                         .setView(promptsView)
@@ -184,9 +187,8 @@ public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnI
 
                                                                 //insert Word
                                                                 boolean x=true;
-                                                                /*boolean x = db.insertTopic(Maintopic_EN.getText().toString().trim(),
-                                                                        Maintopic_VN.getText().toString().trim(),
-                                                                        Maintopic_choosen.getMaintopic_ID());*/
+                                                                 x = db.insertWord(SaveObject.saveTopic.getTopic_Id(),Maintopic_EN.getText().toString().trim(),
+                                                                        Maintopic_VN.getText().toString().trim());
 
                                                                 listView_Word.setAdapter(new Adapter_Word(context,db.getListWord(SaveObject.saveTopic)));
                                                                 listView_Word.invalidate();

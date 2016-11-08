@@ -171,7 +171,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             openDataBase();
             ContentValues values = new ContentValues();
-            values.put("Word_check", ischeck ? 1:0);
+            values.put("Word_check", ischeck ? 1 : 0);
             int rs = database.update("Word", values, "Word_Id=" + word.getWord_Id(), null);
 
         } catch (SQLException e) {
@@ -180,11 +180,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
     }
+
     public ArrayList<Word> getLisCheckedtWord() {
         ArrayList<Word> list = new ArrayList<>();
         try {
             openDataBase();
-            Cursor cs = database.rawQuery("select * from Word where Word.Word_check = 1" , null);
+            Cursor cs = database.rawQuery("select * from Word where Word.Word_check = 1", null);
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
@@ -200,7 +201,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return list;
 
     }
-
 
 
     public ArrayList<Word> getListWord(Topic t) {
@@ -281,7 +281,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertMaintopic(String MainTopic_EN,String MainTopic_VN) {
+    public boolean insertMaintopic(String MainTopic_EN, String MainTopic_VN) {
         boolean result = false;
         try {
 
@@ -300,7 +300,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
 
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -309,7 +308,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean insertTopic(String Topic_Title,String Topic_Title_VN,int MainTopic_Id) {
+    public boolean insertTopic(String Topic_Title, String Topic_Title_VN, int MainTopic_Id) {
         boolean result = false;
         try {
 
@@ -318,7 +317,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             values.put("Topic_Title", Topic_Title);
             values.put("Topic_Title_VN", Topic_Title_VN);
-            values.put("MainTopic_Id",MainTopic_Id);
+            values.put("MainTopic_Id", MainTopic_Id);
             values.put("Topic_Process", 0);
 
             long rs = database.insert("Topic", null, values);
@@ -329,13 +328,53 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
 
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             close();
         }
         return result;
+    }
+
+    public boolean insertWord(String topicID, String WordTittle_EN, String WordTittle_VN) {
+        boolean result = false;
+        try {
+
+            openDataBase();
+            ContentValues values = new ContentValues();
+
+            Cursor cs = database.rawQuery("select * from Word where Word_Title= "+'"'+WordTittle_EN+'"' , null);
+
+            Log.d("Tag", "insertWord: "+cs.getCount());
+            if (cs.getCount()!=0)
+            {
+                result =false;
+            }
+
+            else {
+
+
+                values.put("Topic_Id", topicID);
+                values.put("Word_Title", WordTittle_EN);
+                values.put("Word_Title_VN", WordTittle_VN);
+
+                long rs = database.insert("Word", null, values);
+
+                if (rs > 0) {
+                    result = true;
+                    Log.d("Tag", "insertMaintopic: compele");
+                }
+            }
+
+        } catch (SQLException e) {
+            Log.d("Tag", "insertWord: "+e.getMessage());
+        } finally {
+            close();
+        }
+
+        return result;
+
+
     }
 
 }
