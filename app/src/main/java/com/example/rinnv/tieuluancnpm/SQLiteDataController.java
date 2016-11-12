@@ -241,7 +241,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         ArrayList<Word> list = new ArrayList<>();
         try {
             openDataBase();
-            Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = " + t.getTopic_Id(), null);
+            Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id()+"'", null);
+            Log.d("tag",t.getTopic_Id());
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
