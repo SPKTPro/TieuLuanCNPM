@@ -10,101 +10,64 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
-import java.util.Locale;
+import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
 
-public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnInitListener  {
+public class Word_Activity extends AppCompatActivity {
 
+    public String TAG = "Tag";
     public static int ID = 0;
-    public static TextToSpeech mTts;
-    private static final int SPEECH_API_CHECK = 0;
 
     FloatingActionMenu materialDesignFAM;
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
     final Context context = this;
+
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         // Don't forget to shutdown!
-        if (mTts != null)
-        {
+        if (mTts != null) {
             mTts.stop();
             mTts.shutdown();
         }
         super.onDestroy();
     }
-    @Override
-    public void onInit(int status) {
 
-        if (status == TextToSpeech.SUCCESS) {
-            int result = mTts.setLanguage(Locale.US);
-        } else {
-            // Initialization failed.
-            Log.e("app", "Could not initialize TextToSpeech.");
-        }
-    }
 
-    @Override
-    protected void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == SPEECH_API_CHECK) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                // success, create the TTS instance
-                mTts = new TextToSpeech(this, this);
-                int result = mTts.setLanguage(Locale.US);
-
-            } else {
-                // missing data, install it
-                Intent installIntent = new Intent();
-                installIntent.setAction(
-                        TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installIntent);
-            }
-        }
-    }
-
-    private void CheckTTS()
-    {
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, SPEECH_API_CHECK);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         setTitle(SaveObject.saveMaintopic.getMaintopic_Tittle());
         toolbar.setSubtitle(SaveObject.saveTopic.getTopic_Title());
-        CheckTTS();
+
         final SQLiteDataController db = new SQLiteDataController(this);
 
 
 
-        final GridView listView_Word = (GridView) findViewById(R.id.list_item) ;
-        listView_Word.setAdapter(new Adapter_Word(this,db.getListWord(SaveObject.saveTopic)));
+        final GridView listView_Word = (GridView) findViewById(R.id.list_item);
+        listView_Word.setAdapter(new Adapter_Word(this, db.getListWord(SaveObject.saveTopic)));
 
         listView_Word.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Word word= (Word) listView_Word.getItemAtPosition(position);
-                mTts.setLanguage(Locale.ENGLISH);
+                Word word = (Word) listView_Word.getItemAtPosition(position);
                 mTts.speak(word.getWord_Title().trim(), TextToSpeech.QUEUE_FLUSH, null);
 
 
@@ -146,6 +109,7 @@ public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnI
                 //TODO something when floating action menu third item clicked
 
                 Intent intent = new Intent(Word_Activity.this, Test.class);
+                intent.putExtra("level", "topic");
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -185,11 +149,11 @@ public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnI
                                                             case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
 
                                                                 //insert Word
-                                                                boolean x=true;
-                                                                 x = db.insertWord(SaveObject.saveTopic.getTopic_Id(),Maintopic_EN.getText().toString().trim(),
+                                                                boolean x = true;
+                                                                x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), Maintopic_EN.getText().toString().trim(),
                                                                         Maintopic_VN.getText().toString().trim());
 
-                                                                listView_Word.setAdapter(new Adapter_Word(context,db.getListWord(SaveObject.saveTopic)));
+                                                                listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
                                                                 listView_Word.invalidate();
 
                                                                 Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
@@ -224,8 +188,6 @@ public class Word_Activity extends AppCompatActivity implements TextToSpeech.OnI
                 alertDialog.show();
             }
         });
-
-
 
 
     }

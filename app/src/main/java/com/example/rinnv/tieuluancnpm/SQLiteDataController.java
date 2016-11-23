@@ -266,7 +266,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
 
             ArrayList<Topic> listTopic = new ArrayList<>();
-            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = " + maintopic.getMaintopic_ID(), null);
+            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID()+"'", null);
             Topic topic;
             while (cs.moveToNext()) {
                 topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2),
@@ -276,7 +276,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             for (Topic t : listTopic
                     ) {
-                cs = database.rawQuery("select * from Word where Word.Topic_Id = " + t.getTopic_Id(), null);
+                cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id()+"'", null);
                 Word word;
                 while (cs.moveToNext()) {
                     word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
@@ -300,7 +300,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         ArrayList<Topic> list = new ArrayList<>();
         try {
             openDataBase();
-            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = " + maintopic.getMaintopic_ID(), null);
+            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID()+"'", null);
             Topic topic;
             while (cs.moveToNext()) {
                 topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getString(3), cs.getInt(4));

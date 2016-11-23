@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:circular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_test"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,49 +9,45 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.example.rinnv.tieuluancnpm.Test">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    <Button
+        android:text="Start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnstart" />
+
+    <com.example.rinnv.CircularProgressBar
+        android:id="@+id/circularprogressbar2"
+        style="@style/Widget.ProgressBar.Holo.CircularProgressBar"
+        android:layout_width="110dip"
+        android:layout_height="110dip"
+        android:layout_marginTop="10dip"
+        circular:cpb_subtitle="subtitle"
+        android:layout_gravity="center_horizontal"
+        circular:cpb_title="Title" />
 
     <TextView
-        android:text="10"
-        android:layout_width="match_parent"
+        android:text="TextView"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/Score" />
+        android:id="@+id/word" />
 
-    <TextView
-        android:text="Score"
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2"
-       />
-    <TextView
-        android:text="Test NAme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView2" />
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/inputText" />
 
-    <TextView
-        android:text="Answer"
+    <Button
+        android:text="Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2"
-        android:id="@+id/textView3" />
-    <ListView
-        android:id="@+id/list_char"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:id="@+id/submit" />
 
 
 </LinearLayout>
-
-</RelativeLayout>

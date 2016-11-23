@@ -85,11 +85,8 @@ public class Game extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (startQuiz == 0) {
-                    QuizID = 1;
-                    QuizNow = 0;
-                    Score = 0;
-                    timeDelay = 50;
-                    QuizLevel = 0;
+                    QuizID = 1;                    QuizNow = 0;                    Score = 0;                    timeDelay = 50;
+                    QuizLevel = 0;Clicked=0;
                     startQuiz = 1;
                     CreatQuiz();
                 } else {

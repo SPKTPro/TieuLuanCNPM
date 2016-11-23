@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Locale;
+
+import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +47,52 @@ public class MainActivity extends AppCompatActivity {
     private static GridView listView_Maintopic;
     private static Adapter_Maintopic adapterMaintopic;
 
+    private static final int SPEECH_API_CHECK = 0; public String TAG = "Tag";
+    public void CheckTTS() {
+        Log.d(TAG, "CheckTTS: ");
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, SPEECH_API_CHECK);
+    }
+
+    @Override
+    protected void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
+
+        Log.d(TAG, "onActivityResult: ");
+        if (requestCode == SPEECH_API_CHECK) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                // success, create the TTS instance
+                mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int i) {
+                        if (i == TextToSpeech.SUCCESS) {
+
+                            int result = mTts.setLanguage(Locale.getDefault());
+
+                            Log.d(TAG, "onInit: " + Locale.getDefault());
+                            if (result == TextToSpeech.LANG_MISSING_DATA
+                                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                Log.e("TTS", "This Language is not supported");
+                            } else {
+                                Log.d(TAG, "onInit: ok");
+
+                            }
+                        } else {
+                            // Initialization failed.
+                            Log.e("app", "Could not initialize TextToSpeech.");
+                        }
+                    }
+                });
+            } else {
+                // missing data, install it
+                Intent installIntent = new Intent();
+                installIntent.setAction(
+                        TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installIntent);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +104,13 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
+
         // test
         createDB();
         db = new SQLiteDataController(this);
+
+        CheckTTS();
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
