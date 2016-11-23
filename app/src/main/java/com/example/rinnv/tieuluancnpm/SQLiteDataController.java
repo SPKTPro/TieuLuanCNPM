@@ -180,6 +180,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
     }
+
     public void CheckWordRemind(boolean ischeck, Word word) {
         try {
 
@@ -203,7 +204,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -215,6 +216,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return list;
 
     }
+
     public ArrayList<Word> getListRemindWord() {
         ArrayList<Word> list = new ArrayList<>();
         try {
@@ -223,7 +225,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -241,12 +243,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         ArrayList<Word> list = new ArrayList<>();
         try {
             openDataBase();
-            Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id()+"'", null);
-            Log.d("tag",t.getTopic_Id());
+            Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id() + "'", null);
+            Log.d("tag", t.getTopic_Id());
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -259,6 +261,64 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     }
 
+    public void deleteWord(Word word) {
+        try {
+            openDataBase();
+            database.execSQL("delete from  Word where word.Word_Id = '" + word.getWord_Id() + "'");
+
+            Log.d("Tag", "deleteWord: " + word.getWord_Title());
+
+        } catch (Exception e) {
+            Log.d("Tag", "deleteWord: " + e.getMessage());
+        }
+    }
+
+    public void deleteTopic(Topic topic) {
+        ArrayList<Word> list = new ArrayList<>();
+        try {
+            openDataBase();
+            Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + topic.getTopic_Id() + "'", null);
+            Word word;
+            while (cs.moveToNext()) {
+                word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                list.add(word);
+            }
+
+            for (Word x : list) {
+                deleteWord(x);
+            }
+            database.execSQL("delete from  Topic where Topic.Topic_Id = '" + topic.getTopic_Id() + "'");
+
+        } catch (Exception e) {
+            Log.d("Tag", "deleteWord: " + e.getMessage());
+        }
+    }
+
+    public void deleteMaintopic(Maintopic maintopic) {
+        try {
+            openDataBase();
+            ArrayList<Topic> listTopic = new ArrayList<>();
+            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID() + "'", null);
+            Topic topic;
+            while (cs.moveToNext()) {
+                topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2),
+                        cs.getString(3), cs.getInt(4));
+                listTopic.add(topic);
+            }
+
+            for (Topic t : listTopic) {
+                deleteTopic(t);
+            }
+            database.execSQL("delete from  MainTopic where MainTopic.MainTopic_Id = '" + maintopic.getMaintopic_ID() + "'");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public ArrayList<Word> getListWord(Maintopic maintopic) {
         ArrayList<Word> list = new ArrayList<>();
 
@@ -266,7 +326,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
 
             ArrayList<Topic> listTopic = new ArrayList<>();
-            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID()+"'", null);
+            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID() + "'", null);
             Topic topic;
             while (cs.moveToNext()) {
                 topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2),
@@ -276,11 +336,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             for (Topic t : listTopic
                     ) {
-                cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id()+"'", null);
+                cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id() + "'", null);
                 Word word;
                 while (cs.moveToNext()) {
                     word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                            cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6),cs.getInt(7));
+                            cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
                     list.add(word);
                 }
             }
@@ -300,7 +360,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         ArrayList<Topic> list = new ArrayList<>();
         try {
             openDataBase();
-            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID()+"'", null);
+            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID() + "'", null);
             Topic topic;
             while (cs.moveToNext()) {
                 topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getString(3), cs.getInt(4));
@@ -378,15 +438,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
             ContentValues values = new ContentValues();
 
-            Cursor cs = database.rawQuery("select * from Word where Word_Title= "+'"'+WordTittle_EN+'"' , null);
+            Cursor cs = database.rawQuery("select * from Word where Word_Title= " + '"' + WordTittle_EN + '"', null);
 
-            Log.d("Tag", "insertWord: "+cs.getCount());
-            if (cs.getCount()!=0)
-            {
-                result =false;
-            }
-
-            else {
+            Log.d("Tag", "insertWord: " + cs.getCount());
+            if (cs.getCount() != 0) {
+                result = false;
+            } else {
 
 
                 values.put("Topic_Id", topicID);
@@ -402,7 +459,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
 
         } catch (SQLException e) {
-            Log.d("Tag", "insertWord: "+e.getMessage());
+            Log.d("Tag", "insertWord: " + e.getMessage());
         } finally {
             close();
         }

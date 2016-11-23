@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private static GridView listView_Maintopic;
     private static Adapter_Maintopic adapterMaintopic;
 
-    private static final int SPEECH_API_CHECK = 0; public String TAG = "Tag";
+    private static final int SPEECH_API_CHECK = 0;
+    public String TAG = "Tag";
+
     public void CheckTTS() {
         Log.d(TAG, "CheckTTS: ");
         Intent checkIntent = new Intent();
@@ -104,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-
         // test
         createDB();
         db = new SQLiteDataController(this);
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 boolean x = db.insertMaintopic(Maintopic_EN.getText().toString().trim(),
                                                                         Maintopic_VN.getText().toString().trim());
 
-                                                               adapterMaintopic=new Adapter_Maintopic(context,db.getListMainTopic());
+                                                                adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
                                                                 listView_Maintopic.setAdapter(adapterMaintopic);
                                                                 listView_Maintopic.invalidate();
 
@@ -309,11 +310,28 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                listView_Maintopic.setOnLongClickListener(new View.OnLongClickListener() {
+                listView_Maintopic.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
-                        // Xoa main topic
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                        final Maintopic maintopic = (Maintopic) listView_Maintopic.getItemAtPosition(position);
 
+                        new AlertDialog.Builder(getContext())
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle("Delete Main topic")
+                                .setMessage("Are you sure you want to delete this Topic?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        db.deleteMaintopic(maintopic);
+                                        adapterMaintopic = new Adapter_Maintopic(getContext(), db.getListMainTopic());
+                                        listView_Maintopic.setAdapter(adapterMaintopic);
+                                        listView_Maintopic.invalidate();
+
+                                    }
+
+                                })
+                                .setNegativeButton("No", null)
+                                .show();
 
                         return true;
                     }

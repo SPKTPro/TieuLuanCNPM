@@ -58,6 +58,34 @@ public class Topic_Activity extends AppCompatActivity {
             }
         });
 
+        listView_Topic.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                final Topic topic = (Topic) listView_Topic.getItemAtPosition(position);
+                new AlertDialog.Builder(context)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Delete Main topic")
+                        .setMessage("Are you sure you want to delete this Topic?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                db.deleteTopic(topic);
+                                adapter_topic = new Adapter_Topic(context, db.getListTopic(Maintopic_choosen));
+                                listView_Topic.setAdapter(adapter_topic);
+                                listView_Topic.invalidate();
+
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+
+                return true;
+            }
+        });
+
 
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
         floatingActionButton1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);

@@ -42,7 +42,6 @@ public class Word_Activity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +59,6 @@ public class Word_Activity extends AppCompatActivity {
         final SQLiteDataController db = new SQLiteDataController(this);
 
 
-
         final GridView listView_Word = (GridView) findViewById(R.id.list_item);
         listView_Word.setAdapter(new Adapter_Word(this, db.getListWord(SaveObject.saveTopic)));
 
@@ -73,6 +71,31 @@ public class Word_Activity extends AppCompatActivity {
 
             }
         });
+        listView_Word.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                final Word word = (Word) listView_Word.getItemAtPosition(position);
+                new AlertDialog.Builder(context)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Delete Main topic")
+                        .setMessage("Are you sure you want to delete this Topic?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                db.deleteWord(word);
+                                listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                listView_Word.invalidate();
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+                return true;
+            }
+        });
+
+
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
         floatingActionButton1 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.action1);
         floatingActionButton2 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.action2);
