@@ -3,6 +3,7 @@ package com.example.rinnv.tieuluancnpm;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,13 +16,14 @@ import android.widget.Toast;
 import com.example.rinnv.CircularProgressBar;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Test extends AppCompatActivity {
 
     private ArrayList<Word> listWord = new ArrayList<>();
     private int count, QuizID, QuizNow, Life, Score, startQuiz;
     private Word word1;
-    private TextView question;
+    private TextView question,hint;
     private ImageView h1,h2,h3;
     private Button btn1, btnStart;
     private EditText answer;
@@ -65,7 +67,9 @@ public class Test extends AppCompatActivity {
         h1 = (ImageView)findViewById(R.id.heart1);
         h2 = (ImageView)findViewById(R.id.heart2);
         h3 = (ImageView)findViewById(R.id.heart3);
+        hint = (TextView)findViewById(R.id.hint);
         btn1.setVisibility(View.INVISIBLE);
+        hint.setVisibility(View.INVISIBLE);
         answer.clearFocus();
         circularProgressBar = (CircularProgressBar) findViewById(R.id.circularprogressbar2);
         PrepareforGame();
@@ -125,14 +129,45 @@ public class Test extends AppCompatActivity {
 
                     } else {
                         if (Life >= 1) {
-                            Life--;
-                            answer.setText("");
-                            CreateQuiz();
+
+                            new CountDownTimer(3000, 1000) {
+
+                                public void onTick(long millisUntilFinished) {
+                                    hint.setVisibility(View.VISIBLE);
+                                    hint.setText(RightAnswer);
+                                    btn1.setClickable(false);
+                                }
+
+                                public void onFinish() {
+                                    hint.setVisibility(View.INVISIBLE);
+                                    Life--;
+                                    answer.setText("");
+                                    CreateQuiz();
+                                    btn1.setClickable(true);
+                                }
+                            }.start();
+
+
+
 
                         } else {
-                            startQuiz = 0;
-                            answer.setText("");
-                            end_Game(Score);
+                            new CountDownTimer(3000, 1000) {
+
+                                public void onTick(long millisUntilFinished) {
+                                    hint.setVisibility(View.VISIBLE);
+                                    hint.setText(RightAnswer);
+                                    btn1.setClickable(false);
+                                }
+
+                                public void onFinish() {
+                                    hint.setVisibility(View.INVISIBLE);
+                                    btn1.setClickable(true);
+                                    startQuiz = 0;
+                                    answer.setText("");
+                                    end_Game(Score);
+                                }
+                            }.start();
+
                         }
                     }
                 }
