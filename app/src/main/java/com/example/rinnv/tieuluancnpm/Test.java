@@ -71,7 +71,7 @@ public class Test extends AppCompatActivity {
                     Score = 0;
                     startQuiz = 1;
                     Life = 3;
-                    CreatQuiz();
+                    CreateQuiz();
                 } else {
 
                 }
@@ -89,16 +89,16 @@ public class Test extends AppCompatActivity {
 
     }
 
-    public void CreatQuiz() {
+    public void CreateQuiz() {
         int x1 = LaysoRandom(listWord, 1);
-        Log.d("Tag", "CreatQuiz: " + x1 + " " + listWord.size());
+        Log.d("Tag", "CreateQuiz: " + x1 + " " + listWord.size());
 
         word1 = listWord.get(x1);
 
         QuizQuestion = word1.getWord_Title_VN();
         RightAnswer = word1.getWord_Title();
 
-        Log.d("Tag", "CreatQuiz: "+RightAnswer);
+        Log.d("Tag", "CreateQuiz: "+RightAnswer);
         StartGame();
 
     }
@@ -113,12 +113,12 @@ public class Test extends AppCompatActivity {
                 if (startQuiz == 1) {
                     if (RightAnswer.toLowerCase().equals(s.toLowerCase())) {
                         Score++;
-                        CreatQuiz();
+                        CreateQuiz();
 
                     } else {
                         if (Life >= 1) {
                             Life--;
-                            CreatQuiz();
+                            CreateQuiz();
 
                         } else {
                             startQuiz = 0;
