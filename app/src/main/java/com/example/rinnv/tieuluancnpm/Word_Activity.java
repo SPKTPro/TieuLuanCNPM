@@ -31,7 +31,9 @@ public class Word_Activity extends AppCompatActivity {
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
     final Context context = this;
 
-    @Override
+
+    // khong tat text to speech
+   /* @Override
     public void onDestroy() {
         // Don't forget to shutdown!
         if (mTts != null) {
@@ -41,7 +43,7 @@ public class Word_Activity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
