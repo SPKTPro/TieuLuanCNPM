@@ -170,9 +170,54 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
 
             openDataBase();
+
+
+            // thay cờ check đả học hay chưa
             ContentValues values = new ContentValues();
             values.put("Word_check", ischeck ? 1 : 0);
             int rs = database.update("Word", values, "Word_Id=" + word.getWord_Id(), null);
+
+            // tiến hành update thong so process cua topic hiện tai
+            int count = 0, sum = 0;
+            Cursor cx = database.rawQuery("select * from Word where Word.Word_check = 1 and Word.Topic_Id = '" + word.getTopic_Id() + "'", null);
+            count = cx.getCount();
+            cx = database.rawQuery("select * from Word where Word.Topic_Id = '" + word.getTopic_Id() + "'", null);
+            sum = cx.getCount();
+            values = new ContentValues();
+            int x = 0;
+            try {
+                x = (count * 100 / sum * 100) / 100;
+            } catch (Exception e) {
+                x = 0;
+            }
+            values.put("Topic_Process", x);
+            rs = database.update("Topic", values, "Topic_Id = '" + word.getTopic_Id() + "'", null);
+
+
+            // tiến hành update thong so process cua main topic hiện tai
+            cx = database.rawQuery("select * from Topic where Topic.Topic_Id = '" + word.getTopic_Id() + "'", null);
+            cx.moveToFirst();
+            int MainTopicID = cx.getInt(0);
+
+            Log.d("Tag", "CheckWord: "+MainTopicID);
+            cx = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopicID + "'", null);
+            sum =0; count =0;
+            while (cx.moveToNext()) {
+
+               count += cx.getInt(4);
+                sum +=100;
+
+            }
+            x = 0;
+            try {
+                x = (count * 100 / sum * 100) / 100;
+            } catch (Exception e) {
+                x = 0;
+            }
+            values = new ContentValues();
+            values.put("MainTopic_Process", x);
+            rs = database.update("MainTopic", values, "MainTopic_Id = '" +MainTopicID + "'", null);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -244,7 +289,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
             openDataBase();
             Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id() + "'", null);
-            Log.d("tag", t.getTopic_Id());
+
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
@@ -363,6 +408,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID() + "'", null);
             Topic topic;
             while (cs.moveToNext()) {
+
+
                 topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getString(3), cs.getInt(4));
                 list.add(topic);
             }

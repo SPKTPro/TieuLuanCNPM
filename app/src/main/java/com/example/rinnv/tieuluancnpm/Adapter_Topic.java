@@ -1,6 +1,7 @@
 package com.example.rinnv.tieuluancnpm;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class Adapter_Topic extends BaseAdapter {
         RelativeLayout Layout = (RelativeLayout)itemInflater.inflate(R.layout.item_layout,
                 parent,
                 false);
+
         ImageView imageView = (ImageView) Layout.findViewById(R.id.imageView);
         TextView titleView  = (TextView)Layout.findViewById(R.id.itemtitle);
         ProgressBar progressBar = (ProgressBar) Layout.findViewById(R.id.seekBar);
@@ -67,7 +69,8 @@ public class Adapter_Topic extends BaseAdapter {
             imageView.setImageResource(imageResource);
 
         progressBar.setMax(100);
-        progressBar.setProgress(item.getTopic_Process()+ 50);
+
+        progressBar.setProgress(item.getTopic_Process());
 
 
         Layout.setTag(position);

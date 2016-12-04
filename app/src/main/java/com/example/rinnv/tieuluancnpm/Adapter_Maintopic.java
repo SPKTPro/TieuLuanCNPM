@@ -69,7 +69,7 @@ public class Adapter_Maintopic extends BaseAdapter {
 
         }
         progressBar.setMax(100);
-        progressBar.setProgress(item.getMaintopic_Process() + 50);
+        progressBar.setProgress(item.getMaintopic_Process());
 
 
         Layout.setTag(position);
