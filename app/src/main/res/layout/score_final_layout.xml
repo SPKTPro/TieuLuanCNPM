@@ -1,26 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
-        android:id="@+id/imageView" />
+        android:id="@+id/linearLayout2"
+        android:layout_marginTop="8dp"
+        android:paddingRight="8dp">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:textAlignment="center" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+
+            android:background="@drawable/img_bg"
+            android:id="@+id/imageView2"
+            android:layout_marginStart="12dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            />
+
+    </LinearLayout>
+
 
     <Button
-        android:text="Button"
+       android:text="OK"
+        android:textSize="15dp"
+android:background="@drawable/button_focused"
         android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/button"
+        android:textStyle="bold"
+        android:textColor="@android:color/background_light"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:text="0"
+
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button" />
-</LinearLayout>
+        android:id="@+id/textView"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_light"
+        android:layout_marginEnd="50dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2" />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:background="@drawable/score"
+        android:id="@+id/imageView"
+        android:layout_marginStart="26dp"
+        android:layout_alignTop="@+id/linearLayout2"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="YOUR SCORE"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="6dp"
+        android:layout_alignTop="@+id/linearLayout2"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

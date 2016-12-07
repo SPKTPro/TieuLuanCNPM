@@ -186,8 +186,8 @@ public class Test extends AppCompatActivity {
             dialog.setTitle("Score");
 
             TextView text = (TextView) dialog.findViewById(R.id.textView);
-            text.setText(Score + " Score");
-            text.setTextSize(20);
+            text.setText(Score+"");
+
             Button dialogButton = (Button) dialog.findViewById(R.id.button);
             // if button is clicked, close the custom dialog
             dialogButton.setOnClickListener(new View.OnClickListener() {

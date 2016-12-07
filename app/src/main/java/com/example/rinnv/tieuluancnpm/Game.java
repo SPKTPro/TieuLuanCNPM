@@ -69,7 +69,8 @@ public class Game extends AppCompatActivity {
         btn1 = (Button) findViewById(R.id.btn1);
         btn2 = (Button) findViewById(R.id.btn2);
         btnStart = (Button) findViewById(R.id.btnstart);
-
+        btn1.setVisibility(View.INVISIBLE);
+        btn2.setVisibility(View.INVISIBLE);
         //Setup luc bat dau
 
 
@@ -95,6 +96,9 @@ public class Game extends AppCompatActivity {
                     Toast.makeText(Game.this, "There are no source for game", Toast.LENGTH_SHORT).show();
                 } else {
                     if (startQuiz == 0) {
+                        btn1.setVisibility(View.VISIBLE);
+                        btn2.setVisibility(View.VISIBLE);
+                        btnStart.setVisibility(View.INVISIBLE);
                         QuizID = 1;
                         QuizNow = 0;
                         Score = 0;
@@ -182,14 +186,16 @@ public class Game extends AppCompatActivity {
     public void end_Game(int score) {
         try {
             startQuiz = 0;
-
+            btn1.setVisibility(View.INVISIBLE);
+            btn2.setVisibility(View.INVISIBLE);
+            btnStart.setVisibility(View.VISIBLE);
             final Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.score_final_layout);
             dialog.setTitle("Score");
 
             TextView text = (TextView) dialog.findViewById(R.id.textView);
-            text.setText(Score + " Score");
-            text.setTextSize(20);
+            text.setText(Score+"");
+
             Button dialogButton = (Button) dialog.findViewById(R.id.button);
             // if button is clicked, close the custom dialog
             dialogButton.setOnClickListener(new View.OnClickListener() {
