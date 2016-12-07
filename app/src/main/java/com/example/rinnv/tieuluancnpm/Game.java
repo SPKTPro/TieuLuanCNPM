@@ -3,10 +3,8 @@ package com.example.rinnv.tieuluancnpm;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -51,11 +49,20 @@ public class Game extends AppCompatActivity {
             Maintopic m = SaveObject.saveMaintopic;
             listWord = db.getListWord(m);
 
-        } else if (level.equals("topic")) {
-            Topic topic = SaveObject.saveTopic;
-            listWord = db.getListWord(topic);
         } else {
-            Toast.makeText(this, "There are some problem", Toast.LENGTH_SHORT).show();
+            if (level.equals("topic")) {
+                Topic topic = SaveObject.saveTopic;
+                listWord = db.getListWord(topic);
+            } else {
+
+                if ((level.equals("rememberWord"))) {
+
+                    listWord = db.getLisCheckedtWord();
+                } else {
+                    Toast.makeText(this, "There are some problem", Toast.LENGTH_SHORT).show();
+                }
+
+            }
         }
 
         question = (TextView) findViewById(R.id.word);
@@ -84,13 +91,19 @@ public class Game extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (startQuiz == 0) {
-                    QuizID = 1;                    QuizNow = 0;                    Score = 0;                    timeDelay = 50;
-                    QuizLevel = 0;Clicked=0;
-                    startQuiz = 1;
-                    CreatQuiz();
+                if (listWord.size() == 0) {
+                    Toast.makeText(Game.this, "There are no source for game", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    if (startQuiz == 0) {
+                        QuizID = 1;
+                        QuizNow = 0;
+                        Score = 0;
+                        timeDelay = 50;
+                        QuizLevel = 0;
+                        Clicked = 0;
+                        startQuiz = 1;
+                        CreatQuiz();
+                    }
                 }
             }
         });
@@ -205,6 +218,7 @@ public class Game extends AppCompatActivity {
         word1 = listWord.get(x1);
         word2 = listWord.get(x2);
 
+        Log.d("Tag", "CreatQuiz: "+word1.getWord_Title()+"|||"+word1.getWord_Title_VN());
 
         //typeQuiz=1, Quiz Anh Viet
         //typeQuiz=2, Quiz Viet Anh
@@ -281,11 +295,13 @@ public class Game extends AppCompatActivity {
         // mode 2 lay random cac tu trong listWord
 
 
+        int Min=1,Max = listWord.size();
         if (mode == 1) {
-            int x = listWord.size() - 1;
-            int result = 0 + (int) (Math.random() * ((x) + 1));
+
+            int result = Min+(int)(Math.random()*((Max-Min)+1));
             return result;
         } else {
+            int x = listWord.size();
             int result = 1 + (int) (Math.random() * (3));
             return result;
         }

@@ -1,13 +1,11 @@
 package com.example.rinnv.tieuluancnpm;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,7 +58,8 @@ public class Adapter_Topic extends BaseAdapter {
         Topic item = items.get(position);
         titleView.setText(item.getTopic_Title());
         titleView2.setText(item.getTopic_Title_VN());
-        String s= item.getTopic_Title().toLowerCase();
+        String s= item.getTopic_Title().toString().toLowerCase();
+
         int imageResource = Layout.getResources().getIdentifier(s, "drawable",context.getPackageName());
         if(imageResource==0) {
             imageView.setImageResource(R.drawable.newtopic);
@@ -69,7 +68,6 @@ public class Adapter_Topic extends BaseAdapter {
             imageView.setImageResource(imageResource);
 
         progressBar.setMax(100);
-
         progressBar.setProgress(item.getTopic_Process());
 
 

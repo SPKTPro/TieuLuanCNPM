@@ -16,15 +16,14 @@ import android.widget.Toast;
 import com.example.rinnv.CircularProgressBar;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class Test extends AppCompatActivity {
 
     private ArrayList<Word> listWord = new ArrayList<>();
     private int count, QuizID, QuizNow, Life, Score, startQuiz;
     private Word word1;
-    private TextView question,hint;
-    private ImageView h1,h2,h3;
+    private TextView question, hint;
+    private ImageView h1, h2, h3;
     private Button btn1, btnStart;
     private EditText answer;
     private CircularProgressBar circularProgressBar;
@@ -64,10 +63,10 @@ public class Test extends AppCompatActivity {
         btnStart = (Button) findViewById(R.id.btnstart);
         btn1 = (Button) findViewById(R.id.submit);
         answer = (EditText) findViewById(R.id.inputText);
-        h1 = (ImageView)findViewById(R.id.heart1);
-        h2 = (ImageView)findViewById(R.id.heart2);
-        h3 = (ImageView)findViewById(R.id.heart3);
-        hint = (TextView)findViewById(R.id.hint);
+        h1 = (ImageView) findViewById(R.id.heart1);
+        h2 = (ImageView) findViewById(R.id.heart2);
+        h3 = (ImageView) findViewById(R.id.heart3);
+        hint = (TextView) findViewById(R.id.hint);
         btn1.setVisibility(View.INVISIBLE);
         hint.setVisibility(View.INVISIBLE);
         answer.clearFocus();
@@ -76,15 +75,17 @@ public class Test extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startQuiz == 0) {
-                    Score = 0;
-                    startQuiz = 1;
-                    btnStart.setVisibility(View.INVISIBLE);
-                    btn1.setVisibility(View.VISIBLE);
-                    Life = 3;
-                    CreateQuiz();
+                if (listWord.size() == 0) {
+                    Toast.makeText(Test.this, "There are no source for test.", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    if (startQuiz == 0) {
+                        Score = 0;
+                        startQuiz = 1;
+                        btnStart.setVisibility(View.INVISIBLE);
+                        btn1.setVisibility(View.VISIBLE);
+                        Life = 3;
+                        CreateQuiz();
+                    }
                 }
             }
         });
@@ -94,9 +95,9 @@ public class Test extends AppCompatActivity {
 
     private void PrepareforGame() {
         question.setText("Question");
-     //   btn1.setText("Submit");
+        //   btn1.setText("Submit");
         circularProgressBar.setTitle("0");
-     //   circularProgressBar.setSubTitle("Score");
+        //   circularProgressBar.setSubTitle("Score");
 
     }
 
@@ -109,7 +110,7 @@ public class Test extends AppCompatActivity {
         QuizQuestion = word1.getWord_Title_VN();
         RightAnswer = word1.getWord_Title();
 
-        Log.d("Tag", "CreateQuiz: "+RightAnswer);
+        Log.d("Tag", "CreateQuiz: " + RightAnswer);
         StartGame();
 
     }
@@ -146,8 +147,6 @@ public class Test extends AppCompatActivity {
                                     btn1.setClickable(true);
                                 }
                             }.start();
-
-
 
 
                         } else {
@@ -208,7 +207,7 @@ public class Test extends AppCompatActivity {
 
     private void SetControlInterface() {
         question.setText(QuizQuestion);
-      //  btn1.setText("Answer");
+        //  btn1.setText("Answer");
         if (Life == 3) {
             circularProgressBar.setProgress(100);
             h1.setVisibility(View.VISIBLE);
@@ -216,16 +215,15 @@ public class Test extends AppCompatActivity {
             h3.setVisibility(View.VISIBLE);
         }
         if (Life == 2) {
-         //   circularProgressBar.setProgress(75);
-           h1.setVisibility(View.INVISIBLE);
+            //   circularProgressBar.setProgress(75);
+            h1.setVisibility(View.INVISIBLE);
         }
         if (Life == 1) {
-        //    circularProgressBar.setProgress(50);
+            //    circularProgressBar.setProgress(50);
             h2.setVisibility(View.INVISIBLE);
         }
-        if (Life ==0)
-        {
-           // circularProgressBar.setProgress(25);
+        if (Life == 0) {
+            // circularProgressBar.setProgress(25);
             h3.setVisibility(View.INVISIBLE);
         }
 

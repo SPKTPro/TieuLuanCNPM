@@ -1,19 +1,14 @@
 package com.example.rinnv.tieuluancnpm;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -70,6 +65,7 @@ public class Adapter_Remember extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 db.CheckWordRemind(isChecked,item);
+                SaveObject.remindWord =db.getListRemindWord();
             }
         });
         Layout.setTag(position);
