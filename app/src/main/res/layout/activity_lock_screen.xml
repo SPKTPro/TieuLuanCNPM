@@ -45,4 +45,13 @@
         android:layout_toStartOf="@+id/btnExit"
         android:layout_marginEnd="11dp"
         android:id="@+id/btnspeak" />
+
+    <Button
+        android:text="Open APP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnspeak"
+        android:layout_toStartOf="@+id/btnspeak"
+        android:layout_marginEnd="26dp"
+        android:id="@+id/btnOpenApp" />
 </RelativeLayout>

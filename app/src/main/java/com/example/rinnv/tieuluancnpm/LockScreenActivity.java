@@ -116,6 +116,15 @@ public class LockScreenActivity extends AppCompatActivity {
             }
         });
 
+        Button btnOpenApp = (Button) findViewById(R.id.btnOpenApp);
+        btnOpenApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LockScreenActivity.this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        });
     }
 
 
