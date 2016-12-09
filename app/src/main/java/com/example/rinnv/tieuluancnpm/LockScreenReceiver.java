@@ -9,15 +9,23 @@ public class LockScreenReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-
+        Log.d("Tag", "onReceive: onReceive");
         //If the screen was just turned on or it just booted up, start your Lock Activity
-        if(action.equals(Intent.ACTION_SCREEN_OFF) || action.equals(Intent.ACTION_BOOT_COMPLETED))
+        if(action.equals(Intent.ACTION_SCREEN_OFF) || action.equals(Intent.ACTION_BOOT_COMPLETED)|| action.equals(Intent.ACTION_SCREEN_ON) )
         {
 
-            Log.d("Tag", "onReceive: Open Screen");
+            if (SaveObject.remindWord.size() > 0){
             Intent i = new Intent(context, LockScreenActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
+            }
+            else {
+                Log.d("Tag", "onReceive: Khong co tu de nhac");
+            }
         }
     }
+
+
+
+
 }

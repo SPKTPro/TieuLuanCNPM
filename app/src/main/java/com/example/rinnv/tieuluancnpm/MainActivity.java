@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public String TAG = "Tag";
 
     public void CheckTTS() {
-        Log.d(TAG, "CheckTTS: ");
+
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, SPEECH_API_CHECK);
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
 
-        Log.d(TAG, "onActivityResult: ");
+
         if (requestCode == SPEECH_API_CHECK) {
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 // success, create the TTS instance
@@ -67,12 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
                             int result = mTts.setLanguage(Locale.getDefault());
 
-                            Log.d(TAG, "onInit: " + Locale.getDefault());
+
                             if (result == TextToSpeech.LANG_MISSING_DATA
                                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                                 Log.e("TTS", "This Language is not supported");
                             } else {
-                                Log.d(TAG, "onInit: ok");
+
 
                             }
                         } else {
@@ -120,79 +120,86 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        SaveObject.remindWord =db.getListRemindWord();
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                if (tabLayout.getSelectedTabPosition()==0) {
+                    // get prompts.xml view
+                    LayoutInflater li = LayoutInflater.from(context);
+                    View promptsView = li.inflate(R.layout.layout_add_maintopic, null);
 
-                // get prompts.xml view
-                LayoutInflater li = LayoutInflater.from(context);
-                View promptsView = li.inflate(R.layout.layout_add_maintopic, null);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            context);
+                    final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
+                    final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
+                    // set dialog message
+                    alertDialogBuilder
+                            .setView(promptsView)
+                            .setCancelable(false)
+                            .setPositiveButton("OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // bien kiem tra cho phep luu
+                                            Snackbar.make(view, "Tap to undo this add", Snackbar.LENGTH_LONG)
+                                                    .setCallback(new Snackbar.Callback() {
+                                                        @Override
+                                                        public void onDismissed(Snackbar snackbar, int event) {
+                                                            switch (event) {
+                                                                case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                                                    Toast.makeText(context, "Undo Complete", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-                final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
-                final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
-                // set dialog message
-                alertDialogBuilder
-                        .setView(promptsView)
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // bien kiem tra cho phep luu
-                                        Snackbar.make(view, "Tap to undo this add", Snackbar.LENGTH_LONG)
-                                                .setCallback(new Snackbar.Callback() {
-                                                    @Override
-                                                    public void onDismissed(Snackbar snackbar, int event) {
-                                                        switch (event) {
-                                                            case Snackbar.Callback.DISMISS_EVENT_ACTION:
-                                                                Toast.makeText(context, "Undo Complete", Toast.LENGTH_LONG).show();
-                                                                break;
-                                                            case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                                                                    boolean x = db.insertMaintopic(Maintopic_EN.getText().toString().trim(),
+                                                                            Maintopic_VN.getText().toString().trim());
 
-                                                                boolean x = db.insertMaintopic(Maintopic_EN.getText().toString().trim(),
-                                                                        Maintopic_VN.getText().toString().trim());
+                                                                    adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
+                                                                    listView_Maintopic.setAdapter(adapterMaintopic);
+                                                                    listView_Maintopic.invalidate();
 
-                                                                adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
-                                                                listView_Maintopic.setAdapter(adapterMaintopic);
-                                                                listView_Maintopic.invalidate();
-
-                                                                Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
-                                                                break;
+                                                                    Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                            }
                                                         }
-                                                    }
 
-                                                })
-                                                .setAction("Undo", new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
+                                                    })
+                                                    .setAction("Undo", new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
 
-                                                    }
-                                                })
-                                                .setActionTextColor(Color.RED)
-                                                .show();
+                                                        }
+                                                    })
+                                                    .setActionTextColor(Color.RED)
+                                                    .show();
 
 
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
+                                        }
+                                    })
+                            .setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
 
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
 
-                // show it
-                alertDialog.show();
-
+                    // show it
+                    alertDialog.show();
+                }else  if (tabLayout.getSelectedTabPosition()==1) {
+                    Intent intent = new Intent(MainActivity.this, Game.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("type", 1);
+                    intent.putExtra("level", "rememberWord");
+                    startActivity(intent);
+                }
 
             }
         });

@@ -3,7 +3,6 @@ package com.example.rinnv.tieuluancnpm;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Process;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -79,14 +78,15 @@ public class LockScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lock_screen);
 
 
-        int Min = 1, Max = SaveObject.remindWord.size();
-        int result = Min + (int) (Math.random() * ((Max - Min) + 1));
 
-        Log.d(TAG, "onCreate: " + result);
+
+
         TextView txtVN = (TextView) findViewById(R.id.txtVN);
         final TextView txtEN = (TextView) findViewById(R.id.txtEN);
 
         try {
+            int Min = 1, Max = SaveObject.remindWord.size();
+            int result = Min + (int) (Math.random() * ((Max - Min) + 1));
             Word x = SaveObject.remindWord.get(result);
             txtEN.setText(x.getWord_Title());
             txtVN.setText(x.getWord_Title_VN());
@@ -110,7 +110,8 @@ public class LockScreenActivity extends AppCompatActivity {
         ExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Process.killProcess(Process.myPid());
+               // Process.killProcess(Process.myPid());
+                finish();
 
             }
         });
