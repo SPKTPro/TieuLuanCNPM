@@ -66,6 +66,7 @@ public class Adapter_Remember extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 db.CheckWordRemind(isChecked,item);
                 SaveObject.remindWord =db.getListRemindWord();
+                items=db.getLisCheckedtWord();
             }
         });
         Layout.setTag(position);
