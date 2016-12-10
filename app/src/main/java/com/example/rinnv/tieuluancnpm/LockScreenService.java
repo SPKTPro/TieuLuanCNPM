@@ -20,8 +20,6 @@ public class LockScreenService extends Service {
     @Override
     @SuppressWarnings("deprecation")
     public void onCreate() {
-
-        Log.d("Tag", "onCreate: Start service");
         KeyguardManager.KeyguardLock key;
         KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
 
