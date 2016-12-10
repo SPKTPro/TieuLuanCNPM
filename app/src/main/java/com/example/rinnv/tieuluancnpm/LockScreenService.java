@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -16,25 +15,6 @@ public class LockScreenService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    Handler handler = new Handler();
-
-    Runnable runnable = new Runnable(){
-
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-            Log.d("Tag", "run: "+i++);
-            handler.postDelayed(this, 1000); // 1000 - Milliseconds
-        }
-    };
-
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        handler.postDelayed(runnable, 1000);
-        return START_STICKY;
     }
 
     @Override

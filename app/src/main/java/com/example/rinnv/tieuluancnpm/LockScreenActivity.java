@@ -77,16 +77,13 @@ public class LockScreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_lock_screen);
 
-
-
-
-
         TextView txtVN = (TextView) findViewById(R.id.txtVN);
         final TextView txtEN = (TextView) findViewById(R.id.txtEN);
 
         try {
             int Min = 1, Max = SaveObject.remindWord.size();
-            int result = Min + (int) (Math.random() * ((Max - Min) + 1));
+            int result = Min + (int) (Math.random() * ((Max - Min) + 1)) -1;
+
             Word x = SaveObject.remindWord.get(result);
             txtEN.setText(x.getWord_Title());
             txtVN.setText(x.getWord_Title_VN());
@@ -132,14 +129,13 @@ public class LockScreenActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-       /* getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-*/
 
 
-        Log.d("Tag", "makeFullScreen: " + Build.VERSION.SDK_INT);
+
         if (Build.VERSION.SDK_INT < 19) { //View.SYSTEM_UI_FLAG_IMMERSIVE is only on API 19+
             this.getWindow().getDecorView()
                     .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
