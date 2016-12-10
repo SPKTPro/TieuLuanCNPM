@@ -54,12 +54,18 @@ public class Game extends AppCompatActivity {
                 Topic topic = SaveObject.saveTopic;
                 listWord = db.getListWord(topic);
             } else {
-
                 if ((level.equals("rememberWord"))) {
 
                     listWord = db.getLisCheckedtWord();
                 } else {
-                    Toast.makeText(this, "There are some problem", Toast.LENGTH_SHORT).show();
+
+                    if ((level.equals("all"))) {
+
+                        listWord = db.getListWord();
+                    } else {
+
+                        Toast.makeText(this, "There are some problem", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
@@ -305,7 +311,8 @@ public class Game extends AppCompatActivity {
         if (mode == 1) {
 
             int result = Min+(int)(Math.random()*((Max-Min)+1));
-            return result;
+            Log.d("Tag", "LaysoRandom: "+result);
+            return result - 1;
         } else {
             int x = listWord.size();
             int result = 1 + (int) (Math.random() * (3));

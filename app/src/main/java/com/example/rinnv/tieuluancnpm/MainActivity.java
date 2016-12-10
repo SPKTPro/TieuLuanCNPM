@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -27,6 +26,8 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.io.IOException;
 import java.util.Locale;
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int SPEECH_API_CHECK = 0;
     public String TAG = "Tag";
+
 
     public void CheckTTS() {
 
@@ -125,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
 
         SaveObject.remindWord =db.getListRemindWord();
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        
+        /*final android.support.design.widget.FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
@@ -203,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+*/
     }
 
     private void createDB() {
@@ -294,11 +297,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                                  Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
             int tab = getArguments().getInt(ARG_SECTION_NUMBER);
             if (tab == 1) {
+                final Context context = getContext();
                 listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
                 adapterMaintopic = new Adapter_Maintopic(getContext(), db.getListMainTopic());
                 listView_Maintopic.setAdapter(adapterMaintopic);
@@ -342,6 +346,125 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+                final   FloatingActionMenu materialDesignFAM;
+                final com.github.clans.fab.FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
+
+
+                materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
+                floatingActionButton1 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action1);
+                floatingActionButton2 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action2);
+                floatingActionButton3 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action3);
+                floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
+                   floatingActionButton4.setVisibility(View.VISIBLE);
+
+                floatingActionButton1.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        //TODO something when floating action menu first item clicked
+                        Intent intent = new Intent(context, Game.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("type", 1);
+                        intent.putExtra("level", "all");
+                        startActivity(intent);
+                        materialDesignFAM.close(false);
+                    }
+                });
+                floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        //TODO something when floating action menu second item clicked
+
+                        Intent intent = new Intent(context, Game.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("type", 2);
+                        intent.putExtra("level", "all");
+                        startActivity(intent);
+                        materialDesignFAM.close(false);
+
+                    }
+                });
+                floatingActionButton3.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        //TODO something when floating action menu third item clicked
+
+                        Intent intent = new Intent(context, Test.class);
+                        intent.putExtra("level", "all");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        materialDesignFAM.close(false);
+                    }
+                });
+
+
+
+                floatingActionButton4.setLabelText("Them Main Topic");
+                floatingActionButton4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LayoutInflater li = LayoutInflater.from(context);
+                        View promptsView = li.inflate(R.layout.layout_add_maintopic, null);
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                context);
+
+                        final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
+                        final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
+                        // set dialog message
+                        alertDialogBuilder
+                                .setView(promptsView)
+                                .setCancelable(false)
+                                .setPositiveButton("OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                // bien kiem tra cho phep luu
+                                                Snackbar.make(rootView, "Tap to undo this add", Snackbar.LENGTH_LONG)
+                                                        .setCallback(new Snackbar.Callback() {
+                                                            @Override
+                                                            public void onDismissed(Snackbar snackbar, int event) {
+                                                                switch (event) {
+                                                                    case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                                                        Toast.makeText(context, "Undo Complete", Toast.LENGTH_LONG).show();
+                                                                        break;
+                                                                    case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+
+                                                                        boolean x = db.insertMaintopic(Maintopic_EN.getText().toString().trim(),
+                                                                                Maintopic_VN.getText().toString().trim());
+
+                                                                        adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
+                                                                        listView_Maintopic.setAdapter(adapterMaintopic);
+                                                                        listView_Maintopic.invalidate();
+
+                                                                        Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
+                                                                        break;
+                                                                }
+                                                            }
+
+                                                        })
+                                                        .setAction("Undo", new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+
+                                                            }
+                                                        })
+                                                        .setActionTextColor(Color.RED)
+                                                        .show();
+
+
+                                            }
+                                        })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+                });
+
 
 
             } else {
@@ -353,9 +476,61 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                            Word word = (Word) listView_Maintopic.getItemAtPosition(position);
+                            mTts.speak(word.getWord_Title().trim(), TextToSpeech.QUEUE_FLUSH, null);
 
                         }
                     });
+
+                   final FloatingActionMenu materialDesignFAM;
+                    com.github.clans.fab.FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
+
+
+                    materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
+                    floatingActionButton1 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action1);
+                    floatingActionButton2 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action2);
+                    floatingActionButton3 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action3);
+                    floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
+
+
+                    final Context context = getContext();
+                    floatingActionButton1.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            //TODO something when floating action menu first item clicked
+                            Intent intent = new Intent(context, Game.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("type", 1);
+                            intent.putExtra("level", "rememberWord");
+                            startActivity(intent);
+                            materialDesignFAM.close(false);
+                        }
+                    });
+                    floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            //TODO something when floating action menu second item clicked
+
+                            Intent intent = new Intent(context, Game.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra("type", 2);
+                            intent.putExtra("level", "rememberWord");
+                            startActivity(intent);
+                            materialDesignFAM.close(false);
+
+                        }
+                    });
+                    floatingActionButton3.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            //TODO something when floating action menu third item clicked
+
+                            Intent intent = new Intent(context, Test.class);
+                            intent.putExtra("level", "rememberWord");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            materialDesignFAM.close(false);
+                        }
+                    });
+
+
                 }
             }
 

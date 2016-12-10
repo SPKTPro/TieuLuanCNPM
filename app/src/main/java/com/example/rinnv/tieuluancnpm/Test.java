@@ -49,15 +49,28 @@ public class Test extends AppCompatActivity {
         startQuiz = 0;
         if (level.equals("maintopic")) {
             Maintopic m = SaveObject.saveMaintopic;
-
             listWord = db.getListWord(m);
 
-
-        } else if (level.equals("topic")) {
-            Topic topic = SaveObject.saveTopic;
-            listWord = db.getListWord(topic);
         } else {
-            Toast.makeText(this, "There are some problem", Toast.LENGTH_SHORT).show();
+            if (level.equals("topic")) {
+                Topic topic = SaveObject.saveTopic;
+                listWord = db.getListWord(topic);
+            } else {
+                if ((level.equals("rememberWord"))) {
+
+                    listWord = db.getLisCheckedtWord();
+                } else {
+
+                    if ((level.equals("all"))) {
+
+                        listWord = db.getListWord();
+                    } else {
+
+                        Toast.makeText(this, "There are some problem", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
         }
         question = (TextView) findViewById(R.id.word);
         btnStart = (Button) findViewById(R.id.btnstart);

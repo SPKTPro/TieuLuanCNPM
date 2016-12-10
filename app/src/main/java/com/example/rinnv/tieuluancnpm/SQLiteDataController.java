@@ -363,6 +363,28 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<Word> getListWord() {
+        ArrayList<Word> list = new ArrayList<>();
+        try {
+            openDataBase();
+            Cursor cs = database.rawQuery("select * from Word ", null);
+            Word word;
+            while (cs.moveToNext()) {
+                word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                list.add(word);
+            }
+
+        }catch (Exception e)
+        {
+            Log.d("Tag", "getListWord: "+e.getLocalizedMessage());
+        } finally {
+            close();
+        }
+
+        return list;
+    }
+
 
     public ArrayList<Word> getListWord(Maintopic maintopic) {
         ArrayList<Word> list = new ArrayList<>();
@@ -515,5 +537,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
 
     }
+
+
+
 
 }
