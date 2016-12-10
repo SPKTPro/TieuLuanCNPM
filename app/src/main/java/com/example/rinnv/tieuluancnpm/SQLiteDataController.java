@@ -199,7 +199,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             cx.moveToFirst();
             int MainTopicID = cx.getInt(0);
 
-            Log.d("Tag", "CheckWord: "+MainTopicID);
+
             cx = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopicID + "'", null);
             sum =0; count =0;
             while (cx.moveToNext()) {

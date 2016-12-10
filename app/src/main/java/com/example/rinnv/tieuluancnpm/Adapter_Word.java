@@ -46,7 +46,7 @@ public class Adapter_Word extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
 
-        RelativeLayout Layout = (RelativeLayout) itemInflater.inflate(R.layout.item_layout_word,
+        final RelativeLayout Layout = (RelativeLayout) itemInflater.inflate(R.layout.item_layout_word,
                 parent,
                 false);
 
@@ -67,6 +67,7 @@ public class Adapter_Word extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 db.CheckWord(isChecked,item);
+                items = db.getListWord(SaveObject.saveTopic);
             }
         });
         Layout.setTag(position);
