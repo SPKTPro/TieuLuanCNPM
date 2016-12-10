@@ -75,6 +75,8 @@ public class Adapter_Word extends BaseAdapter {
         final Context context = parent.getContext();
 
         ImageButton btnExample = (ImageButton) Layout.findViewById(R.id.btnExample);
+        btnExample.setFocusable(false);
+        btnExample.setFocusableInTouchMode(false);
         btnExample.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
