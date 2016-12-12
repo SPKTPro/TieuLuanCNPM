@@ -48,7 +48,8 @@
         <activity android:name=".Test" />
         <activity
             android:name=".LockScreenActivity"
-            android:excludeFromRecents="true" />
+            android:excludeFromRecents="true"
+            />
 
         <service
             android:name=".LockScreenService"

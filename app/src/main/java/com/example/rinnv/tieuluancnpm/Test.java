@@ -35,6 +35,7 @@ public class Test extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_test2);
         //123
 
@@ -107,7 +108,7 @@ public class Test extends AppCompatActivity {
     }
 
     private void PrepareforGame() {
-        question.setText("Question");
+
         //   btn1.setText("Submit");
         circularProgressBar.setTitle("0");
         //   circularProgressBar.setSubTitle("Score");
@@ -241,7 +242,7 @@ public class Test extends AppCompatActivity {
         }
 
         circularProgressBar.setTitle(Score + "");
-        circularProgressBar.setSubTitle("Score");
+
     }
 
     protected int LaysoRandom(ArrayList<Word> listWord, int mode) {

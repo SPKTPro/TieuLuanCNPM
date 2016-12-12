@@ -7,6 +7,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -54,7 +55,7 @@ public class LockScreenActivity extends AppCompatActivity {
                 });
 
 
-                mTts.speak("Fuck", TextToSpeech.QUEUE_FLUSH, null);
+                mTts.speak("ABC", TextToSpeech.QUEUE_FLUSH, null);
             } else {
                 // missing data, install it
                 Intent installIntent = new Intent();
@@ -74,7 +75,7 @@ public class LockScreenActivity extends AppCompatActivity {
         CheckTTS();
         makeFullScreen();
         //startService(new Intent(this,LockScreenService.class));
-
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_lock_screen);
 
         TextView txtVN = (TextView) findViewById(R.id.txtVN);
@@ -85,7 +86,7 @@ public class LockScreenActivity extends AppCompatActivity {
             int result = Min + (int) (Math.random() * ((Max - Min) + 1)) -1;
 
             Word x = SaveObject.remindWord.get(result);
-            txtEN.setText(x.getWord_Title());
+            txtEN.setText(x.getWord_Title().toUpperCase());
             txtVN.setText(x.getWord_Title_VN());
         } catch (Exception e) {
             txtEN.setText("There is no word to remind");
@@ -126,6 +127,7 @@ public class LockScreenActivity extends AppCompatActivity {
 
 
     public void makeFullScreen() {
+
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

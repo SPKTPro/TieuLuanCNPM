@@ -21,6 +21,7 @@
         android:layout_alignParentStart="true"
         android:orientation="horizontal"
         android:weightSum="2"
+        android:layout_marginBottom="10px"
         android:id="@+id/linearLayout">
 
         <Button
@@ -47,6 +48,7 @@
             android:background="@drawable/state"
             android:layout_marginLeft="10dp"
             android:textStyle="bold"
+
             android:textColor="@android:color/background_light"/>
 
     </LinearLayout>
@@ -57,7 +59,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/word"
             android:textAlignment="center"
-            android:textSize="35dp"
+            android:textSize="38dp"
+        android:textStyle="bold"
 
         android:textColor="@color/colorPrimaryDark"
         android:textColorHighlight="@color/colorPrimaryDark"
@@ -67,28 +70,28 @@
     <com.example.rinnv.CircularProgressBar
         android:id="@+id/circularprogressbar2"
         style="@style/Widget.ProgressBar.Holo.CircularProgressBar"
-        android:layout_width="170dip"
-        android:layout_height="170dip"
+        android:layout_width="180dip"
+        android:layout_height="180dip"
         circular:subtitle="Score"
         circular:title="Title"
         circular:cpb_title="0"
-        circular:cpb_subtitle="Score"
         circular:cpb_strokeWidth="12"
         circular:cpb_titleColor="@android:color/holo_red_dark"
         circular:cpb_subtitleColor="@android:color/holo_red_light"
         circular:cpb_progressColor="@color/colorPrimaryDark"
+        android:layout_marginTop="28dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        circular:cpb_subtitle="Score" />
 
     <Button
 
-        android:layout_width="190dp"
-        android:layout_height="190dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:id="@+id/btnstart"
         android:background="@drawable/start2"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="22dp" />
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_alignStart="@+id/circularprogressbar2" />
 
 
 </RelativeLayout>
