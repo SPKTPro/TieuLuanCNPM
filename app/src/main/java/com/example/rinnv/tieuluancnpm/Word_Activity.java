@@ -79,9 +79,9 @@ public class Word_Activity extends AppCompatActivity {
                 final Word word = (Word) listView_Word.getItemAtPosition(position);
                 new AlertDialog.Builder(context)
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Delete Main topic")
-                        .setMessage("Are you sure you want to delete this Topic?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle("Xóa từ vựng")
+                        .setMessage("Bạn có chắc muốn xóa từ vựng này không?")
+                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 db.deleteWord(word);
@@ -90,7 +90,7 @@ public class Word_Activity extends AppCompatActivity {
                             }
 
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton("Hủy", null)
                         .show();
 
                 return true;
@@ -162,41 +162,43 @@ public class Word_Activity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int id) {
 
                                         // bien kiem tra cho phep luu
+                                        if (Maintopic_EN.getText().toString().contentEquals("") || Maintopic_EN.getText().toString().isEmpty())
+                                            Toast.makeText(context, "Vui lòng nhập từ vựng", Toast.LENGTH_LONG).show();
+                                        else {
+                                            Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
+                                                    .setCallback(new Snackbar.Callback() {
+                                                        @Override
+                                                        public void onDismissed(Snackbar snackbar, int event) {
+                                                            switch (event) {
+                                                                case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                                                    Toast.makeText(context, "Hủy thao tác", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
 
-                                        Snackbar.make(v, "Tap to undo this add", Snackbar.LENGTH_LONG)
-                                                .setCallback(new Snackbar.Callback() {
-                                                    @Override
-                                                    public void onDismissed(Snackbar snackbar, int event) {
-                                                        switch (event) {
-                                                            case Snackbar.Callback.DISMISS_EVENT_ACTION:
-                                                                Toast.makeText(context, "Undo Complete", Toast.LENGTH_LONG).show();
-                                                                break;
-                                                            case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                                                                    //insert Word
+                                                                    boolean x = true;
+                                                                    x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), Maintopic_EN.getText().toString().trim(),
+                                                                            Maintopic_VN.getText().toString().trim());
 
-                                                                //insert Word
-                                                                boolean x = true;
-                                                                x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), Maintopic_EN.getText().toString().trim(),
-                                                                        Maintopic_VN.getText().toString().trim());
+                                                                    listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                                                    listView_Word.invalidate();
 
-                                                                listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
-                                                                listView_Word.invalidate();
-
-                                                                Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
-                                                                break;
+                                                                    Toast.makeText(context, x ? "Thêm main topic thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                            }
                                                         }
-                                                    }
 
-                                                })
-                                                .setAction("Undo", new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
+                                                    })
+                                                    .setAction("Undo", new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
 
-                                                    }
-                                                })
-                                                .setActionTextColor(Color.RED)
-                                                .show();
+                                                        }
+                                                    })
+                                                    .setActionTextColor(Color.RED)
+                                                    .show();
 
-
+                                        }
                                     }
                                 })
                         .setNegativeButton("Cancel",

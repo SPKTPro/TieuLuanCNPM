@@ -64,9 +64,10 @@ public class Topic_Activity extends AppCompatActivity {
                 final Topic topic = (Topic) listView_Topic.getItemAtPosition(position);
                 new AlertDialog.Builder(context)
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Delete Main topic")
-                        .setMessage("Are you sure you want to delete this Topic?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle("Xóa topic")
+                        .setMessage("Bạn có chắc muốn xóa chủ đề này không?")
+                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -78,7 +79,7 @@ public class Topic_Activity extends AppCompatActivity {
                             }
 
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton("Hủy", null)
                         .show();
 
 
@@ -149,41 +150,44 @@ public class Topic_Activity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int id) {
 
                                         // bien kiem tra cho phep luu
+                                        if (Maintopic_EN.getText().toString().contentEquals("") || Maintopic_EN.getText().toString().isEmpty())
+                                            Toast.makeText(context, "Vui lòng nhập chủ đề", Toast.LENGTH_LONG).show();
+                                        else {
+                                            Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
+                                                    .setCallback(new Snackbar.Callback() {
+                                                        @Override
+                                                        public void onDismissed(Snackbar snackbar, int event) {
+                                                            switch (event) {
+                                                                case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                                                    Toast.makeText(context, "Hủy thao tác", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
 
-                                        Snackbar.make(v, "Tap to undo this add", Snackbar.LENGTH_LONG)
-                                                .setCallback(new Snackbar.Callback() {
-                                                    @Override
-                                                    public void onDismissed(Snackbar snackbar, int event) {
-                                                        switch (event) {
-                                                            case Snackbar.Callback.DISMISS_EVENT_ACTION:
-                                                                Toast.makeText(context, "Undo Complete", Toast.LENGTH_LONG).show();
-                                                                break;
-                                                            case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                                                                    boolean x = db.insertTopic(Maintopic_EN.getText().toString().trim(),
+                                                                            Maintopic_VN.getText().toString().trim(),
+                                                                            Maintopic_choosen.getMaintopic_ID());
 
-                                                                boolean x = db.insertTopic(Maintopic_EN.getText().toString().trim(),
-                                                                        Maintopic_VN.getText().toString().trim(),
-                                                                        Maintopic_choosen.getMaintopic_ID());
+                                                                    adapter_topic = new Adapter_Topic(context, db.getListTopic(Maintopic_choosen));
+                                                                    listView_Topic.setAdapter(adapter_topic);
+                                                                    listView_Topic.invalidate();
 
-                                                                adapter_topic = new Adapter_Topic(context, db.getListTopic(Maintopic_choosen));
-                                                                listView_Topic.setAdapter(adapter_topic);
-                                                                listView_Topic.invalidate();
-
-                                                                Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
-                                                                break;
+                                                                    Toast.makeText(context, x ? "Thêm topic thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                            }
                                                         }
-                                                    }
 
-                                                })
-                                                .setAction("Undo", new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
+                                                    })
+                                                    .setAction("Undo", new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
 
-                                                    }
-                                                })
-                                                .setActionTextColor(Color.RED)
-                                                .show();
+                                                        }
+                                                    })
+                                                    .setActionTextColor(Color.RED)
+                                                    .show();
 
 
+                                        }
                                     }
                                 })
                         .setNegativeButton("Cancel",
