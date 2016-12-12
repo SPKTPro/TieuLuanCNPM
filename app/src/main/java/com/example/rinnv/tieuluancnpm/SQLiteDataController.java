@@ -320,6 +320,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     public void deleteTopic(Topic topic) {
         ArrayList<Word> list = new ArrayList<>();
+
+        Log.d("Tag", "deleteTopic: "+topic.getTopic_Id());
         try {
             openDataBase();
             Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + topic.getTopic_Id() + "'", null);
@@ -334,6 +336,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 deleteWord(x);
             }
             database.execSQL("delete from  Topic where Topic.Topic_Id = '" + topic.getTopic_Id() + "'");
+
 
         } catch (Exception e) {
             Log.d("Tag", "deleteWord: " + e.getMessage());
@@ -450,6 +453,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
 
             openDataBase();
+
             ContentValues values = new ContentValues();
 
             values.put("MainTopic_Title", MainTopic_EN);
@@ -477,8 +481,19 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
 
             openDataBase();
+
+            Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopic_Id + "'", null);
+            cs.moveToPosition(cs.getCount()-1);
+
+            String topicIDLast = cs.getString(1);
+            String[] s = topicIDLast.split("-");
+            int TopicID_real = Integer.parseInt(s[s.length-1]) +1;
+            String topicID = s[s.length-2] +"-"+ TopicID_real+"";
+
+
             ContentValues values = new ContentValues();
 
+            values.put("Topic_Id",topicID);
             values.put("Topic_Title", Topic_Title);
             values.put("Topic_Title_VN", Topic_Title_VN);
             values.put("MainTopic_Id", MainTopic_Id);
@@ -488,7 +503,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             if (rs > 0) {
                 result = true;
-                Log.d("Tag", "insertMaintopic: compele");
+
             }
 
 
@@ -509,7 +524,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             Cursor cs = database.rawQuery("select * from Word where Word_Title= " + '"' + WordTittle_EN + '"', null);
 
-            Log.d("Tag", "insertWord: " + cs.getCount());
+            //Log.d("Tag", "insertWord: " + cs.getCount());
             if (cs.getCount() != 0) {
                 result = false;
             } else {
@@ -519,11 +534,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 values.put("Word_Title", WordTittle_EN);
                 values.put("Word_Title_VN", WordTittle_VN);
 
+
+
+
                 long rs = database.insert("Word", null, values);
 
                 if (rs > 0) {
                     result = true;
-                    Log.d("Tag", "insertMaintopic: complete");
+
                 }
             }
 
