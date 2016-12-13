@@ -127,86 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         SaveObject.remindWord =db.getListRemindWord();
 
-        
-        /*final android.support.design.widget.FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                if (tabLayout.getSelectedTabPosition()==0) {
-                    // get prompts.xml view
-                    LayoutInflater li = LayoutInflater.from(context);
-                    View promptsView = li.inflate(R.layout.layout_add_maintopic, null);
 
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                            context);
-                    final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
-                    final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
-                    // set dialog message
-                    alertDialogBuilder
-                            .setView(promptsView)
-                            .setCancelable(false)
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // bien kiem tra cho phep luu
-                                            Snackbar.make(view, "Tap to undo this add", Snackbar.LENGTH_LONG)
-                                                    .setCallback(new Snackbar.Callback() {
-                                                        @Override
-                                                        public void onDismissed(Snackbar snackbar, int event) {
-                                                            switch (event) {
-                                                                case Snackbar.Callback.DISMISS_EVENT_ACTION:
-                                                                    Toast.makeText(context, "Undo Complete", Toast.LENGTH_LONG).show();
-                                                                    break;
-                                                                case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
-
-                                                                    boolean x = db.insertMaintopic(Maintopic_EN.getText().toString().trim(),
-                                                                            Maintopic_VN.getText().toString().trim());
-
-                                                                    adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
-                                                                    listView_Maintopic.setAdapter(adapterMaintopic);
-                                                                    listView_Maintopic.invalidate();
-
-                                                                    Toast.makeText(context, x ? "Add Main topic Successfull" : "Fail to do this", Toast.LENGTH_LONG).show();
-                                                                    break;
-                                                            }
-                                                        }
-
-                                                    })
-                                                    .setAction("Undo", new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-
-                                                        }
-                                                    })
-                                                    .setActionTextColor(Color.RED)
-                                                    .show();
-
-
-                                        }
-                                    })
-                            .setNegativeButton("Cancel",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
-                }else  if (tabLayout.getSelectedTabPosition()==1) {
-                    Intent intent = new Intent(MainActivity.this, Game.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("type", 1);
-                    intent.putExtra("level", "rememberWord");
-                    startActivity(intent);
-                }
-
-            }
-        });
-*/
     }
 
     private void createDB() {
@@ -275,16 +196,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -473,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
                 if (tab == 2) {
+
                     final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
                     Adapter_Remember adapterRemember = new Adapter_Remember(getContext(), db.getLisCheckedtWord());
                     listView_Maintopic.setAdapter(adapterRemember);

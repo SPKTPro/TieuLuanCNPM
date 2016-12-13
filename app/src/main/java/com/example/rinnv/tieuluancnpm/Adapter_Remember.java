@@ -17,8 +17,8 @@ import java.util.ArrayList;
  */
 
 public class Adapter_Remember extends BaseAdapter {
-    private ArrayList<Word> items;
-    private LayoutInflater itemInflater;
+    public ArrayList<Word> items;
+    public LayoutInflater itemInflater;
 
     @Override
     public int getCount() {
@@ -42,9 +42,9 @@ public class Adapter_Remember extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, final ViewGroup parent) {
+    public View getView(int position, final View convertView, final ViewGroup parent) {
 
-        RelativeLayout Layout = (RelativeLayout) itemInflater.inflate(R.layout.remember_word_layout,
+        final RelativeLayout Layout = (RelativeLayout) itemInflater.inflate(R.layout.remember_word_layout,
                 parent,
                 false);
 
@@ -53,24 +53,61 @@ public class Adapter_Remember extends BaseAdapter {
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
 
-
         final Word item = items.get(position);
         titleView.setText(item.getWord_Title());
-        titleView2.setText(item.getWord_Title_VN() );
-        CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
+        titleView2.setText(item.getWord_Title_VN());
+        final CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
         checkBox.setFocusable(false);
         checkBox.setFocusableInTouchMode(false);
         checkBox.setChecked(item.getWord_Remind());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                db.CheckWordRemind(isChecked,item);
-                SaveObject.remindWord =db.getListRemindWord();
-                items=db.getLisCheckedtWord();
+                db.CheckWordRemind(isChecked, item);
+                SaveObject.remindWord = db.getListRemindWord();
+                items = db.getLisCheckedtWord();
+            }
+        });
+
+
+        checkBox.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                if (checkBox.isChecked()) {
+                    for (Word item : items) {
+                        db.CheckWordRemind(false, item);
+                        checkBox.setChecked(false);
+
+                    }
+
+                } else {
+                    for (Word item : items) {
+                        db.CheckWordRemind(true, item);
+                        checkBox.setChecked(true);
+                    }
+
+                }
+
+
+                SaveObject.remindWord = db.getListRemindWord();
+                 ArrayList<Word> dataitems = db.getLisCheckedtWord();
+
+                refresAdapter(dataitems);
+                parent.invalidate();
+
+                return true;
             }
         });
         Layout.setTag(position);
         return Layout;
 
+    }
+
+    public synchronized void refresAdapter(ArrayList<Word> dataitems) {
+
+        items.clear();
+        items.addAll(dataitems);
+        notifyDataSetChanged();
     }
 }
