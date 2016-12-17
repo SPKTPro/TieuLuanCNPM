@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                     final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
                     Adapter_Remember adapterRemember = new Adapter_Remember(getContext(), db.getLisCheckedtWord());
                     listView_Maintopic.setAdapter(adapterRemember);
-                    listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                   /* listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -398,7 +398,11 @@ public class MainActivity extends AppCompatActivity {
                             mTts.speak(word.getWord_Title().trim(), TextToSpeech.QUEUE_FLUSH, null);
 
                         }
-                    });
+                    });*/
+
+
+
+
 
                    final FloatingActionMenu materialDesignFAM;
                     com.github.clans.fab.FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
@@ -408,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                     floatingActionButton1 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action1);
                     floatingActionButton2 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action2);
                     floatingActionButton3 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action3);
-                    floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
+
 
 
                     final Context context = getContext();

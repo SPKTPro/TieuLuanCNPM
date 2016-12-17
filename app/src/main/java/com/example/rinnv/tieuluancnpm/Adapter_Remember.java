@@ -1,6 +1,7 @@
 package com.example.rinnv.tieuluancnpm;
 
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
 
 /**
  * Created by rinnv on 25/10/2016.
@@ -57,8 +60,18 @@ public class Adapter_Remember extends BaseAdapter {
         titleView.setText(item.getWord_Title());
         titleView2.setText(item.getWord_Title_VN());
         final CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
+
         checkBox.setFocusable(false);
         checkBox.setFocusableInTouchMode(false);
+
+
+        Layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTts.speak(item.getWord_Title().trim(), TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+
         checkBox.setChecked(item.getWord_Remind());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -73,20 +86,17 @@ public class Adapter_Remember extends BaseAdapter {
         checkBox.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
                 if (checkBox.isChecked()) {
                     for (Word item : items) {
                         db.CheckWordRemind(false, item);
                         checkBox.setChecked(false);
 
                     }
-
                 } else {
                     for (Word item : items) {
                         db.CheckWordRemind(true, item);
                         checkBox.setChecked(true);
                     }
-
                 }
 
 
@@ -94,11 +104,14 @@ public class Adapter_Remember extends BaseAdapter {
                  ArrayList<Word> dataitems = db.getLisCheckedtWord();
 
                 refresAdapter(dataitems);
-                parent.invalidate();
 
+                parent.invalidate();
+                parent.clearFocus();
                 return true;
             }
         });
+
+
         Layout.setTag(position);
         return Layout;
 
