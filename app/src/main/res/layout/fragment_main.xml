@@ -38,7 +38,7 @@
         fab:menu_colorNormal="#da3c2f"
         fab:menu_colorPressed="#dc4b3f"
         fab:menu_colorRipple="#99d4d4d4"
-        fab:menu_fab_label="Floating Action Menu"
+        fab:menu_fab_label="Menu"
         fab:menu_fab_size="normal"
         fab:menu_icon="@android:drawable/btn_star_big_on"
         fab:menu_labels_colorNormal="#333"
