@@ -1,6 +1,5 @@
 package com.example.rinnv.tieuluancnpm;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -72,23 +70,6 @@ public class Adapter_Word extends BaseAdapter {
         });
         Layout.setTag(position);
 
-        final Context context = parent.getContext();
-
-        ImageButton btnExample = (ImageButton) Layout.findViewById(R.id.btnExample);
-        btnExample.setFocusable(false);
-        btnExample.setFocusableInTouchMode(false);
-        btnExample.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                alertDialogBuilder.setTitle(item.getExample());
-                alertDialogBuilder.setMessage(item.getExample_VN());
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-
-            }
-        });
 
         return Layout;
 
