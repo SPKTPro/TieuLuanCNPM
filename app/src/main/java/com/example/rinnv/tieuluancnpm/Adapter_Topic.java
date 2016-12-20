@@ -60,7 +60,16 @@ public class Adapter_Topic extends BaseAdapter {
         titleView.setText(item.getTopic_Title());
         titleView2.setText(item.getTopic_Title_VN());
         String s= item.getTopic_Title().toString().toLowerCase();
-
+        int i=-1;
+        while(i!=-2) {
+            i = s.indexOf(" ");
+            if(i!=-1) {
+                s = removeCharAt(s, i);
+                i=-1;
+            }
+            else
+             i=-2;
+        }
         int imageResource = Layout.getResources().getIdentifier(s, "drawable",context.getPackageName());
         if(imageResource==0) {
             imageView.setImageResource(R.drawable.newtopic);
@@ -75,6 +84,9 @@ public class Adapter_Topic extends BaseAdapter {
         Layout.setTag(position);
         return Layout;
 
+    }
+    public static String removeCharAt(String s, int pos) {
+        return s.substring(0, pos) + s.substring(pos + 1);
     }
 }
 
