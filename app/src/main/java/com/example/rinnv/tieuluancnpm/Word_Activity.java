@@ -183,7 +183,7 @@ public class Word_Activity extends AppCompatActivity {
                                                                     listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
                                                                     listView_Word.invalidate();
 
-                                                                    Toast.makeText(context, x ? "Thêm main topic thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+                                                                    Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
                                                                     break;
                                                             }
                                                         }
