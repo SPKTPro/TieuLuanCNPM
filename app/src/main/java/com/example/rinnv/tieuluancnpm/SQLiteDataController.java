@@ -482,14 +482,20 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             openDataBase();
 
+            Log.d("Tag", "insertTopic: "+MainTopic_Id);
             Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopic_Id + "'", null);
             cs.moveToPosition(cs.getCount()-1);
+            String topicID = "";
+            try {
+                String topicIDLast = cs.getString(1);
+                String[] s = topicIDLast.split("-");
+                int TopicID_real = Integer.parseInt(s[s.length - 1]) + 1;
+                topicID = s[s.length - 2] + "-" + TopicID_real + "";
+            }catch (Exception e)
+            {
+                topicID = MainTopic_Id + "-1" ;
 
-            String topicIDLast = cs.getString(1);
-            String[] s = topicIDLast.split("-");
-            int TopicID_real = Integer.parseInt(s[s.length-1]) +1;
-            String topicID = s[s.length-2] +"-"+ TopicID_real+"";
-
+            }
 
             ContentValues values = new ContentValues();
 
