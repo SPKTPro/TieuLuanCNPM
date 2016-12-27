@@ -202,7 +202,7 @@ public class Test extends AppCompatActivity {
             TextView text = (TextView) dialog.findViewById(R.id.textView);
             text.setText(Score+"");
 
-            Button dialogButton = (Button) dialog.findViewById(R.id.btnOk);
+            Button dialogButton = (Button) dialog.findViewById(R.id.button);
             // if button is clicked, close the custom dialog
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override

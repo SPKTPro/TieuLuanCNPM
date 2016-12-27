@@ -59,13 +59,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/word"
             android:textAlignment="center"
-            android:textSize="38dp"
         android:textStyle="bold"
 
         android:textColor="@color/colorPrimaryDark"
         android:textColorHighlight="@color/colorPrimaryDark"
         android:layout_below="@+id/circularprogressbar2"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textSize="34sp" />
 
     <com.example.rinnv.CircularProgressBar
         android:id="@+id/circularprogressbar2"
@@ -79,7 +79,7 @@
         circular:cpb_titleColor="@android:color/holo_red_dark"
         circular:cpb_subtitleColor="@android:color/holo_red_light"
         circular:cpb_progressColor="@color/colorPrimaryDark"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="40dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         circular:cpb_subtitle="Score" />
@@ -87,11 +87,35 @@
     <Button
 
         android:layout_width="200dp"
-        android:layout_height="200dp"
         android:id="@+id/btnstart"
         android:background="@drawable/start2"
         android:layout_alignBottom="@+id/linearLayout"
-        android:layout_alignStart="@+id/circularprogressbar2" />
+        android:layout_alignStart="@+id/circularprogressbar2"
+        android:layout_height="190dp" />
+
+    <ImageView
+        android:layout_height="wrap_content"
+        circular:srcCompat="@drawable/best"
+        android:layout_marginEnd="50dp"
+        android:id="@+id/imageView3"
+        android:padding="0dp"
+        android:layout_width="30sp"
+        android:layout_marginBottom="189dp"
+        android:layout_above="@+id/word"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="100"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/max"
+        android:textSize="28sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="normal|bold"
+        android:textAlignment="textEnd"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
 
 
 </RelativeLayout>

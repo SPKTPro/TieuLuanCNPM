@@ -21,9 +21,9 @@ public class Game extends AppCompatActivity {
     private int Clicked = 0, Score = 0;
     private Button btn1, btn2, btnStart;
     private Word word1, word2;
-    private TextView question;
+    private TextView question,max;
     private CircularProgressBar circularProgressBar;
-    private String QuizQuestion, Answer1, Answer2, RightAnswer;
+    private String QuizQuestion, Answer1, Answer2, RightAnswer,Max;
     private int count, QuizID, QuizNow, typeQuiz, timeDelay, QuizLevel, startQuiz;
     //typeQuiz=1, Quiz Anh-Viet, typeQuiz=2 Quiz Viet Anh
     // bien startQuiz dung de ngan tinh trang nhan nut start nhieu lan
@@ -46,7 +46,8 @@ public class Game extends AppCompatActivity {
         // level = topic thì lấy tat ca cac từ trong topic đó,
         // level = maintopic thi lay tat ca cac tu trong maintopic do
 
-        startQuiz = 0;
+
+         startQuiz = 0;
         if (level.equals("maintopic")) {
             Maintopic m = SaveObject.saveMaintopic;
             listWord = db.getListWord(m);
@@ -72,8 +73,9 @@ public class Game extends AppCompatActivity {
 
             }
         }
-
+        Max= PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore", "0");
         question = (TextView) findViewById(R.id.word);
+        max= (TextView)findViewById(R.id.max);
         btn1 = (Button) findViewById(R.id.btn1);
         btn2 = (Button) findViewById(R.id.btn2);
         btnStart = (Button) findViewById(R.id.btnstart);
@@ -81,7 +83,7 @@ public class Game extends AppCompatActivity {
         btn2.setVisibility(View.INVISIBLE);
         //Setup luc bat dau
 
-
+        max.setText(Max);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,55 +200,63 @@ public class Game extends AppCompatActivity {
             btn2.setVisibility(View.INVISIBLE);
             btnStart.setVisibility(View.VISIBLE);
             final Dialog dialog = new Dialog(this);
+            final Dialog dialog1 = new Dialog(this);
             dialog.setContentView(R.layout.score_final_layout);
-            dialog.setTitle(score + "Score(s)");
+            dialog.setTitle("Score");
+            dialog1.setContentView(R.layout.remind_game_layout);
+            dialog1.setTitle("Gợi ý");
             TextView text = (TextView) dialog.findViewById(R.id.textView);
             text.setText(score+"");
+            dialog.show();
+     //       TextView textQues = (TextView) dialog.findViewById(R.id.txt);
 
-            TextView textQues = (TextView) dialog.findViewById(R.id.txt);
 
 
 
-            String x = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore", "0");
-            Button dialogButtonCancel = (Button) dialog.findViewById(R.id.btnCancel);
-            Button dialogButtonOK = (Button) dialog.findViewById(R.id.btnOk);
-            final int maxScore = Integer.parseInt(x);
-            if (score > maxScore) {
-                textQues.setText("This is highest score of you, Do you want to save this ?");
-            } else {
-                textQues.setText("Continue");
-                dialogButtonCancel.setVisibility(View.GONE);
-            }
+
+            Button dialogButtonOK = (Button) dialog.findViewById(R.id.button);
+            final Button dialogButtonOK1 = (Button) dialog1.findViewById(R.id.buttonOK);
+            Button dialogButtonOK2 = (Button) dialog1.findViewById(R.id.buttonCancel);
+            final int maxScore = Integer.parseInt(Max);
+
 
             dialogButtonOK.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                     if (score > maxScore) {
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
                                 edit().putString("MaxScore", score + "").commit();
+                        Max= PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore", "0");
+                        max.setText(Max);
                     }
                     Score = 0;
-                    PrepareforGame();
+
+                    dialog1.show();
                     dialog.dismiss();
+
 
                 }
             });
-
-
-
-            dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            dialogButtonOK1.setOnClickListener(new View.OnClickListener(){
                 @Override
-                public void onClick(View v) {
-                    Score = 0;
+                public void onClick(View view) {
+                    //Làm code chỗ này
+
                     PrepareforGame();
-                    dialog.dismiss();
+                    dialog1.dismiss();
+
+                }
+            });
+            dialogButtonOK2.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    PrepareforGame();
+                    dialog1.dismiss();
 
                 }
             });
 
-            dialog.show();
+
 
         } catch (Exception e) {
 
