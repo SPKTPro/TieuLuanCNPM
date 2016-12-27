@@ -10,18 +10,21 @@ public class Topic {
     private String Topic_Title;
     private String Topic_Title_VN;
     private int Topic_Process;
+    private int countWord;
 
     public Topic(int MainTopic_Id,
                  String Topic_Id,
                  String Topic_Title,
                  String Topic_Title_VN,
-                 int Topic_Process
+                 int Topic_Process,
+                 int countWord
     ) {
         this.MainTopic_Id = MainTopic_Id;
         this.Topic_Id = Topic_Id;
         this.Topic_Title = Topic_Title;
         this.Topic_Title_VN = Topic_Title_VN;
         this.Topic_Process = Topic_Process;
+        this.countWord =countWord;
     }
 
     public int getMainTopic_Id() {
@@ -44,4 +47,7 @@ public class Topic {
         return Topic_Title_VN;
     }
 
+    public int getCountWord() {
+        return countWord;
+    }
 }

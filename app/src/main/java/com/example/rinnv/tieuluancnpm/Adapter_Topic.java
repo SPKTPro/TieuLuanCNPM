@@ -57,7 +57,9 @@ public class Adapter_Topic extends BaseAdapter {
         TextView titleView2  = (TextView)Layout.findViewById(R.id.itemtitle2);
 
         Topic item = items.get(position);
-        titleView.setText(item.getTopic_Title());
+        titleView.setText(item.getTopic_Title()+" - "+item.getCountWord() +" word(s)");
+
+
         titleView2.setText(item.getTopic_Title_VN());
         String s= item.getTopic_Title().toString().toLowerCase();
         int i=-1;

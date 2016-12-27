@@ -3,6 +3,7 @@ package com.example.rinnv.tieuluancnpm;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -190,7 +191,7 @@ public class Game extends AppCompatActivity {
         ThreadGame.start();
     }
 
-    public void end_Game(int score) {
+    public void end_Game(final int score) {
         try {
             startQuiz = 0;
             btn1.setVisibility(View.INVISIBLE);
@@ -198,28 +199,61 @@ public class Game extends AppCompatActivity {
             btnStart.setVisibility(View.VISIBLE);
             final Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.score_final_layout);
-            dialog.setTitle("Score");
-
+            dialog.setTitle(score + "Score(s)");
             TextView text = (TextView) dialog.findViewById(R.id.textView);
-            text.setText(Score+"");
+            text.setText(score+"");
 
-            Button dialogButton = (Button) dialog.findViewById(R.id.button);
-            // if button is clicked, close the custom dialog
-            dialogButton.setOnClickListener(new View.OnClickListener() {
+            TextView textQues = (TextView) dialog.findViewById(R.id.txt);
+
+
+
+            String x = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore", "0");
+            Button dialogButtonCancel = (Button) dialog.findViewById(R.id.btnCancel);
+            Button dialogButtonOK = (Button) dialog.findViewById(R.id.btnOk);
+            final int maxScore = Integer.parseInt(x);
+            if (score > maxScore) {
+                textQues.setText("This is highest score of you, Do you want to save this ?");
+            } else {
+                textQues.setText("Continue");
+                dialogButtonCancel.setVisibility(View.GONE);
+            }
+
+            dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if (score > maxScore) {
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
+                                edit().putString("MaxScore", score + "").commit();
+                    }
+                    Score = 0;
+                    PrepareforGame();
+                    dialog.dismiss();
+
+                }
+            });
+
+
+
+            dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Score = 0;
                     PrepareforGame();
                     dialog.dismiss();
+
                 }
             });
+
             dialog.show();
-        }catch (Exception e)
-        {
+
+        } catch (Exception e) {
 
         }
 
     }
+
 
     public void CreatQuiz() {
         int x1 = LaysoRandom(listWord, 1);
@@ -231,7 +265,7 @@ public class Game extends AppCompatActivity {
         word1 = listWord.get(x1);
         word2 = listWord.get(x2);
 
-        Log.d("Tag", "CreatQuiz: "+word1.getWord_Title()+"|||"+word1.getWord_Title_VN());
+        Log.d("Tag", "CreatQuiz: " + word1.getWord_Title() + "|||" + word1.getWord_Title_VN());
 
         //typeQuiz=1, Quiz Anh Viet
         //typeQuiz=2, Quiz Viet Anh
@@ -308,11 +342,11 @@ public class Game extends AppCompatActivity {
         // mode 2 lay random cac tu trong listWord
 
 
-        int Min=1,Max = listWord.size();
+        int Min = 1, Max = listWord.size();
         if (mode == 1) {
 
-            int result = Min+(int)(Math.random()*((Max-Min)+1));
-            Log.d("Tag", "LaysoRandom: "+result);
+            int result = Min + (int) (Math.random() * ((Max - Min) + 1));
+
             return result - 1;
         } else {
             int x = listWord.size();

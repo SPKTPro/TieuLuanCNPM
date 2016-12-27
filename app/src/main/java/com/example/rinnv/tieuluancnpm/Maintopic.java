@@ -9,15 +9,18 @@ public class Maintopic {
     private String Maintopic_Tittle;
     private String Maintopic_Tittle_VN;
     private int Maintopic_Process;
+    private int countTopic;
+
 
     public Maintopic(int Maintopic_ID,
                      String Maintopic_Tittle,
                      String Maintopic_Tittle_VN,
-                     int Maintopic_Process) {
+                     int Maintopic_Process,int countTopic) {
         this.Maintopic_ID = Maintopic_ID;
         this.Maintopic_Tittle = Maintopic_Tittle;
         this.Maintopic_Tittle_VN = Maintopic_Tittle_VN;
         this.Maintopic_Process = Maintopic_Process;
+        this.countTopic = countTopic;
     }
 
     public int getMaintopic_ID() {
@@ -36,6 +39,10 @@ public class Maintopic {
         return Maintopic_Tittle_VN;
     }
 
+    public int getCountTopic()
+    {
+        return countTopic;
+    }
 
 
 }

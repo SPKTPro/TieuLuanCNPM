@@ -155,7 +155,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Cursor cs = database.rawQuery("select * from MainTopic", null);
             Maintopic maintopic;
             while (cs.moveToNext()) {
-                maintopic = new Maintopic(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getInt(3));
+                maintopic = new Maintopic(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getInt(3),cs.getInt(4));
                 listMainTopic.add(maintopic);
             }
         } catch (SQLException e) {
@@ -342,7 +342,18 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
             database.execSQL("delete from  Word where word.Word_Id = '" + word.getWord_Id() + "'");
 
-            Log.d("Tag", "deleteWord: " + word.getWord_Title());
+
+            Cursor cs = database.rawQuery("select * from Word where word.Topic_Id ='"+word.getTopic_Id().toString()+"'",null);
+            int x = cs.getCount();
+
+
+
+            ContentValues values = new ContentValues();
+            values.put("Count_Word", x);
+
+            int rs = database.update("Topic", values, "Topic_Id='" + word.getTopic_Id()+"'", null);
+
+
 
         } catch (Exception e) {
             Log.d("Tag", "deleteWord: " + e.getMessage());
@@ -368,6 +379,15 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
             database.execSQL("delete from  Topic where Topic.Topic_Id = '" + topic.getTopic_Id() + "'");
 
+            cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + topic.getMainTopic_Id() + "'", null);
+            int x = cs.getCount();
+
+            ContentValues values = new ContentValues();
+            values.put("Count_Topic", x);
+
+            int rs = database.update("MainTopic", values, "MainTopic_Id='" + topic.getMainTopic_Id()+"'", null);
+
+
 
         } catch (Exception e) {
             Log.d("Tag", "deleteWord: " + e.getMessage());
@@ -382,7 +402,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Topic topic;
             while (cs.moveToNext()) {
                 topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4));
+                        cs.getString(3), cs.getInt(4),cs.getInt(5));
                 listTopic.add(topic);
             }
 
@@ -436,7 +456,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Topic topic;
             while (cs.moveToNext()) {
                 topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4));
+                        cs.getString(3), cs.getInt(4),cs.getInt(5));
                 listTopic.add(topic);
             }
 
@@ -471,7 +491,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             while (cs.moveToNext()) {
 
 
-                topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getString(3), cs.getInt(4));
+                topic = new Topic(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getString(3), cs.getInt(4),cs.getInt(5));
                 list.add(topic);
             }
         } catch (SQLException e) {
