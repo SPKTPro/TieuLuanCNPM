@@ -1,7 +1,5 @@
 package com.example.rinnv.tieuluancnpm;
 
-import java.net.IDN;
-
 /**
  * Created by rinnv on 25/10/2016.
  */
@@ -37,4 +35,7 @@ public class Maintopic {
     public String getMaintopic_Tittle_VN() {
         return Maintopic_Tittle_VN;
     }
+
+
+
 }

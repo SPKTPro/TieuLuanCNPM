@@ -7,7 +7,6 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -65,9 +64,6 @@ public class LockScreenActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,11 +77,13 @@ public class LockScreenActivity extends AppCompatActivity {
         TextView txtVN = (TextView) findViewById(R.id.txtVN);
         final TextView txtEN = (TextView) findViewById(R.id.txtEN);
 
+        Word x = null;
+        final SQLiteDataController db = new SQLiteDataController(this);
         try {
             int Min = 1, Max = SaveObject.remindWord.size();
             int result = Min + (int) (Math.random() * ((Max - Min) + 1)) -1;
 
-            Word x = SaveObject.remindWord.get(result);
+            x = SaveObject.remindWord.get(result);
             txtEN.setText(x.getWord_Title().toUpperCase());
             txtVN.setText(x.getWord_Title_VN());
         } catch (Exception e) {
@@ -121,6 +119,16 @@ public class LockScreenActivity extends AppCompatActivity {
                 Intent i = new Intent(LockScreenActivity.this, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
+            }
+        });
+
+
+        Button btnUncheckWord = (Button) findViewById(R.id.btnUncheckWord);
+        final Word finalX1 = x;
+        btnUncheckWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.CheckWordRemind(false, finalX1);
             }
         });
     }

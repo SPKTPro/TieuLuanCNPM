@@ -64,7 +64,17 @@
         android:id="@+id/btnOpenApp"
         android:background="@drawable/home"
 
+        android:layout_marginEnd="15dp"
+        android:layout_alignTop="@+id/btnspeak"
+        android:layout_toStartOf="@+id/btnUncheckWord" />
+
+    <Button
+
+        android:layout_width="145px"
+        android:layout_height="145px"
+        android:id="@+id/btnUncheckWord"
+        android:background="@drawable/home"
+
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btnspeak"
-        android:layout_marginEnd="10dp" />
+        android:layout_toStartOf="@+id/btnspeak" />
 </RelativeLayout>

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by rinnv on 25/10/2016.
@@ -162,6 +164,15 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
 
+
+        Collections.sort(listMainTopic, new Comparator<Maintopic>() {
+            @Override
+            public int compare(Maintopic o1, Maintopic o2) {
+                return o1.getMaintopic_Tittle().toLowerCase().compareToIgnoreCase(o2.getMaintopic_Tittle());
+
+            }
+        });
+
         return listMainTopic;
     }
 
@@ -201,11 +212,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
 
             cx = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopicID + "'", null);
-            sum =0; count =0;
+            sum = 0;
+            count = 0;
             while (cx.moveToNext()) {
 
-               count += cx.getInt(4);
-                sum +=100;
+                count += cx.getInt(4);
+                sum += 100;
 
             }
             x = 0;
@@ -216,7 +228,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
             values = new ContentValues();
             values.put("MainTopic_Process", x);
-            rs = database.update("MainTopic", values, "MainTopic_Id = '" +MainTopicID + "'", null);
+            rs = database.update("MainTopic", values, "MainTopic_Id = '" + MainTopicID + "'", null);
 
 
         } catch (SQLException e) {
@@ -233,6 +245,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put("Word_Remind", ischeck ? 1 : 0);
             int rs = database.update("Word", values, "Word_Id=" + word.getWord_Id(), null);
+
+            Log.d("Tag", "CheckWordRemind: "+word+"|"+ischeck);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -258,6 +272,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
 
+        Collections.sort(list, new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getWord_Title().toLowerCase().compareToIgnoreCase(o2.getWord_Title());
+            }
+        });
         return list;
 
     }
@@ -279,8 +299,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
 
+        Collections.sort(list, new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getWord_Title().toLowerCase().compareToIgnoreCase(o2.getWord_Title());
+            }
+        });
         return list;
-
     }
 
 
@@ -301,6 +326,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             close();
         }
+        Collections.sort(list, new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getWord_Title().toLowerCase().compareToIgnoreCase(o2.getWord_Title());
+            }
+        });
 
         return list;
 
@@ -321,7 +352,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     public void deleteTopic(Topic topic) {
         ArrayList<Word> list = new ArrayList<>();
 
-        Log.d("Tag", "deleteTopic: "+topic.getTopic_Id());
+        Log.d("Tag", "deleteTopic: " + topic.getTopic_Id());
         try {
             openDataBase();
             Cursor cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + topic.getTopic_Id() + "'", null);
@@ -378,13 +409,18 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 list.add(word);
             }
 
-        }catch (Exception e)
-        {
-            Log.d("Tag", "getListWord: "+e.getLocalizedMessage());
+        } catch (Exception e) {
+            Log.d("Tag", "getListWord: " + e.getLocalizedMessage());
         } finally {
             close();
         }
 
+        Collections.sort(list, new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getWord_Title().toLowerCase().compareToIgnoreCase(o2.getWord_Title());
+            }
+        });
         return list;
     }
 
@@ -444,6 +480,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             close();
         }
 
+
+        Collections.sort(list, new Comparator<Topic>() {
+            @Override
+            public int compare(Topic o1, Topic o2) {
+                return o1.getTopic_Title().toLowerCase().compareToIgnoreCase(o2.getTopic_Title());
+            }
+        });
         return list;
 
     }
@@ -482,24 +525,23 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             openDataBase();
 
-            Log.d("Tag", "insertTopic: "+MainTopic_Id);
+            Log.d("Tag", "insertTopic: " + MainTopic_Id);
             Cursor cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopic_Id + "'", null);
-            cs.moveToPosition(cs.getCount()-1);
+            cs.moveToPosition(cs.getCount() - 1);
             String topicID = "";
             try {
                 String topicIDLast = cs.getString(1);
                 String[] s = topicIDLast.split("-");
                 int TopicID_real = Integer.parseInt(s[s.length - 1]) + 1;
                 topicID = s[s.length - 2] + "-" + TopicID_real + "";
-            }catch (Exception e)
-            {
-                topicID = MainTopic_Id + "-1" ;
+            } catch (Exception e) {
+                topicID = MainTopic_Id + "-1";
 
             }
 
             ContentValues values = new ContentValues();
 
-            values.put("Topic_Id",topicID);
+            values.put("Topic_Id", topicID);
             values.put("Topic_Title", Topic_Title);
             values.put("Topic_Title_VN", Topic_Title_VN);
             values.put("MainTopic_Id", MainTopic_Id);
@@ -541,8 +583,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 values.put("Word_Title_VN", WordTittle_VN);
 
 
-
-
                 long rs = database.insert("Word", null, values);
 
                 if (rs > 0) {
@@ -561,8 +601,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
 
     }
-
-
 
 
 }
