@@ -203,10 +203,10 @@ public class Test extends AppCompatActivity {
             startQuiz = 0;
             btnStart.setVisibility(View.VISIBLE);
             btn1.setVisibility(View.INVISIBLE);
-            final CharSequence[] items = {listWrongWord.get(0).getWord_Title(),listWrongWord.get(1).getWord_Title(),
-                    listWrongWord.get(2).getWord_Title(),listWrongWord.get(3).getWord_Title()};
+            final CharSequence[] items = {listWrongWord.get(0).getWord_Title(), listWrongWord.get(1).getWord_Title(),
+                    listWrongWord.get(2).getWord_Title(), listWrongWord.get(3).getWord_Title()};
             // arraylist to keep the selected items
-            final ArrayList seletedItems=new ArrayList();
+            final ArrayList seletedItems = new ArrayList();
             final AlertDialog dialog1 = new AlertDialog.Builder(this)
                     .setTitle("Select The Difficulty Level")
                     .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
@@ -224,10 +224,9 @@ public class Test extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             SQLiteDataController db = new SQLiteDataController(getApplicationContext());
-                            for (int i =0; i < seletedItems.size(); i ++)
-                            {
-                                db.CheckWord(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
-                                db.CheckWordRemind(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
+                            for (int i = 0; i < seletedItems.size(); i++) {
+                                db.CheckWord(true, listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
+                                db.CheckWordRemind(true, listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
                             }
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -242,7 +241,7 @@ public class Test extends AppCompatActivity {
             dialog.setContentView(R.layout.score_final_layout);
             dialog.setTitle("Score");
             TextView text = (TextView) dialog.findViewById(R.id.textView);
-            text.setText(Score+"");
+            text.setText(Score + "");
 
             Button dialogButton = (Button) dialog.findViewById(R.id.button);
             // if button is clicked, close the custom dialog
@@ -255,7 +254,6 @@ public class Test extends AppCompatActivity {
 
                     dialog1.show();
                     dialog.dismiss();
-
 
 
                 }

@@ -244,7 +244,11 @@ public class Game extends AppCompatActivity {
 
 
                    SQLiteDataController db = new SQLiteDataController(getApplicationContext());
+
+                    // them tu vao learn word
                     db.CheckWord(true,word1);
+                    // them tu vao remind word
+
                     db.CheckWordRemind(true,word1);
 
                     PrepareforGame();

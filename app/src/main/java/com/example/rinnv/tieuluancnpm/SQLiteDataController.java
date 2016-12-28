@@ -571,6 +571,15 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
 
 
+            cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopic_Id + "'", null);
+            int x = cs.getCount();
+
+            values = new ContentValues();
+            values.put("Count_Topic", x);
+
+            rs = database.update("MainTopic", values, "MainTopic_Id='" + MainTopic_Id+"'", null);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -605,6 +614,17 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     result = true;
 
                 }
+
+
+                 cs = database.rawQuery("select * from Word where word.Topic_Id ='"+topicID+"'",null);
+                int x = cs.getCount();
+
+
+
+                values = new ContentValues();
+                values.put("Count_Word", x);
+
+                rs = database.update("Topic", values, "Topic_Id='" + topicID+"'", null);
             }
 
         } catch (SQLException e) {
