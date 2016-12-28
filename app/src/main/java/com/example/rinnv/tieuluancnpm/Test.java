@@ -1,6 +1,8 @@
 package com.example.rinnv.tieuluancnpm;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 public class Test extends AppCompatActivity {
 
     private ArrayList<Word> listWord = new ArrayList<>();
+    private ArrayList<Word> listWrongWord = new ArrayList<>();
     private int count, QuizID, QuizNow, Life, Score, startQuiz;
     private Word word1;
     private TextView question, hint;
@@ -98,6 +101,7 @@ public class Test extends AppCompatActivity {
                         btnStart.setVisibility(View.INVISIBLE);
                         btn1.setVisibility(View.VISIBLE);
                         Life = 3;
+                        listWrongWord.clear();
                         CreateQuiz();
                     }
                 }
@@ -144,6 +148,7 @@ public class Test extends AppCompatActivity {
 
                     } else {
                         if (Life >= 1) {
+                            listWrongWord.add(word1);
 
                             new CountDownTimer(3000, 1000) {
 
@@ -195,7 +200,17 @@ public class Test extends AppCompatActivity {
             startQuiz = 0;
             btnStart.setVisibility(View.VISIBLE);
             btn1.setVisibility(View.INVISIBLE);
+            final CharSequence[] items = {listWrongWord.get(0).getWord_Title(),listWrongWord.get(1).getWord_Title(),
+                    listWrongWord.get(2).getWord_Title(),listWrongWord.get(3).getWord_Title()};
+            // arraylist to keep the selected items
+            final ArrayList seletedItems=new ArrayList();
+
             final Dialog dialog = new Dialog(this);
+
+
+
+
+
             dialog.setContentView(R.layout.score_final_layout);
             dialog.setTitle("Score");
 
@@ -209,10 +224,48 @@ public class Test extends AppCompatActivity {
                 public void onClick(View v) {
                     Score = 0;
                     PrepareforGame();
+
+                    final AlertDialog dialog1 = new AlertDialog.Builder(getApplicationContext())
+                            .setTitle("Select The Difficulty Level")
+                            .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                                    if (isChecked) {
+                                        // If the user checked the item, add it to the selected items
+                                        seletedItems.add(indexSelected);
+                                    } else if (seletedItems.contains(indexSelected)) {
+                                        // Else, if the item is already in the array, remove it
+                                        seletedItems.remove(Integer.valueOf(indexSelected));
+                                    }
+                                }
+                            }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    SQLiteDataController db = new SQLiteDataController(getApplicationContext());
+                                    for (int i =0; i < seletedItems.size(); i ++)
+                                    {
+                                        db.CheckWord(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
+                                        db.CheckWordRemind(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
+                                    }
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //  Your code when user clicked on Cancel
+                                }
+                            }).create();
+
+                    dialog1.show();
+
                     dialog.dismiss();
                 }
             });
             dialog.show();
+
+
+
+
+
         } catch (Exception e) {
 
         }
