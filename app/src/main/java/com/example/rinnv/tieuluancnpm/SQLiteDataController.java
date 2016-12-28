@@ -181,8 +181,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
 
             openDataBase();
-
-
             // thay cờ check đả học hay chưa
             ContentValues values = new ContentValues();
             values.put("Word_check", ischeck ? 1 : 0);
@@ -245,8 +243,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put("Word_Remind", ischeck ? 1 : 0);
             int rs = database.update("Word", values, "Word_Id=" + word.getWord_Id(), null);
-
-            Log.d("Tag", "CheckWordRemind: "+word+"|"+ischeck);
 
         } catch (SQLException e) {
             e.printStackTrace();
