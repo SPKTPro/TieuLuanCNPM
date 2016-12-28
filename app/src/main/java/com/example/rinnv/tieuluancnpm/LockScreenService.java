@@ -1,5 +1,6 @@
 package com.example.rinnv.tieuluancnpm;
 
+import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -20,13 +21,12 @@ public class LockScreenService extends Service {
     @Override
     @SuppressWarnings("deprecation")
     public void onCreate() {
-        KeyguardManager.KeyguardLock key;
-        KeyguardManager km = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
 
-        //This is deprecated, but it is a simple way to disable the lockscreen in code
-        key = km.newKeyguardLock("IN");
+        KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
+        lock.disableKeyguard();
 
-        key.disableKeyguard();
+
         SQLiteDataController db = new SQLiteDataController(this);
         SaveObject.remindWord =db.getListRemindWord();
 

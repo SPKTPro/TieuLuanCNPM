@@ -242,6 +242,11 @@ public class Game extends AppCompatActivity {
                 public void onClick(View view) {
                     //Làm code chỗ này
 
+
+                   SQLiteDataController db = new SQLiteDataController(getApplicationContext());
+                    db.CheckWord(true,word1);
+                    db.CheckWordRemind(true,word1);
+
                     PrepareforGame();
                     dialog1.dismiss();
 
