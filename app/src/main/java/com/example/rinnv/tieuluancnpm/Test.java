@@ -169,6 +169,9 @@ public class Test extends AppCompatActivity {
 
 
                         } else {
+
+
+                            listWrongWord.add(word1);
                             new CountDownTimer(3000, 1000) {
 
                                 public void onTick(long millisUntilFinished) {
@@ -204,16 +207,40 @@ public class Test extends AppCompatActivity {
                     listWrongWord.get(2).getWord_Title(),listWrongWord.get(3).getWord_Title()};
             // arraylist to keep the selected items
             final ArrayList seletedItems=new ArrayList();
+            final AlertDialog dialog1 = new AlertDialog.Builder(this)
+                    .setTitle("Select The Difficulty Level")
+                    .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                            if (isChecked) {
+                                // If the user checked the item, add it to the selected items
+                                seletedItems.add(indexSelected);
+                            } else if (seletedItems.contains(indexSelected)) {
+                                // Else, if the item is already in the array, remove it
+                                seletedItems.remove(Integer.valueOf(indexSelected));
+                            }
+                        }
+                    }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            SQLiteDataController db = new SQLiteDataController(getApplicationContext());
+                            for (int i =0; i < seletedItems.size(); i ++)
+                            {
+                                db.CheckWord(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
+                                db.CheckWordRemind(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
+                            }
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Your code when user clicked on Cancel
+                        }
+                    }).create();
+
 
             final Dialog dialog = new Dialog(this);
-
-
-
-
-
             dialog.setContentView(R.layout.score_final_layout);
             dialog.setTitle("Score");
-
             TextView text = (TextView) dialog.findViewById(R.id.textView);
             text.setText(Score+"");
 
@@ -225,47 +252,15 @@ public class Test extends AppCompatActivity {
                     Score = 0;
                     PrepareforGame();
 
-                    final AlertDialog dialog1 = new AlertDialog.Builder(getApplicationContext())
-                            .setTitle("Select The Difficulty Level")
-                            .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-                                    if (isChecked) {
-                                        // If the user checked the item, add it to the selected items
-                                        seletedItems.add(indexSelected);
-                                    } else if (seletedItems.contains(indexSelected)) {
-                                        // Else, if the item is already in the array, remove it
-                                        seletedItems.remove(Integer.valueOf(indexSelected));
-                                    }
-                                }
-                            }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    SQLiteDataController db = new SQLiteDataController(getApplicationContext());
-                                    for (int i =0; i < seletedItems.size(); i ++)
-                                    {
-                                        db.CheckWord(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
-                                        db.CheckWordRemind(true,listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
-                                    }
-                                }
-                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    //  Your code when user clicked on Cancel
-                                }
-                            }).create();
 
                     dialog1.show();
-
                     dialog.dismiss();
+
+
+
                 }
             });
             dialog.show();
-
-
-
-
-
         } catch (Exception e) {
 
         }
