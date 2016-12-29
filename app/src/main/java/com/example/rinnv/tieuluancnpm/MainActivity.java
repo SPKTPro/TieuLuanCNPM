@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,13 +23,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
@@ -117,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
         CheckTTS();
 
 
-
-        Intent intent = new Intent(MainActivity.this,LockScreenService.class);
+        Intent intent = new Intent(MainActivity.this, LockScreenService.class);
         startService(intent);
 
         // Create the adapter that will return a fragment for each of the three
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        SaveObject.remindWord =db.getListRemindWord();
+        SaveObject.remindWord = db.getListRemindWord();
 
 
     }
@@ -266,8 +269,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-                final   FloatingActionMenu materialDesignFAM;
-                final com.github.clans.fab.FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
+                final FloatingActionMenu materialDesignFAM;
+                final com.github.clans.fab.FloatingActionButton floatingActionButton1,
+                        floatingActionButton2, floatingActionButton3, floatingActionButton4,
+                        floatingActionButton5;
 
 
                 materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
@@ -275,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
                 floatingActionButton2 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action2);
                 floatingActionButton3 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action3);
                 floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
-                   floatingActionButton4.setVisibility(View.VISIBLE);
+                floatingActionButton5 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action5);
+                floatingActionButton4.setVisibility(View.VISIBLE);
 
                 floatingActionButton1.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -314,6 +320,126 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
+                floatingActionButton5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        materialDesignFAM.close(false);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Type your word here");
+                        final EditText input = new EditText(getContext());
+
+                        input.setInputType(InputType.TYPE_CLASS_TEXT);
+                        builder.setView(input);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (input.getText().toString().length() > 0) {
+                                            ArrayList<Word> listResult = new ArrayList<Word>();
+                                            listResult = db.SearchWord(input.getText().toString().trim().toUpperCase());
+                                            if (listResult.isEmpty()) {
+                                                new AlertDialog.Builder(context)
+                                                        .setTitle("No result")
+                                                        .setMessage("There is no result")
+                                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialogx, int which) {
+                                                                dialogx.dismiss();
+                                                            }
+                                                        })
+                                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                                        .show();
+
+
+                                                dialog.dismiss();
+                                            } else {
+
+                                                final AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
+                                                builderSingle.setIcon(android.R.drawable.ic_menu_help);
+                                                builderSingle.setTitle("Select One Word");
+
+                                               /* final ArrayAdapter<String> arrayAdapter =
+                                                        new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+
+                                                for (int i = 0; i < listResult.size(); i++) {
+                                                    arrayAdapter.add(listResult.get(i).getWord_Title().toUpperCase());
+                                                }*/
+
+
+                                                final ArrayList<Word> finalListResult1 = listResult;
+                                                final ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_list_item_2,
+                                                        android.R.id.text1, finalListResult1) {
+                                                    @Override
+                                                    public View getView(int position, View convertView, ViewGroup parent) {
+                                                        View view = super.getView(position, convertView, parent);
+                                                        TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                                                        TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+
+                                                        text1.setText(finalListResult1.get(position).getWord_Title().toString());
+                                                        text2.setText(finalListResult1.get(position).getWord_Title_VN().toString());
+                                                        return view;
+                                                    }
+                                                };
+
+                                                builderSingle.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+
+                                                final ArrayList<Word> finalListResult = listResult;
+                                                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        String strName = finalListResult.get(which).getWord_Title().toString();
+                                                        String strMean = finalListResult.get(which).getWord_Title_VN().toString();
+                                                        AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
+                                                        builderInner.setMessage(strMean);
+                                                        builderInner.setTitle(strName);
+                                                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                dialog.dismiss();
+                                                                builderSingle.show();
+                                                            }
+                                                        });
+                                                        builderInner.show();
+                                                    }
+                                                });
+                                                builderSingle.show();
+
+
+
+                                                dialog.dismiss();
+                                            }
+
+
+                                        } else {
+                                            AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
+                                            builderInner.setMessage("Error");
+                                            builderInner.setTitle("Please check your input");
+                                            builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            builderInner.show();
+                                        }
+                                    }
+                                }
+                        );
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        builder.show();
+
+
+                    }
+                });
 
                 floatingActionButton4.setLabelText("Thêm chủ đề chính");
                 floatingActionButton4.setOnClickListener(new View.OnClickListener() {
@@ -390,7 +516,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-
             } else {
                 if (tab == 2) {
 
@@ -408,10 +533,7 @@ public class MainActivity extends AppCompatActivity {
                     });*/
 
 
-
-
-
-                   final FloatingActionMenu materialDesignFAM;
+                    final FloatingActionMenu materialDesignFAM;
                     com.github.clans.fab.FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
 
 
@@ -419,7 +541,6 @@ public class MainActivity extends AppCompatActivity {
                     floatingActionButton1 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action1);
                     floatingActionButton2 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action2);
                     floatingActionButton3 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action3);
-
 
 
                     final Context context = getContext();

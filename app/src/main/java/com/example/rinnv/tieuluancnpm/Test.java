@@ -203,6 +203,7 @@ public class Test extends AppCompatActivity {
             startQuiz = 0;
             btnStart.setVisibility(View.VISIBLE);
             btn1.setVisibility(View.INVISIBLE);
+
             final CharSequence[] items = {listWrongWord.get(0).getWord_Title(), listWrongWord.get(1).getWord_Title(),
                     listWrongWord.get(2).getWord_Title(), listWrongWord.get(3).getWord_Title()};
             // arraylist to keep the selected items

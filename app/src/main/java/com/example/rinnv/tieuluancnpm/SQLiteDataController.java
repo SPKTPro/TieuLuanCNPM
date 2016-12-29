@@ -616,15 +616,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 }
 
 
-                 cs = database.rawQuery("select * from Word where word.Topic_Id ='"+topicID+"'",null);
+                cs = database.rawQuery("select * from Word where word.Topic_Id ='" + topicID + "'", null);
                 int x = cs.getCount();
-
 
 
                 values = new ContentValues();
                 values.put("Count_Word", x);
 
-                rs = database.update("Topic", values, "Topic_Id='" + topicID+"'", null);
+                rs = database.update("Topic", values, "Topic_Id='" + topicID + "'", null);
             }
 
         } catch (SQLException e) {
@@ -634,9 +633,29 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
 
         return result;
-
-
     }
 
 
+    public ArrayList<Word>  SearchWord(String s) {
+        ArrayList<Word> list = new ArrayList<>();
+
+        try {
+            openDataBase();
+            Cursor cs = database.rawQuery("SELECT * FROM Word where Word.Word_Title LIKE '%" + s
+                    + "%'  or Word.Word_Title_VN like  '%" +s+"%'", null);
+            Word word;
+            while (cs.moveToNext()) {
+                word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                list.add(word);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return list;
+    }
 }
