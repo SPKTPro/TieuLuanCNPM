@@ -322,9 +322,9 @@ public class MainActivity extends AppCompatActivity {
 
                 floatingActionButton5.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(final View v) {
                         materialDesignFAM.close(false);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle("Type your word here");
                         final EditText input = new EditText(getContext());
 
@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
                                                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        String strName = finalListResult.get(which).getWord_Title().toString();
+                                                        /*String strName = finalListResult.get(which).getWord_Title().toString();
                                                         String strMean = finalListResult.get(which).getWord_Title_VN().toString();
                                                         AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
                                                         builderInner.setMessage(strMean);
@@ -391,9 +391,10 @@ public class MainActivity extends AppCompatActivity {
                                                             public void onClick(DialogInterface dialog, int which) {
                                                                 dialog.dismiss();
                                                                 builderSingle.show();
+
                                                             }
                                                         });
-                                                        builderInner.show();
+                                                        builderInner.show();*/
                                                     }
                                                 });
                                                 builderSingle.show();
