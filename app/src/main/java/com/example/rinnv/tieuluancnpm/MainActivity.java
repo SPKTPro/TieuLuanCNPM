@@ -355,15 +355,6 @@ public class MainActivity extends AppCompatActivity {
                                                 final AlertDialog.Builder builderSingle = new AlertDialog.Builder(context);
                                                 builderSingle.setIcon(android.R.drawable.ic_menu_help);
                                                 builderSingle.setTitle("Select One Word");
-
-                                               /* final ArrayAdapter<String> arrayAdapter =
-                                                        new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
-
-                                                for (int i = 0; i < listResult.size(); i++) {
-                                                    arrayAdapter.add(listResult.get(i).getWord_Title().toUpperCase());
-                                                }*/
-
-
                                                 final ArrayList<Word> finalListResult1 = listResult;
                                                 final ArrayAdapter arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_list_item_2,
                                                         android.R.id.text1, finalListResult1) {
