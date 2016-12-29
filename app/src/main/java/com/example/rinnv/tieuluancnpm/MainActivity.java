@@ -377,30 +377,36 @@ public class MainActivity extends AppCompatActivity {
                                                     }
                                                 });
 
-                                                final ArrayList<Word> finalListResult = listResult;
                                                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        /*String strName = finalListResult.get(which).getWord_Title().toString();
-                                                        String strMean = finalListResult.get(which).getWord_Title_VN().toString();
+                                                        String strName = finalListResult1.get(which).getWord_Title().toString();
+                                                        String strMean = finalListResult1.get(which).getWord_Title_VN().toString();
+                                                        String mainTopic ="Main topic: " +finalListResult1.get(which).getExample().toString();
+                                                        String Topic = "Topic:" +finalListResult1.get(which).getExample_VN().toString();
                                                         AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
-                                                        builderInner.setMessage(strMean);
+                                                        builderInner.setMessage(strMean +"\n"+ mainTopic+"\n" +Topic);
                                                         builderInner.setTitle(strName);
                                                         builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
                                                                 dialog.dismiss();
                                                                 builderSingle.show();
-
                                                             }
                                                         });
-                                                        builderInner.show();*/
+                                                        builderInner.show();
                                                     }
                                                 });
+
+                                               /* builderSingle.setSingleChoiceItems(arrayAdapter, -1, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Toast.makeText(context, finalListResult1.get(which).getWord_Title(),
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });*/
+
                                                 builderSingle.show();
-
-
-
                                                 dialog.dismiss();
                                             }
 
@@ -514,16 +520,6 @@ public class MainActivity extends AppCompatActivity {
                     final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
                     Adapter_Remember adapterRemember = new Adapter_Remember(getContext(), db.getLisCheckedtWord());
                     listView_Maintopic.setAdapter(adapterRemember);
-                   /* listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            Word word = (Word) listView_Maintopic.getItemAtPosition(position);
-                            mTts.speak(word.getWord_Title().trim(), TextToSpeech.QUEUE_FLUSH, null);
-
-                        }
-                    });*/
-
 
                     final FloatingActionMenu materialDesignFAM;
                     com.github.clans.fab.FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;

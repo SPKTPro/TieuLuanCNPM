@@ -641,12 +641,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         try {
             openDataBase();
-            Cursor cs = database.rawQuery("SELECT * FROM Word where Word.Word_Title LIKE '%" + s
-                    + "%'  or Word.Word_Title_VN like  '%" +s+"%'", null);
+            Cursor cs = database.rawQuery("Select * from ( SELECT Word.Topic_ID, Word.Word_Id, Word.Word_Title, Word.Word_Title_VN,Word.Word_check"+
+                    " , MainTopic.MainTopic_Title,Topic.Topic_Title , Word.Word_check " +
+                    "FROM Word,Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Word.Topic_Id = Topic.Topic_Id ) Where Word_Title LIKE '%" + s
+                    + "%'  or Word_Title_VN like  '%" +s+"%'", null);
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), 0);
                 list.add(word);
             }
 
@@ -656,6 +658,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             close();
         }
+
+        Collections.sort(list, new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getWord_Title().toLowerCase().compareToIgnoreCase(o2.getWord_Title());
+            }
+        });
         return list;
     }
 }
