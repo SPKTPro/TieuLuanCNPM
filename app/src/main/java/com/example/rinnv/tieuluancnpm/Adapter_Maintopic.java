@@ -48,13 +48,14 @@ public class Adapter_Maintopic extends BaseAdapter {
 
         RelativeLayout Layout = (RelativeLayout) itemInflater.inflate(R.layout.item_layout, parent, false);
         ImageView imageView = (ImageView) Layout.findViewById(R.id.imageView);
-
+        TextView countView = (TextView) Layout.findViewById(R.id.count);
         TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
         ProgressBar progressBar = (ProgressBar) Layout.findViewById(R.id.seekBar);
         TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
 
         Maintopic item = items.get(position);
-        titleView.setText(item.getMaintopic_Tittle()+" - "+item.getCountTopic()+" Topic(s)");
+        titleView.setText(item.getMaintopic_Tittle());
+        countView.setText(item.getCountTopic()+" Topics");
         titleView2.setText(item.getMaintopic_Tittle_VN());
         String s = item.getMaintopic_Tittle().toLowerCase();
         int imageResource = Layout.getResources().getIdentifier(s, "drawable", context.getPackageName());

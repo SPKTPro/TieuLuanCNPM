@@ -54,4 +54,13 @@
         android:layout_alignStart="@+id/itemtitle"
         android:layout_marginBottom="5dp"
         />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/count"
+        android:layout_alignBaseline="@+id/itemtitle2"
+        android:layout_alignBottom="@+id/itemtitle2"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

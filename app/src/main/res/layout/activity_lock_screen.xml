@@ -14,67 +14,72 @@
 
     <TextView
         android:text="TextView"
-        android:textSize="100px"
+        android:textSize="55dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtEN"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
-        android:layout_marginTop="111dp"
+        android:layout_marginTop="90dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:text="TextView"
-        android:textSize="70px"
+        android:textSize="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtVN"
         android:textAlignment="center"
-
-        android:layout_marginTop="66dp"
-        android:layout_alignTop="@+id/txtEN"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/txtEN"
         android:layout_alignParentStart="true" />
 
-    <Button
-
-        android:layout_width="140px"
-        android:layout_height="140px"
-        android:background="@drawable/quit"
-        android:id="@+id/btnExit"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_height="85dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:id="@+id/linearLayout"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignEnd="@+id/txtVN"
+        >
 
-    <Button
+        <Button
 
-        android:layout_width="140px"
-        android:layout_height="140px"
-        android:background="@drawable/speak2"
-        android:id="@+id/btnspeak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnUncheckWord"
+            android:background="@drawable/del"
+            android:layout_weight="1"/>
 
-        android:layout_marginEnd="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btnExit" />
 
-    <Button
+        <Button
 
-        android:layout_width="145px"
-        android:layout_height="145px"
-        android:id="@+id/btnOpenApp"
-        android:background="@drawable/home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnOpenApp"
+            android:background="@drawable/home"
+            android:layout_weight="1"/>
 
-        android:layout_marginEnd="15dp"
-        android:layout_alignTop="@+id/btnspeak"
-        android:layout_toStartOf="@+id/btnUncheckWord" />
+        <Button
 
-    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/speak2"
+            android:id="@+id/btnspeak"
+            android:layout_weight="1" />
 
-        android:layout_width="145px"
-        android:layout_height="145px"
-        android:id="@+id/btnUncheckWord"
-        android:background="@drawable/home"
+        <Button
 
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btnspeak" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/quit"
+            android:id="@+id/btnExit"
+            android:layout_weight="1" />
+    </LinearLayout>
+
 </RelativeLayout>
+

@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(final View v) {
                         materialDesignFAM.close(false);
                         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle("Type your word here");
+                        builder.setTitle("Nhập từ cần tra");
                         final EditText input = new EditText(getContext());
 
                         input.setInputType(InputType.TYPE_CLASS_TEXT);

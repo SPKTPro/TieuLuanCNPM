@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -129,6 +130,7 @@ public class LockScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 db.CheckWordRemind(false, finalX1);
+                Toast.makeText(LockScreenActivity.this, "Đã xóa khỏi danh sách nhắc từ", Toast.LENGTH_LONG).show();
             }
         });
     }

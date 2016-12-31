@@ -55,22 +55,35 @@ public class Adapter_Topic extends BaseAdapter {
         TextView titleView  = (TextView)Layout.findViewById(R.id.itemtitle);
         ProgressBar progressBar = (ProgressBar) Layout.findViewById(R.id.seekBar);
         TextView titleView2  = (TextView)Layout.findViewById(R.id.itemtitle2);
+        TextView countView = (TextView) Layout.findViewById(R.id.count);
 
         Topic item = items.get(position);
-        titleView.setText(item.getTopic_Title()+" - "+item.getCountWord() +" word(s)");
-
+        titleView.setText(item.getTopic_Title());
+        countView.setText(item.getCountWord() +" words");
 
         titleView2.setText(item.getTopic_Title_VN());
         String s= item.getTopic_Title().toString().toLowerCase();
         int i=-1;
         while(i!=-2) {
             i = s.indexOf(" ");
+
             if(i!=-1) {
                 s = removeCharAt(s, i);
                 i=-1;
             }
             else
              i=-2;
+        }
+        i=-1;
+        while(i!=-2) {
+            i = s.indexOf("&");
+
+            if(i!=-1) {
+                s = removeCharAt(s, i);
+                i=-1;
+            }
+            else
+                i=-2;
         }
         int imageResource = Layout.getResources().getIdentifier(s, "drawable",context.getPackageName());
         if(imageResource==0) {

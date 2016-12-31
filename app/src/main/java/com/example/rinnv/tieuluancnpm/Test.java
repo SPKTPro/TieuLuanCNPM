@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,12 +26,12 @@ public class Test extends AppCompatActivity {
     private ArrayList<Word> listWrongWord = new ArrayList<>();
     private int count, QuizID, QuizNow, Life, Score, startQuiz;
     private Word word1;
-    private TextView question, hint;
+    private TextView question, hint,max;
     private ImageView h1, h2, h3;
     private Button btn1, btnStart;
     private EditText answer;
     private CircularProgressBar circularProgressBar;
-    private String QuizQuestion, RightAnswer;
+    private String QuizQuestion, RightAnswer,Max;
 
     //typeQuiz=1, Quiz Anh-Viet, typeQuiz=2 Quiz Viet Anh
     // bien startQuiz dung de ngan tinh trang nhan nut start nhieu lan
@@ -45,7 +46,7 @@ public class Test extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String level = bundle.getString("level");
-
+        Max= PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore2", "0");
 
         SQLiteDataController db = new SQLiteDataController(this);
         // level = topic thì lấy tat ca cac từ trong topic đó,
@@ -76,6 +77,7 @@ public class Test extends AppCompatActivity {
 
             }
         }
+        max= (TextView)findViewById(R.id.max);
         question = (TextView) findViewById(R.id.word);
         btnStart = (Button) findViewById(R.id.btnstart);
         btn1 = (Button) findViewById(R.id.submit);
@@ -84,6 +86,7 @@ public class Test extends AppCompatActivity {
         h2 = (ImageView) findViewById(R.id.heart2);
         h3 = (ImageView) findViewById(R.id.heart3);
         hint = (TextView) findViewById(R.id.hint);
+        max.setText(Max);
         btn1.setVisibility(View.INVISIBLE);
         hint.setVisibility(View.INVISIBLE);
         answer.clearFocus();
@@ -209,7 +212,7 @@ public class Test extends AppCompatActivity {
             // arraylist to keep the selected items
             final ArrayList seletedItems = new ArrayList();
             final AlertDialog dialog1 = new AlertDialog.Builder(this)
-                    .setTitle("Select The Difficulty Level")
+                    .setTitle("Chọn từ cần nhắc học")
                     .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
@@ -243,16 +246,20 @@ public class Test extends AppCompatActivity {
             dialog.setTitle("Score");
             TextView text = (TextView) dialog.findViewById(R.id.textView);
             text.setText(Score + "");
-
+            final int maxScore = Integer.parseInt(Max);
             Button dialogButton = (Button) dialog.findViewById(R.id.button);
             // if button is clicked, close the custom dialog
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (Score > maxScore) {
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
+                                edit().putString("MaxScore2", Score + "").commit();
+                        Max = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore2", "0");
+                        max.setText(Max);
+                    }
                     Score = 0;
                     PrepareforGame();
-
-
                     dialog1.show();
                     dialog.dismiss();
 
