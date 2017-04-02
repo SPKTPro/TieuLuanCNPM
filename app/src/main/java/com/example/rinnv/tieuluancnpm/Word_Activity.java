@@ -14,6 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.textservice.SentenceSuggestionsInfo;
+import android.view.textservice.SpellCheckerSession;
+import android.view.textservice.SuggestionsInfo;
+import android.view.textservice.TextInfo;
+import android.view.textservice.TextServicesManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -27,7 +32,7 @@ import java.util.Locale;
 
 import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
 
-public class Word_Activity extends AppCompatActivity {
+public class Word_Activity extends AppCompatActivity implements SpellCheckerSession.SpellCheckerSessionListener{
 
     public String TAG = "Tag";
     public static int ID = 0;
@@ -76,6 +81,8 @@ public class Word_Activity extends AppCompatActivity {
             }
         }
     }
+
+    private EditText Word_EN;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,10 +184,8 @@ public class Word_Activity extends AppCompatActivity {
                 // get prompts.xml view
                 LayoutInflater li = LayoutInflater.from(context);
                 View promptsView = li.inflate(R.layout.layout_add_maintopic, null);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-                final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                Word_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
                 final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
 
 
@@ -191,11 +196,14 @@ public class Word_Activity extends AppCompatActivity {
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-
                                         // bien kiem tra cho phep luu
-                                        if (Maintopic_EN.getText().toString().contentEquals("") || Maintopic_EN.getText().toString().isEmpty())
+                                        if (Word_EN.getText().toString().contentEquals("") || Word_EN.getText().toString().isEmpty())
                                             Toast.makeText(context, "Vui lòng nhập từ vựng", Toast.LENGTH_LONG).show();
                                         else {
+                                            fetchSuggestionsFor(Word_EN.getText().toString());
+
+
+
                                             Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
                                                     .setCallback(new Snackbar.Callback() {
                                                         @Override
@@ -208,11 +216,11 @@ public class Word_Activity extends AppCompatActivity {
 
                                                                     //insert Word
                                                                     boolean x = true;
-                                                                    x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), Maintopic_EN.getText().toString().trim(),
-                                                                            Maintopic_VN.getText().toString().trim());
-
-                                                                    listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
-                                                                    listView_Word.invalidate();
+//                                                                    x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), Word_EN.getText().toString().trim(),
+//                                                                            Maintopic_VN.getText().toString().trim());
+//
+//                                                                    listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+//                                                                    listView_Word.invalidate();
 
                                                                     Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
                                                                     break;
@@ -229,6 +237,7 @@ public class Word_Activity extends AppCompatActivity {
                                                     .setActionTextColor(Color.RED)
                                                     .show();
 
+                                            dialog.cancel();
                                         }
                                     }
                                 })
@@ -249,5 +258,74 @@ public class Word_Activity extends AppCompatActivity {
 
 
     }
+    private final int NUMBER_OF_SUGGESTIONS=8;
+
+    private void fetchSuggestionsFor(String input){
+        TextServicesManager tsm = (TextServicesManager) getSystemService(TEXT_SERVICES_MANAGER_SERVICE);
+        SpellCheckerSession session = tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, true);
+        session.getSentenceSuggestions(new TextInfo[]{ new TextInfo(input) }, NUMBER_OF_SUGGESTIONS);
+    }
+    @Override
+    public void onGetSuggestions(SuggestionsInfo[] suggestionsInfos) {
+
+    }
+
+    @Override
+    public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
+        final StringBuffer sb = new StringBuffer("");
+        for(SentenceSuggestionsInfo result:results){
+            int n = result.getSuggestionsCount();
+            for(int i=0; i < n; i++){
+                int m = result.getSuggestionsInfoAt(i).getSuggestionsCount();
+
+                if((result.getSuggestionsInfoAt(i).getSuggestionsAttributes() &
+                        SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO) != SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO )
+                    continue;
+
+                for(int k=0; k < m; k++) {
+                    sb.append(result.getSuggestionsInfoAt(i).getSuggestionAt(k))
+                            .append("\n");
+                }
+                sb.append("\n");
+            }
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                builder1.setTitle("You are so stupid");
+                builder1.setMessage(sb.toString());
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
+
+
+
+            }
+        });
+    }
+
 
 }

@@ -90,7 +90,6 @@ public class Adapter_Word extends BaseAdapter
         btnCheckSpell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(mContext instanceof Word_Activity){
                     ((Word_Activity)mContext).startSpeechToText(item.getWord_Title().toString());
                 }
