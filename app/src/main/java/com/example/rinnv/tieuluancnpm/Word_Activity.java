@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.textservice.SentenceSuggestionsInfo;
@@ -42,6 +43,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     FloatingActionMenu materialDesignFAM;
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
     final Context context = this;
+    SQLiteDataController db;
 
 
     public void startSpeechToText(String word) {
@@ -97,7 +99,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
         setTitle(SaveObject.saveMaintopic.getMaintopic_Tittle());
         toolbar.setSubtitle(SaveObject.saveTopic.getTopic_Title());
 
-        final SQLiteDataController db = new SQLiteDataController(this);
+        db = new SQLiteDataController(this);
 
 
         final GridView listView_Word = (GridView) findViewById(R.id.list_item);
@@ -199,9 +201,15 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
                                         // bien kiem tra cho phep luu
                                         if (Word_EN.getText().toString().contentEquals("") || Word_EN.getText().toString().isEmpty())
                                             Toast.makeText(context, "Vui lòng nhập từ vựng", Toast.LENGTH_LONG).show();
+                                       
+                                        boolean isExist = db.isExist(Word_EN.getText().toString().trim());
+                                        if (isExist)
+                                        {
+                                            Toast.makeText(context, "this word is exist", Toast.LENGTH_SHORT).show();
+                                        }                                        
                                         else {
+                                            // kiem tra chinh ta
                                             fetchSuggestionsFor(Word_EN.getText().toString());
-
 
 
                                             Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
@@ -258,6 +266,9 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
 
 
     }
+
+    
+
     private final int NUMBER_OF_SUGGESTIONS=8;
 
     private void fetchSuggestionsFor(String input){

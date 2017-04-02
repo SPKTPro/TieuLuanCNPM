@@ -36,6 +36,27 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         this.mContext = con;
     }
 
+    public boolean isExist(String word)
+    {
+        boolean x=false;
+        try {
+            openDataBase();
+            String query = "select * from Word where Word_Title= " + '"' + word.toUpperCase() + '"';
+            Cursor cs = database.rawQuery(query, null);
+            if (cs.getCount() != 0) {
+                x=true;
+            } else {
+                x=false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return x;
+    }
+
+
     public boolean isCreatedDatabase() throws IOException {
         // Default là đã có DB
         boolean result = true;

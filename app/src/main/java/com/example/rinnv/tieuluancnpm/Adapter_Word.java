@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +31,6 @@ public class Adapter_Word extends BaseAdapter
     private ArrayList<Word> items;
     private LayoutInflater itemInflater;
     private Context mContext;
-
-    private final int SPEECH_RECOGNITION_CODE = 1001;
-
 
     @Override
     public int getCount() {
@@ -82,11 +80,14 @@ public class Adapter_Word extends BaseAdapter
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d("Tag", "onCheckedChanged: ");
                 db.CheckWord(isChecked,item);
                 items = db.getListWord(SaveObject.saveTopic);
             }
         });
 
+        btnCheckSpell.setFocusable(false);
+        btnCheckSpell.setFocusableInTouchMode(false);
         btnCheckSpell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,6 +96,7 @@ public class Adapter_Word extends BaseAdapter
                 }
             }
         });
+
         Layout.setTag(position);
 
 
