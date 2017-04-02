@@ -1,24 +1,38 @@
 package com.example.rinnv.tieuluancnpm;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.speech.RecognizerIntent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import java.util.ArrayList;
+import java.util.Locale;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by rinnv on 25/10/2016.
  */
 
-public class Adapter_Word extends BaseAdapter {
+public class Adapter_Word extends BaseAdapter
+{
     private ArrayList<Word> items;
     private LayoutInflater itemInflater;
+    private Context mContext;
+
+    private final int SPEECH_RECOGNITION_CODE = 1001;
+
 
     @Override
     public int getCount() {
@@ -28,6 +42,7 @@ public class Adapter_Word extends BaseAdapter {
     public Adapter_Word(Context c, ArrayList<Word> the_Items) {
         items = the_Items;
         itemInflater = LayoutInflater.from(c);
+        mContext=c;
     }
 
 
@@ -35,12 +50,10 @@ public class Adapter_Word extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
-
     @Override
     public Object getItem(int position) {
         return items.get(position);
     }
-
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
 
@@ -48,8 +61,9 @@ public class Adapter_Word extends BaseAdapter {
                 parent,
                 false);
 
-        TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
+        final TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
         TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
+        Button btnCheckSpell =(Button) Layout.findViewById(R.id.btnCheckSpell);
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
 
@@ -57,6 +71,10 @@ public class Adapter_Word extends BaseAdapter {
         final Word item = items.get(position);
         titleView.setText(item.getWord_Title() );
         titleView2.setText(item.getWord_Title_VN() );
+
+
+
+
         CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
         checkBox.setFocusable(false);
         checkBox.setFocusableInTouchMode(false);
@@ -68,10 +86,22 @@ public class Adapter_Word extends BaseAdapter {
                 items = db.getListWord(SaveObject.saveTopic);
             }
         });
+
+        btnCheckSpell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(mContext instanceof Word_Activity){
+                    ((Word_Activity)mContext).startSpeechToText(item.getWord_Title().toString());
+                }
+            }
+        });
         Layout.setTag(position);
 
 
         return Layout;
 
     }
+
+
 }

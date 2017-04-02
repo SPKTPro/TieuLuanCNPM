@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int SPEECH_API_CHECK = 0;
     public String TAG = "Tag";
 
-
     public void CheckTTS() {
 
         Intent checkIntent = new Intent();
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         db = new SQLiteDataController(this);
 
         CheckTTS();
-
+       
 
         Intent intent = new Intent(MainActivity.this, LockScreenService.class);
         startService(intent);

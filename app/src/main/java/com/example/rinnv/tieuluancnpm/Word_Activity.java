@@ -1,10 +1,12 @@
 package com.example.rinnv.tieuluancnpm;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -20,31 +22,61 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
 
 public class Word_Activity extends AppCompatActivity {
 
     public String TAG = "Tag";
     public static int ID = 0;
+    private final int SPEECH_RECOGNITION_CODE = 1001;
 
+    private String wordExpected;
     FloatingActionMenu materialDesignFAM;
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
     final Context context = this;
 
 
-    // khong tat text to speech
-   /* @Override
-    public void onDestroy() {
-        // Don't forget to shutdown!
-        if (mTts != null) {
-            mTts.stop();
-            mTts.shutdown();
+    public void startSpeechToText(String word) {
+        wordExpected=word;
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, word);
+        try {
+            startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),
+                    "Sorry! Speech recognition is not supported in this device.",
+                    Toast.LENGTH_SHORT).show();
         }
-        super.onDestroy();
     }
 
-*/
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case SPEECH_RECOGNITION_CODE: {
+                if (resultCode == RESULT_OK && null != data) {
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (result.contains(wordExpected))
+                    {
+                        Toast.makeText(getApplicationContext(), "Good Job", Toast.LENGTH_SHORT).show();
+                    }else
+                    {
+                        Toast.makeText(context, "Opp! Try again", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                break;
+            }
+        }
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
@@ -142,7 +174,6 @@ public class Word_Activity extends AppCompatActivity {
         floatingActionButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
                 // get prompts.xml view
                 LayoutInflater li = LayoutInflater.from(context);
                 View promptsView = li.inflate(R.layout.layout_add_maintopic, null);
