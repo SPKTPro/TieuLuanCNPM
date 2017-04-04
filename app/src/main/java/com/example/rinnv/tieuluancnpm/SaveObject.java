@@ -15,5 +15,5 @@ public class SaveObject {
 
     public static ArrayList<Word> remindWord;
     public static TextToSpeech mTts;
-    public static SpeechToText mStp;
+
 }

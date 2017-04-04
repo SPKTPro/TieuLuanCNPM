@@ -57,28 +57,48 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
             startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
         } catch (ActivityNotFoundException a) {
             Toast.makeText(getApplicationContext(),
-                    "Sorry! Speech recognition is not supported in this device.",
-                    Toast.LENGTH_SHORT).show();
+                    "Sorry! Speech recognition is not supported in this device.",Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: "+requestCode);
+        Log.d(TAG, "onActivityResult: "+resultCode);
+        Log.d(TAG, "onActivityResult: "+data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS));
         switch (requestCode) {
             case SPEECH_RECOGNITION_CODE: {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    if (result.contains(wordExpected))
-                    {
-                        Toast.makeText(getApplicationContext(), "Good Job", Toast.LENGTH_SHORT).show();
-                    }else
-                    {
-                        Toast.makeText(context, "Opp! Try again", Toast.LENGTH_SHORT).show();
-                    }
+                    //Export this input speech
 
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                    builder1.setTitle("You are so stupid");
+                    builder1.setMessage(result.toString());
+                    builder1.setCancelable(true);
+
+                    builder1.setPositiveButton(
+                            "Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder1.setNegativeButton(
+                            "No",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
                 }
+
                 break;
             }
         }
