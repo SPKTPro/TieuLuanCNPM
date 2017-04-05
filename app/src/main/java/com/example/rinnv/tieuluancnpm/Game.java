@@ -102,8 +102,8 @@ public class Game extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listWord.size() == 0) {
-                    Toast.makeText(Game.this, "There are no source for game", Toast.LENGTH_SHORT).show();
+                if (listWord.size() == 1) {
+                    Toast.makeText(Game.this, "Requires at least 2 words in the list", Toast.LENGTH_LONG).show();
                 } else {
                     if (startQuiz == 0) {
                         btn1.setVisibility(View.VISIBLE);
