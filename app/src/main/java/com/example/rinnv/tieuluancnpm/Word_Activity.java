@@ -2,6 +2,7 @@ package com.example.rinnv.tieuluancnpm;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,11 +53,10 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     final Context context = this;
     SQLiteDataController db;
 
-    public  boolean isConnected()
-    {
+    public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo net = cm.getActiveNetworkInfo();
-        if (net!=null && net.isAvailable() && net.isConnected()) {
+        if (net != null && net.isAvailable() && net.isConnected()) {
             return true;
         } else {
             return false;
@@ -75,9 +75,8 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SPEECH_RECOGNITION_CODE && resultCode == RESULT_OK) {
 
-            ArrayList<String>  matches_text = data
+            final ArrayList<String> matches_text = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
 
             // chua biết làm gì nen show popup tam
             AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
@@ -86,7 +85,8 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
                     .setItems(matches_text.toArray(new String[matches_text.size()]), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
+                            Toast.makeText(context,"You selected "+ matches_text.get(i), Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onClick: "+matches_text.get(i));
                         }
                     }).create().show();
         }
@@ -314,27 +314,44 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     private final int NUMBER_OF_SUGGESTIONS = 10;
 
     private void fetchSuggestionsFor(String input) {
-        TextServicesManager tsm = (TextServicesManager) getSystemService(TEXT_SERVICES_MANAGER_SERVICE);
-        SpellCheckerSession session = tsm.newSpellCheckerSession(null, Locale.US, this, true);
-        //session.getSuggestions(new TextInfo(input), 10);
-        session.getSentenceSuggestions(new TextInfo[]{new TextInfo(input)}, NUMBER_OF_SUGGESTIONS);
+        TextServicesManager tsm = (TextServicesManager) this.getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
+        SpellCheckerSession session = tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, true);
+        if (session != null) {
+            session.getSuggestions(new TextInfo(input), 10);
+        } else {
+            // Show the message to user
+            Toast.makeText(this, "Please turn on the spell checker from setting", Toast.LENGTH_LONG).show();
+            // You can even open the settings page for user to turn it ON
+            ComponentName componentToLaunch = new ComponentName("com.android.settings", "com.android.settings.Settings$SpellCheckersSettingsActivity");
+            Intent intent = new Intent();
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.setComponent(componentToLaunch);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                this.startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                // Error
+            }
+        }
+        //session.getSentenceSuggestions(new TextInfo[]{new TextInfo(input)}, NUMBER_OF_SUGGESTIONS);
     }
 
     @Override
     public void onGetSuggestions(SuggestionsInfo[] suggestionsInfos) {
 
-        /*SuggestWord.clear();
+        SuggestWord = new ArrayList<>();
         for (int i = 0; i < suggestionsInfos.length; ++i) {
             final int len = suggestionsInfos[i].getSuggestionsCount();
             for (int j = 0; j < len; ++j) {
                 SuggestWord.add(suggestionsInfos[i].getSuggestionAt(j).toLowerCase());
             }
-        }*/
+        }
     }
 
     @Override
     public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
 
+       /* SuggestWord = new ArrayList<>();
         for (SentenceSuggestionsInfo result : results) {
             int n = result.getSuggestionsCount();
             for (int i = 0; i < n; i++) {
@@ -351,7 +368,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
             }
         }
 
-        SuggestWord.remove(0);
+        SuggestWord.remove(0);*/
 
 
     }
