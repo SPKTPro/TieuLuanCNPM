@@ -1,10 +1,13 @@
 package com.example.rinnv.tieuluancnpm;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
@@ -49,63 +52,46 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     final Context context = this;
     SQLiteDataController db;
 
+    public  boolean isConnected()
+    {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo net = cm.getActiveNetworkInfo();
+        if (net!=null && net.isAvailable() && net.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public void startSpeechToText(String word) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, word);
-        try {
-            startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(getApplicationContext(),
-                    "Sorry! Speech recognition is not supported in this device.", Toast.LENGTH_SHORT).show();
-        }
+        startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: GEt word");
+        if (requestCode == SPEECH_RECOGNITION_CODE && resultCode == RESULT_OK) {
+
+            ArrayList<String>  matches_text = data
+                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
 
-        switch (requestCode) {
-            case SPEECH_RECOGNITION_CODE: {
-                if (resultCode == RESULT_OK && null != data) {
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    //Export this input speech
+            // chua biết làm gì nen show popup tam
+            AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
+            builder.setIconAttribute(android.R.attr.alertDialogIcon)
+                    .setTitle("This is you voice")
+                    .setItems(matches_text.toArray(new String[matches_text.size()]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                    builder1.setTitle("You are so stupid");
-                    builder1.setMessage(result.toString());
-                    builder1.setCancelable(true);
-
-                    builder1.setPositiveButton(
-                            "Yes",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    builder1.setNegativeButton(
-                            "No",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-
-                    AlertDialog alert11 = builder1.create();
-                    alert11.show();
-                }
-
-                break;
-            }
+                        }
+                    }).create().show();
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     private EditText Word_EN;
 

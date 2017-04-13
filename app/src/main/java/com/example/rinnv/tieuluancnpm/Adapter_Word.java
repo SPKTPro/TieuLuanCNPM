@@ -3,6 +3,8 @@ package com.example.rinnv.tieuluancnpm;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,10 @@ public class Adapter_Word extends BaseAdapter
         itemInflater = LayoutInflater.from(c);
         mContext=c;
     }
+
+
+
+
 
 
     @Override
@@ -91,8 +97,10 @@ public class Adapter_Word extends BaseAdapter
         btnCheckSpell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mContext instanceof Word_Activity){
-                    ((Word_Activity)mContext).startSpeechToText("Fuck");
+                if(((Word_Activity)mContext).isConnected()){
+                    ((Word_Activity)mContext).startSpeechToText(item.getWord_Title().toString());                }
+                else{
+                    Toast.makeText(mContext, "Plese Connect to Internet", Toast.LENGTH_LONG).show();
                 }
             }
         });
