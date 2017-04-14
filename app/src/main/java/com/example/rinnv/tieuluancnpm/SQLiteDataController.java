@@ -280,7 +280,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -307,7 +307,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -335,7 +335,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
                 list.add(topic);
             }
         } catch (SQLException e) {
@@ -387,7 +387,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
                 list.add(word);
             }
 
@@ -442,7 +442,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
                 list.add(word);
             }
 
@@ -483,7 +483,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 Word word;
                 while (cs.moveToNext()) {
                     word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                            cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7));
+                            cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
                     list.add(word);
                 }
             }
@@ -669,7 +669,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), 0);
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), 0,0);
                 list.add(word);
             }
 
@@ -687,5 +687,29 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         });
         return list;
+    }
+    public boolean updateScorePronoun(String word, int score) {
+        boolean result = false;
+        try {
+
+            openDataBase();
+
+            ContentValues values = new ContentValues();
+
+            values.put("Word_Pronoun",score);
+            long rs = database.update("Word", values, "Word_Title='" + word + "'", null);
+
+            if (rs > 0) {
+                result = true;
+                Log.d("Tag", "insertMaintopic: compele");
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return result;
     }
 }

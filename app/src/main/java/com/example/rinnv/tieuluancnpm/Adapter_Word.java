@@ -67,6 +67,7 @@ public class Adapter_Word extends BaseAdapter
 
         final TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
         TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
+        TextView score = (TextView) Layout.findViewById(R.id.pronoun);
         Button btnCheckSpell =(Button) Layout.findViewById(R.id.btnCheckSpell);
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
@@ -75,6 +76,7 @@ public class Adapter_Word extends BaseAdapter
         final Word item = items.get(position);
         titleView.setText(item.getWord_Title() );
         titleView2.setText(item.getWord_Title_VN() );
+        score.setText(""+item.getWord_Pronoun());
 
 
 
@@ -100,7 +102,7 @@ public class Adapter_Word extends BaseAdapter
                 if(((Word_Activity)mContext).isConnected()){
                     ((Word_Activity)mContext).startSpeechToText(item.getWord_Title().toString());                }
                 else{
-                    Toast.makeText(mContext, "Plese Connect to Internet", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "Please Connect to Internet", Toast.LENGTH_LONG).show();
                 }
             }
         });
