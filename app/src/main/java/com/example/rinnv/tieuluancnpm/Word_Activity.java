@@ -111,7 +111,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
                         Toast.LENGTH_SHORT).show();
                 db.updateScorePronoun(your_word,0);
             }
-            listView_Word.setAdapter(adapterWord);
+            listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
             listView_Word.invalidate();
             // chua biết làm gì nen show popup tam
        /*     AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
