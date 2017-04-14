@@ -210,10 +210,6 @@ public class Game extends AppCompatActivity {
             dialog.show();
      //       TextView textQues = (TextView) dialog.findViewById(R.id.txt);
 
-
-
-
-
             Button dialogButtonOK = (Button) dialog.findViewById(R.id.button);
             final Button dialogButtonOK1 = (Button) dialog1.findViewById(R.id.buttonOK);
             Button dialogButtonOK2 = (Button) dialog1.findViewById(R.id.buttonCancel);

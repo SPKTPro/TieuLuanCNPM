@@ -1,5 +1,6 @@
 package com.example.rinnv.tieuluancnpm;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -33,6 +37,7 @@ public class Adapter_Word extends BaseAdapter
     private ArrayList<Word> items;
     private LayoutInflater itemInflater;
     private Context mContext;
+
 
     @Override
     public int getCount() {
@@ -68,7 +73,7 @@ public class Adapter_Word extends BaseAdapter
         final TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
         TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
         TextView score = (TextView) Layout.findViewById(R.id.pronoun);
-        Button btnCheckSpell =(Button) Layout.findViewById(R.id.btnCheckSpell);
+        ImageButton btnCheckSpell =(ImageButton) Layout.findViewById(R.id.btnCheckSpell);
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
 
@@ -94,9 +99,16 @@ public class Adapter_Word extends BaseAdapter
             }
         });
 
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setTitle("Pronunciation");
+        dialog.setContentView(R.layout.recoder_layout);
+        ImageButton btnPronoun = (ImageButton) dialog.findViewById(R.id.imageButton);
+        final ImageView star1 =(ImageView) dialog.findViewById(R.id.star1);
+        final ImageView star2 =(ImageView) dialog.findViewById(R.id.star2);
+        final ImageView star3 =(ImageView) dialog.findViewById(R.id.star3);
         btnCheckSpell.setFocusable(false);
         btnCheckSpell.setFocusableInTouchMode(false);
-        btnCheckSpell.setOnClickListener(new View.OnClickListener() {
+        btnPronoun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(((Word_Activity)mContext).isConnected()){
@@ -106,6 +118,31 @@ public class Adapter_Word extends BaseAdapter
                 }
             }
         });
+        btnCheckSpell.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+                int a =Integer.parseInt(item.getWord_Pronoun()+"") ;
+                Log.d("tag",a+"");
+
+                if(a!=0) {
+                    if (a == 1)
+                        star3.setImageResource(R.drawable.star2);
+                    else
+                        if (a == 2) {
+                        star3.setImageResource(R.drawable.star2);
+                        star2.setImageResource(R.drawable.star2);
+                    } else {
+                        star1.setImageResource(R.drawable.star2);
+                        star2.setImageResource(R.drawable.star2);
+                        star3.setImageResource(R.drawable.star2);
+                    }
+                }
+
+            }
+        });
+
 
         Layout.setTag(position);
 

@@ -25,6 +25,7 @@ import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -44,6 +45,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
 
     public String TAG = "Tag";
     public String your_word="";
+    public Dialog dialog;
     public static int ID = 0;
     private final int SPEECH_RECOGNITION_CODE = 1001;
     public String saveWord = "";
@@ -65,7 +67,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     }
 
     public void startSpeechToText(String word) {
-        your_word = word.toString();
+        your_word = word;
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -77,11 +79,14 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SPEECH_RECOGNITION_CODE && resultCode == RESULT_OK) {
             final GridView listView_Word = (GridView) findViewById(R.id.list_item);
+            final Adapter_Word adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic));
+
             final ArrayList<String> matches_text = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String [] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
             Toast.makeText(this.context,matches_text2[0]+" "+matches_text2[1]+" "+matches_text2[2]+" "+your_word,
                     Toast.LENGTH_LONG).show();
+
             db.updateScorePronoun(your_word,1);
             if(matches_text2[0].equals(your_word.toLowerCase())) {
                 Toast.makeText(this.context,matches_text2[0]+" 3 sao",
@@ -102,11 +107,11 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
             }
             else
             {
-                Toast.makeText(this.context,"sai rồi",
+                Toast.makeText(this.context,"Thử lại",
                         Toast.LENGTH_SHORT).show();
                 db.updateScorePronoun(your_word,0);
             }
-            listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+            listView_Word.setAdapter(adapterWord);
             listView_Word.invalidate();
             // chua biết làm gì nen show popup tam
        /*     AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
