@@ -54,6 +54,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
     final Context context = this;
     SQLiteDataController db;
+    boolean ischek=false;
 
     public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -32,6 +32,7 @@ public class Adapter_Word extends BaseAdapter {
     protected ImageView star1;
     protected ImageView star2;
     protected ImageView star3;
+    protected String selectedWord;
 
 
     @Override
@@ -105,6 +106,7 @@ public class Adapter_Word extends BaseAdapter {
                 int a = Integer.parseInt(item.getWord_Pronoun() + "");
                 //chỗ này display chứ ko phải reset
                 DisplayStar(a);
+                selectedWord = item.getWord_Title();
                 dialog.show();
             }
         });
@@ -114,7 +116,8 @@ public class Adapter_Word extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 if (((Word_Activity) mContext).isConnected()) {
-                    ((Word_Activity) mContext).startSpeechToText(item.getWord_Title().toString());
+                    ResetStar();
+                    ((Word_Activity) mContext).startSpeechToText(selectedWord);
                 } else {
                     Toast.makeText(mContext, "Please Connect to Internet", Toast.LENGTH_LONG).show();
                 }
@@ -148,7 +151,6 @@ public class Adapter_Word extends BaseAdapter {
     }
 
     public void RefreshDialogView(int a) {
-        Log.e("Tag", "RefreshDialogView: ");
         DisplayStar(a);
         dialogView.invalidate();
         Log.d("tag", "reset");
