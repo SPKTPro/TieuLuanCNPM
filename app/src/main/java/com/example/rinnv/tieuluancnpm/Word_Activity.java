@@ -25,7 +25,6 @@ import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -35,21 +34,21 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
 
+
 public class Word_Activity extends AppCompatActivity implements SpellCheckerSession.SpellCheckerSessionListener {
 
     public String TAG = "Tag";
-    public String your_word="";
+    public String your_word = "";
     public Dialog dialog;
     public static int ID = 0;
     private final int SPEECH_RECOGNITION_CODE = 1001;
     public String saveWord = "";
     private static ArrayList<String> SuggestWord = new ArrayList<>();
+    private Adapter_Word adapterWord;
 
     FloatingActionMenu materialDesignFAM;
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
@@ -72,7 +71,11 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, word);
+        intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,
+                new Long(1000));
+
         startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
+
     }
 
     @Override
@@ -83,49 +86,36 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
 
             final ArrayList<String> matches_text = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            String [] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
-            Toast.makeText(this.context,matches_text2[0]+" "+matches_text2[1]+" "+matches_text2[2]+" "+your_word,
-                    Toast.LENGTH_LONG).show();
+            String[] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
 
-            db.updateScorePronoun(your_word,1);
-            if(matches_text2[0].equals(your_word.toLowerCase())) {
-                Toast.makeText(this.context,matches_text2[0]+" 3 sao",
-                        Toast.LENGTH_SHORT).show();
-                db.updateScorePronoun(your_word,3);
-            }
-            else
-            if(matches_text2[1].equals(your_word.toLowerCase())) {
-                Toast.makeText(this.context,matches_text2[1]+" 2 sao",
-                        Toast.LENGTH_SHORT).show();
-                db.updateScorePronoun(your_word,2);
-            }
-            else
-            if(matches_text2[2].equals(your_word.toLowerCase())){
-                Toast.makeText(this.context,matches_text2[2]+" 1 sao",
-                        Toast.LENGTH_SHORT).show();
-                db.updateScorePronoun(your_word,1);
-            }
-            else
-            {
-                Toast.makeText(this.context,"Thử lại",
-                        Toast.LENGTH_SHORT).show();
-                db.updateScorePronoun(your_word,0);
+
+            int a = 0;
+            // tai sao chua chi da set bang 1
+            db.updateScorePronoun(your_word, 1);
+
+            // chua bat truong hop matches_text2 khong có hoac chi co 1 2 từ
+            if (matches_text2[0].equals(your_word.toLowerCase())) {
+                a = 3;
+                db.updateScorePronoun(your_word, 3);
+            } else if (matches_text2[1].equals(your_word.toLowerCase())) {
+                a = 2;
+                db.updateScorePronoun(your_word, 2);
+            } else if (matches_text2[2].equals(your_word.toLowerCase())) {
+                a = 1;
+                db.updateScorePronoun(your_word, 1);
+            } else {
+                db.updateScorePronoun(your_word, 0);
             }
             listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
             listView_Word.invalidate();
-            // chua biết làm gì nen show popup tam
-       /*     AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
-            builder.setIconAttribute(android.R.attr.alertDialogIcon)
-                    .setTitle("This is you voice")
-                    .setItems(matches_text2, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(context,"You selected "+ matches_text.get(i), Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "onClick: "+matches_text.get(i));
-                        }
-                    }).create().show();*/
+
+            //refresh dialog
+            refreshDialog(a);
         }
-        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void refreshDialog(int count) {
+        adapterWord.RefreshDialogView(count);
     }
 
     private EditText Word_EN;
@@ -144,11 +134,11 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
         toolbar.setSubtitle(SaveObject.saveTopic.getTopic_Title());
 
         db = new SQLiteDataController(this);
-
+        adapterWord = new Adapter_Word(this, db.getListWord(SaveObject.saveTopic));
 
         SuggestWord.add("");
         final GridView listView_Word = (GridView) findViewById(R.id.list_item);
-        listView_Word.setAdapter(new Adapter_Word(this, db.getListWord(SaveObject.saveTopic)));
+        listView_Word.setAdapter(adapterWord);
 
         listView_Word.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -172,7 +162,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 db.deleteWord(word);
-                                listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
                                 listView_Word.invalidate();
                             }
 
@@ -244,8 +234,6 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(final DialogInterface dialog, final int id) {
-
-
                                         // bien kiem tra cho phep luu
                                         if (Word_EN.getText().toString().contentEquals("") || Word_EN.getText().toString().isEmpty())
                                             Toast.makeText(context, "Vui lòng nhập từ vựng", Toast.LENGTH_LONG).show();
@@ -298,8 +286,8 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
                                                                                                 x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), word,
                                                                                                         Maintopic_VN.getText().toString().trim());
 
-                                                                                                listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
-                                                                                                listView_Word.invalidate();
+                                                                                                listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                                                                                listView_Word.invalidateViews();
 
                                                                                                 Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
                                                                                                 break;
@@ -351,6 +339,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     private void fetchSuggestionsFor(String input) {
         TextServicesManager tsm = (TextServicesManager) this.getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
         SpellCheckerSession session = tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, true);
+
         if (session != null) {
             session.getSuggestions(new TextInfo(input), 10);
         } else {
@@ -373,7 +362,6 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
 
     @Override
     public void onGetSuggestions(SuggestionsInfo[] suggestionsInfos) {
-
         SuggestWord = new ArrayList<>();
         for (int i = 0; i < suggestionsInfos.length; ++i) {
             final int len = suggestionsInfos[i].getSuggestionsCount();
