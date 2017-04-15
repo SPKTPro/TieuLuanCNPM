@@ -1,8 +1,6 @@
 package com.example.rinnv.tieuluancnpm;
 
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +8,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.StrictMode;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
@@ -20,11 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.textservice.SentenceSuggestionsInfo;
-import android.view.textservice.SpellCheckerSession;
-import android.view.textservice.SuggestionsInfo;
-import android.view.textservice.TextInfo;
-import android.view.textservice.TextServicesManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -34,12 +27,12 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.List;
 
 import static com.example.rinnv.tieuluancnpm.SaveObject.mTts;
 
 
-public class Word_Activity extends AppCompatActivity implements SpellCheckerSession.SpellCheckerSessionListener {
+public class Word_Activity extends AppCompatActivity {
 
     public String TAG = "Tag";
     public String your_word = "";
@@ -47,14 +40,13 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     public static int ID = 0;
     private final int SPEECH_RECOGNITION_CODE = 1001;
     public String saveWord = "";
-    private static ArrayList<String> SuggestWord = new ArrayList<>();
     private Adapter_Word adapterWord;
 
     FloatingActionMenu materialDesignFAM;
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
     final Context context = this;
     SQLiteDataController db;
-    boolean ischek=false;
+    boolean ischek = false;
 
     public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -87,7 +79,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
 
             final ArrayList<String> matches_text = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches_text.size()>0) {
+            if (matches_text.size() > 0) {
                 String[] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
 
                 Toast.makeText(this.context, matches_text2[0] + " " + matches_text2[1] + " " + matches_text2[2] + " " + your_word, Toast.LENGTH_SHORT).show();
@@ -126,6 +118,11 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word);
 
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -138,7 +135,7 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
         db = new SQLiteDataController(this);
         adapterWord = new Adapter_Word(this, db.getListWord(SaveObject.saveTopic));
 
-        SuggestWord.add("");
+
         final GridView listView_Word = (GridView) findViewById(R.id.list_item);
         listView_Word.setAdapter(adapterWord);
 
@@ -246,73 +243,117 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
                                         } else {
                                             // kiem tra chinh ta
                                             saveWord = Word_EN.getText().toString().toLowerCase();
-                                            fetchSuggestionsFor(saveWord);
+                                            final List<String> suggestWord = Utility.CheckWord(saveWord);
 
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Log.d(TAG, "run: " + SuggestWord.size());
-                                                    if (SuggestWord.size() == 0) {
-                                                        new AlertDialog.Builder(context)
-                                                                .setTitle("Error")
-                                                                .setMessage("There is no word detect for this input")
-                                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                                                    public void onClick(DialogInterface dialog, int which) {
+                                            Log.d(TAG, "onClick: "+suggestWord.size());
+                                            // neu list suggest ko chua tu vua nhap vao
+                                            if (!suggestWord.contains(saveWord) && suggestWord.size() > 1 ) {
 
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
+                                                builder.setIconAttribute(android.R.attr.alertDialogIcon)
+                                                        .setTitle("Which word do you mean ?")
+                                                        .setItems(suggestWord.toArray(new String[suggestWord.size()]), new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                                final String word = suggestWord.get(i);
+                                                                Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
+                                                                        .setCallback(new Snackbar.Callback() {
+                                                                            @Override
+                                                                            public void onDismissed(Snackbar snackbar, int event) {
+                                                                                switch (event) {
+                                                                                    case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                                                                        Toast.makeText(context, "Hủy thao tác", Toast.LENGTH_LONG).show();
+                                                                                        break;
+                                                                                    case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+
+                                                                                        //insert Word
+                                                                                        boolean x = true;
+                                                                                        x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), word,
+                                                                                                Maintopic_VN.getText().toString().trim());
+
+                                                                                        listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                                                                        listView_Word.invalidateViews();
+
+                                                                                        Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+                                                                                        break;
+                                                                                }
+                                                                            }
+
+                                                                        })
+                                                                        .setAction("Undo", new View.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(View v) {
+
+                                                                            }
+                                                                        })
+                                                                        .setActionTextColor(Color.RED)
+                                                                        .show();
+
+                                                            }
+                                                        })
+                                                        .create()
+                                                        .show();
+
+                                            } else {
+                                                // neu ko dc suggest tu nao
+                                                if (suggestWord.size() == 0) {
+                                                    new AlertDialog.Builder(context)
+                                                            .setTitle("Confirm")
+                                                            .setMessage("This word may be misspelled. Are you sure to save ?")
+                                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    boolean x = true;
+                                                                    x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), saveWord,
+                                                                            Maintopic_VN.getText().toString().trim());
+
+                                                                    listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                                                    listView_Word.invalidateViews();
+
+                                                                    Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+
+                                                                }
+                                                            })
+                                                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                                }
+                                                            })
+                                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                                            .show();
+                                                } else {
+                                                    Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
+                                                            .setCallback(new Snackbar.Callback() {
+                                                                @Override
+                                                                public void onDismissed(Snackbar snackbar, int event) {
+                                                                    switch (event) {
+                                                                        case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                                                            Toast.makeText(context, "Hủy thao tác", Toast.LENGTH_LONG).show();
+                                                                            break;
+                                                                        case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                                                                            //insert Word
+                                                                            boolean x = true;
+                                                                            x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), saveWord,
+                                                                                    Maintopic_VN.getText().toString().trim());
+
+                                                                            listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                                                            listView_Word.invalidateViews();
+
+                                                                            Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+                                                                            break;
                                                                     }
-                                                                })
-                                                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                                                .show();
+                                                                }
 
-                                                    } else {
-                                                        AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
-                                                        builder.setIconAttribute(android.R.attr.alertDialogIcon)
-                                                                .setTitle("Which word do you mean ?")
-                                                                .setItems(SuggestWord.toArray(new String[SuggestWord.size()]), new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                                        final String word = SuggestWord.get(i);
+                                                            })
+                                                            .setAction("Undo", new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
 
-                                                                        Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
-                                                                                .setCallback(new Snackbar.Callback() {
-                                                                                    @Override
-                                                                                    public void onDismissed(Snackbar snackbar, int event) {
-                                                                                        switch (event) {
-                                                                                            case Snackbar.Callback.DISMISS_EVENT_ACTION:
-                                                                                                Toast.makeText(context, "Hủy thao tác", Toast.LENGTH_LONG).show();
-                                                                                                break;
-                                                                                            case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
-
-                                                                                                //insert Word
-                                                                                                boolean x = true;
-                                                                                                x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), word,
-                                                                                                        Maintopic_VN.getText().toString().trim());
-
-                                                                                                listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
-                                                                                                listView_Word.invalidateViews();
-
-                                                                                                Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
-                                                                                                break;
-                                                                                        }
-                                                                                    }
-
-                                                                                })
-                                                                                .setAction("Undo", new View.OnClickListener() {
-                                                                                    @Override
-                                                                                    public void onClick(View v) {
-
-                                                                                    }
-                                                                                })
-                                                                                .setActionTextColor(Color.RED)
-                                                                                .show();
-
-                                                                    }
-                                                                })
-                                                                .create()
-                                                                .show();
-                                                    }
+                                                                }
+                                                            })
+                                                            .setActionTextColor(Color.RED)
+                                                            .show();
                                                 }
-                                            }, 1000);
+                                            }
 
                                         }
                                     }
@@ -336,65 +377,4 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
     }
 
 
-    private final int NUMBER_OF_SUGGESTIONS = 10;
-
-    private void fetchSuggestionsFor(String input) {
-        TextServicesManager tsm = (TextServicesManager) this.getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
-        SpellCheckerSession session = tsm.newSpellCheckerSession(null, Locale.ENGLISH, this, true);
-
-        if (session != null) {
-            session.getSuggestions(new TextInfo(input), 10);
-        } else {
-            // Show the message to user
-            Toast.makeText(this, "Please turn on the spell checker from setting", Toast.LENGTH_LONG).show();
-            // You can even open the settings page for user to turn it ON
-            ComponentName componentToLaunch = new ComponentName("com.android.settings", "com.android.settings.Settings$SpellCheckersSettingsActivity");
-            Intent intent = new Intent();
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.setComponent(componentToLaunch);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            try {
-                this.startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                // Error
-            }
-        }
-        //session.getSentenceSuggestions(new TextInfo[]{new TextInfo(input)}, NUMBER_OF_SUGGESTIONS);
-    }
-
-    @Override
-    public void onGetSuggestions(SuggestionsInfo[] suggestionsInfos) {
-        SuggestWord = new ArrayList<>();
-        for (int i = 0; i < suggestionsInfos.length; ++i) {
-            final int len = suggestionsInfos[i].getSuggestionsCount();
-            for (int j = 0; j < len; ++j) {
-                SuggestWord.add(suggestionsInfos[i].getSuggestionAt(j).toLowerCase());
-            }
-        }
-    }
-
-    @Override
-    public void onGetSentenceSuggestions(SentenceSuggestionsInfo[] results) {
-
-       /* SuggestWord = new ArrayList<>();
-        for (SentenceSuggestionsInfo result : results) {
-            int n = result.getSuggestionsCount();
-            for (int i = 0; i < n; i++) {
-                int m = result.getSuggestionsInfoAt(i).getSuggestionsCount();
-
-                if ((result.getSuggestionsInfoAt(i).getSuggestionsAttributes() &
-                        SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO) != SuggestionsInfo.RESULT_ATTR_LOOKS_LIKE_TYPO)
-                    continue;
-
-                for (int k = 0; k < m; k++) {
-                    SuggestWord.add(result.getSuggestionsInfoAt(i).getSuggestionAt(k).toLowerCase());
-                }
-
-            }
-        }
-
-        SuggestWord.remove(0);*/
-
-
-    }
 }
