@@ -85,7 +85,6 @@ public class Utility {
                 con.disconnect();
             }
         }
-
         // All done
 
         return messages;

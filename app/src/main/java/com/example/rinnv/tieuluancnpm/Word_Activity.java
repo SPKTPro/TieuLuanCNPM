@@ -15,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -245,9 +244,9 @@ public class Word_Activity extends AppCompatActivity {
                                             saveWord = Word_EN.getText().toString().toLowerCase();
                                             final List<String> suggestWord = Utility.CheckWord(saveWord);
 
-                                            Log.d(TAG, "onClick: "+suggestWord.size());
+
                                             // neu list suggest ko chua tu vua nhap vao
-                                            if (!suggestWord.contains(saveWord) && suggestWord.size() > 1 ) {
+                                            if (!suggestWord.contains(saveWord) && suggestWord.size() > 0) {
 
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
                                                 builder.setIconAttribute(android.R.attr.alertDialogIcon)
@@ -295,32 +294,7 @@ public class Word_Activity extends AppCompatActivity {
                                                         .show();
 
                                             } else {
-                                                // neu ko dc suggest tu nao
-                                                if (suggestWord.size() == 0) {
-                                                    new AlertDialog.Builder(context)
-                                                            .setTitle("Confirm")
-                                                            .setMessage("This word may be misspelled. Are you sure to save ?")
-                                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    boolean x = true;
-                                                                    x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), saveWord,
-                                                                            Maintopic_VN.getText().toString().trim());
-
-                                                                    listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
-                                                                    listView_Word.invalidateViews();
-
-                                                                    Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
-
-                                                                }
-                                                            })
-                                                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                                                public void onClick(DialogInterface dialog, int which) {
-
-                                                                }
-                                                            })
-                                                            .setIcon(android.R.drawable.ic_dialog_alert)
-                                                            .show();
-                                                } else {
+                                                if (suggestWord.contains(saveWord)) {
                                                     Snackbar.make(v, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
                                                             .setCallback(new Snackbar.Callback() {
                                                                 @Override
@@ -352,6 +326,34 @@ public class Word_Activity extends AppCompatActivity {
                                                             })
                                                             .setActionTextColor(Color.RED)
                                                             .show();
+                                                }
+                                                // neu ko dc suggest tu nao
+                                                else {
+                                                    if (suggestWord.size() == 0) {
+                                                        new AlertDialog.Builder(context)
+                                                                .setTitle("Confirm")
+                                                                .setMessage("This word may be misspelled. Are you sure to save ?")
+                                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        boolean x = true;
+                                                                        x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), saveWord,
+                                                                                Maintopic_VN.getText().toString().trim());
+
+                                                                        listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                                                                        listView_Word.invalidateViews();
+
+                                                                        Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+
+                                                                    }
+                                                                })
+                                                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                                    }
+                                                                })
+                                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                                .show();
+                                                    }
                                                 }
                                             }
 
