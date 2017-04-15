@@ -103,7 +103,8 @@ public class Adapter_Word extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 int a = Integer.parseInt(item.getWord_Pronoun() + "");
-                ResetStar();
+                //chỗ này display chứ ko phải reset
+                DisplayStar(a);
                 dialog.show();
             }
         });
@@ -148,8 +149,9 @@ public class Adapter_Word extends BaseAdapter {
 
     public void RefreshDialogView(int a) {
         Log.e("Tag", "RefreshDialogView: ");
-        DisplayStar(3);
+        DisplayStar(a);
         dialogView.invalidate();
+        Log.d("tag", "reset");
     }
 
 

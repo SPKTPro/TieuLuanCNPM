@@ -86,31 +86,32 @@ public class Word_Activity extends AppCompatActivity implements SpellCheckerSess
 
             final ArrayList<String> matches_text = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            String[] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
+            if (matches_text.size()>0) {
+                String[] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
 
+                Toast.makeText(this.context, matches_text2[0] + " " + matches_text2[1] + " " + matches_text2[2] + " " + your_word, Toast.LENGTH_SHORT).show();
+                int a = 0;
 
-            int a = 0;
-            // tai sao chua chi da set bang 1
-            db.updateScorePronoun(your_word, 1);
+                // chua bat truong hop matches_text2 khong có hoac chi co 1 2 từ
+                if (matches_text2[0].equals(your_word.toLowerCase())) {
+                    a = 3;
+                    db.updateScorePronoun(your_word, 3);
+                } else if (matches_text2[1].equals(your_word.toLowerCase())) {
+                    a = 2;
+                    db.updateScorePronoun(your_word, 2);
+                } else if (matches_text2[2].equals(your_word.toLowerCase())) {
+                    a = 1;
+                    db.updateScorePronoun(your_word, 1);
+                } else {
+                    db.updateScorePronoun(your_word, 0);
+                }
+                listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
+                listView_Word.invalidate();
 
-            // chua bat truong hop matches_text2 khong có hoac chi co 1 2 từ
-            if (matches_text2[0].equals(your_word.toLowerCase())) {
-                a = 3;
-                db.updateScorePronoun(your_word, 3);
-            } else if (matches_text2[1].equals(your_word.toLowerCase())) {
-                a = 2;
-                db.updateScorePronoun(your_word, 2);
-            } else if (matches_text2[2].equals(your_word.toLowerCase())) {
-                a = 1;
-                db.updateScorePronoun(your_word, 1);
-            } else {
-                db.updateScorePronoun(your_word, 0);
+                //refresh dialog
+                refreshDialog(a);
+
             }
-            listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
-            listView_Word.invalidate();
-
-            //refresh dialog
-            refreshDialog(a);
         }
     }
 
