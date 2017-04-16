@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -68,6 +69,16 @@ public class Word_Activity extends AppCompatActivity {
 
         startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
 
+        //code check refresh sao
+        /*if (ischek)
+        {
+           refreshDialog(1);
+            ischek=!ischek;
+        }else {
+           refreshDialog(3);
+            ischek=!ischek;
+        }*/
+
     }
 
     @Override
@@ -97,17 +108,18 @@ public class Word_Activity extends AppCompatActivity {
                 } else {
                     db.updateScorePronoun(your_word, 0);
                 }
+                refreshDialog(a);
+
                 listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic)));
                 listView_Word.invalidate();
 
-                //refresh dialog
-                refreshDialog(a);
 
             }
         }
     }
 
     public void refreshDialog(int count) {
+        Log.d(TAG, "refreshDialog: "+count);
         adapterWord.RefreshDialogView(count);
     }
 
@@ -243,7 +255,7 @@ public class Word_Activity extends AppCompatActivity {
                                             // kiem tra chinh ta
                                             saveWord = Word_EN.getText().toString().toLowerCase();
                                             final List<String> suggestWord = Utility.CheckWord(saveWord);
-
+                                            Log.d(TAG, "onClick: "+suggestWord.size());
 
                                             // neu list suggest ko chua tu vua nhap vao
                                             if (!suggestWord.contains(saveWord) && suggestWord.size() > 0) {

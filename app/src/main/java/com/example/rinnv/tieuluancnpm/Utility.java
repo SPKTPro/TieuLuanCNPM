@@ -37,6 +37,8 @@ public class Utility {
             con.setReadTimeout(10000 /* milliseconds */);
             con.setConnectTimeout(15000 /* milliseconds */);
             con.setRequestMethod("GET");
+           /* con.addRequestProperty("Referer",
+                    "https://en.oxforddictionaries.com/definition");*/
             con.setDoInput(true);
 
             // Start the query

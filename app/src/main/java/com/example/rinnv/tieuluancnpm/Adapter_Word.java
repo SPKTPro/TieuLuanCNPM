@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by rinnv on 25/10/2016.
  */
@@ -136,6 +138,8 @@ public class Adapter_Word extends BaseAdapter {
     }
 
     protected void DisplayStar(int count) {
+        Log.d(TAG, "refreshDialog reci: "+count);
+        ResetStar();
         if (count != 0) {
             if (count == 1)
                 star3.setImageResource(R.drawable.star2);
@@ -153,7 +157,7 @@ public class Adapter_Word extends BaseAdapter {
     public void RefreshDialogView(int a) {
         DisplayStar(a);
         dialogView.invalidate();
-        Log.d("tag", "reset");
+        dialog.show();
     }
 
 
