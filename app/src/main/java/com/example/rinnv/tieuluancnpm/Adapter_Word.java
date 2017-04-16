@@ -120,6 +120,7 @@ public class Adapter_Word extends BaseAdapter {
             public void onClick(View view) {
                 if (((Word_Activity) mContext).isConnected()) {
                     ResetStar();
+                    dialog.dismiss();
                     ((Word_Activity) mContext).startSpeechToText(selectedWord);
                 } else {
                     Toast.makeText(mContext, "Please Connect to Internet", Toast.LENGTH_LONG).show();
@@ -129,7 +130,6 @@ public class Adapter_Word extends BaseAdapter {
 
         Layout.setTag(position);
         return Layout;
-
     }
 
     protected void ResetStar() {
@@ -139,7 +139,7 @@ public class Adapter_Word extends BaseAdapter {
     }
 
     protected void DisplayStar(int count) {
-        Log.d(TAG, "refreshDialog reci: "+count);
+        Log.d(TAG, "refreshDialog reci: " + count);
         ResetStar();
         if (count != 0) {
             if (count == 1)
@@ -157,6 +157,7 @@ public class Adapter_Word extends BaseAdapter {
 
     public void RefreshDialogView(int a) {
         DisplayStar(a);
+        Log.d(TAG, "RefreshDialogView: "+dialog.isShowing());
         dialogView.invalidate();
         dialog.show();
     }

@@ -70,7 +70,7 @@ public class Word_Activity extends AppCompatActivity {
         startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
 
         //code check refresh sao
-        /*if (ischek)
+       /* if (ischek)
         {
            refreshDialog(1);
             ischek=!ischek;
