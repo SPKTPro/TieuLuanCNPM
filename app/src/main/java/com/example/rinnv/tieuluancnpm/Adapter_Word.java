@@ -34,7 +34,7 @@ public class Adapter_Word extends BaseAdapter {
     protected ImageView star1;
     protected ImageView star2;
     protected ImageView star3;
-    protected String selectedWord;
+    protected static String selectedWord;
 
 
     @Override
@@ -110,6 +110,7 @@ public class Adapter_Word extends BaseAdapter {
                 DisplayStar(a);
                 selectedWord = item.getWord_Title();
                 dialog.show();
+
             }
         });
 
