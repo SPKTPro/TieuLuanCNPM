@@ -330,9 +330,13 @@ public class Word_Activity extends AppCompatActivity {
                                                 // neu ko dc suggest tu nao
                                                 else {
                                                     if (suggestWord.size() == 0) {
+                                                        String message = "This word may be misspelled. Are you sure to save ?";
+                                                        if (!isConnected())
+                                                            message ="There is no Internet connection. \n "+message;
+
                                                         new AlertDialog.Builder(context)
                                                                 .setTitle("Confirm")
-                                                                .setMessage("This word may be misspelled. Are you sure to save ?")
+                                                                .setMessage(message)
                                                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                                     public void onClick(DialogInterface dialog, int which) {
                                                                         boolean x = true;
