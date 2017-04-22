@@ -48,7 +48,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         this.mContext = context;
     }
 
-    public void exportDB() {
+    public boolean exportDB() {
         File sd = Environment.getExternalStorageDirectory();
         File backupDB = new File(sd, "vocabulary.xls");
         try {
@@ -109,15 +109,49 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             workbook.close();
             curCSV.close();
             db.close();
-
+            return true;
 
         } catch (Exception ex) {
-            Log.d(TAG, "exportDB: " + ex.getLocalizedMessage());
+            return false;
+        }
+    }
+
+    public void importDB(String filename) {
+       /* if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+            Log.e(TAG, "Storage not available or read only");
+            return;
+        }
+        try {
+            // Creating Input Stream
+            File file = new File(mContext.getExternalFilesDir(null), filename);
+            FileInputStream myInput = new FileInputStream(file);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        return;*/
+        File file = new File(mContext.getExternalFilesDir(null), filename);
+        Log.d(TAG, "importDB: "+file.length());
 
     }
 
+    private  boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+
+    private  boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
 
     private List<String> getListData(Cursor curCSV) {
         List<String> listString = new ArrayList<>();

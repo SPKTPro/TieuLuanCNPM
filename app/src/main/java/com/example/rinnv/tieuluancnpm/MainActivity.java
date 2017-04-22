@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 final FloatingActionMenu materialDesignFAM;
                 final com.github.clans.fab.FloatingActionButton floatingActionButton1,
                         floatingActionButton2, floatingActionButton3, floatingActionButton4,
-                        floatingActionButton5, floatingActionButton6;
+                        floatingActionButton5, floatingActionButton6,floatingActionButton7;
 
 
                 materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
@@ -282,8 +282,11 @@ public class MainActivity extends AppCompatActivity {
                 floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
                 floatingActionButton5 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action5);
                 floatingActionButton6 = (FloatingActionButton) rootView.findViewById(R.id.action6);
+                floatingActionButton7 = (FloatingActionButton) rootView.findViewById(R.id.action7);
                 floatingActionButton4.setVisibility(View.VISIBLE);
                 floatingActionButton6.setVisibility(View.VISIBLE);
+                floatingActionButton7.setVisibility(View.VISIBLE);
+
 
                 floatingActionButton1.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -522,6 +525,13 @@ public class MainActivity extends AppCompatActivity {
                         materialDesignFAM.close(false);
                         ExportDatabaseCSVTask task = new ExportDatabaseCSVTask();
                         task.execute();
+                    }
+                });
+
+                floatingActionButton7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
                     }
                 });
 
