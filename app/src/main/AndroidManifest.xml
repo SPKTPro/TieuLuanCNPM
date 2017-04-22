@@ -70,6 +70,14 @@
             android:exported="true">
 
         </receiver>
+        <receiver android:name=".FileChoosenReceiver"
+                  android:enabled="true"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="FileChoose"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

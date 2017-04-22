@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static Adapter_Maintopic adapterMaintopic;
 
     private static final int SPEECH_API_CHECK = 0;
+    private static final int REQUEST_CHOOSER = 1234;
     public String TAG = "Tag";
 
     public void CheckTTS() {
@@ -272,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
                 final FloatingActionMenu materialDesignFAM;
                 final com.github.clans.fab.FloatingActionButton floatingActionButton1,
                         floatingActionButton2, floatingActionButton3, floatingActionButton4,
-                        floatingActionButton5, floatingActionButton6,floatingActionButton7;
+                        floatingActionButton5, floatingActionButton6, floatingActionButton7;
 
 
                 materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
@@ -531,6 +533,11 @@ public class MainActivity extends AppCompatActivity {
                 floatingActionButton7.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        materialDesignFAM.close(false);
+                        FileDialog dialog = new FileDialog(getActivity(),
+                                Environment.getExternalStorageDirectory().getAbsolutePath());
+                        dialog.setFileEndsWith("xls");
+                        dialog.showDialog();
 
                     }
                 });

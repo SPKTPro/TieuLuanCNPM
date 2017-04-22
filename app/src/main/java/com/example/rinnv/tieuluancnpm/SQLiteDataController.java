@@ -21,13 +21,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import jxl.Cell;
+import jxl.CellType;
+import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
+import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by rinnv on 25/10/2016.
@@ -116,7 +118,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
     }
 
-    public void importDB(String filename) {
+    public boolean importDB(String filePath) {
        /* if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
             Log.e(TAG, "Storage not available or read only");
             return;
@@ -132,8 +134,30 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
 
         return;*/
-        File file = new File(mContext.getExternalFilesDir(null), filename);
-        Log.d(TAG, "importDB: "+file.length());
+        File file = new File(filePath);
+        try {
+            Workbook workbook = Workbook.getWorkbook(file);
+            Sheet sheet = workbook.getSheet("MainTopic");
+
+            for (int i = 0; i < sheet.getRows(); i++) {
+                for (int j = 0; j < sheet.getColumns(); j++) {
+                    Cell cell = sheet.getCell(j, i);
+                    CellType type = cell.getType();
+                    if (type == CellType.LABEL) {
+                        System.out.println("I got a label "
+                                + cell.getContents());
+                    }
+                }
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        }
+
+        return true;
 
     }
 
