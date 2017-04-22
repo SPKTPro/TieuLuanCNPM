@@ -1,1 +1,1 @@
-include ':app', ':csvhelper', ':gamelibrary'
+include ':app', ':gamelibrary'

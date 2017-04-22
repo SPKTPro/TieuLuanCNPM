@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TieuLuanCNPM.iml" filepath="$PROJECT_DIR$/TieuLuanCNPM.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/csvhelper/csvhelper.iml" filepath="$PROJECT_DIR$/csvhelper/csvhelper.iml" />
       <module fileurl="file://$PROJECT_DIR$/gamelibrary/gamelibrary.iml" filepath="$PROJECT_DIR$/gamelibrary/gamelibrary.iml" />
     </modules>
   </component>

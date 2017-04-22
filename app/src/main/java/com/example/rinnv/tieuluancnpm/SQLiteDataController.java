@@ -9,11 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import com.example.csvhelper.CSVWriter;
-
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,8 +19,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 import static android.content.ContentValues.TAG;
+
 /**
  * Created by rinnv on 25/10/2016.
  */
@@ -44,45 +49,74 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     public void exportDB() {
-       /* File sd = Environment.getExternalStorageDirectory();
-        FileChannel source;
-        FileChannel destination;
-        String backupDBPath = DB_NAME;
-
-        File currentDB = mContext.getDatabasePath(DB_NAME);
-        File backupDB = new File(sd, backupDBPath+".sqlite");
-        try {
-            backupDB.createNewFile();
-            source = new FileInputStream(currentDB).getChannel();
-            destination = new FileOutputStream(backupDB).getChannel();
-            destination.transferFrom(source, 0, source.size());
-            source.close();
-            destination.close();
-        } catch (IOException e) {
-            Log.d(TAG, "exportDB: " + e.getLocalizedMessage());
-        }*/
-
-
-        File dbFile = mContext.getDatabasePath(DB_NAME);
         File sd = Environment.getExternalStorageDirectory();
-        File backupDB = new File(sd, "vocabulary.csv");
+        File backupDB = new File(sd, "vocabulary.xls");
         try {
             backupDB.createNewFile();
+
+            WorkbookSettings wbSettings = new WorkbookSettings();
+            wbSettings.setLocale(new Locale("en", "EN"));
+            WritableWorkbook workbook = Workbook.createWorkbook(backupDB, wbSettings);
+            WritableSheet sheet = workbook.createSheet("MainTopic", 0);
             SQLiteDatabase db = getReadableDatabase();
-            CSVWriter csvWrite = new CSVWriter(new FileWriter(backupDB));
             Cursor curCSV = db.rawQuery("SELECT * FROM MainTopic", null);
+
             List<String> listColumName = Arrays.asList(curCSV.getColumnNames());
-            csvWrite.writeNext(listColumName.toArray(new String[listColumName.size()]));
+            for (int i = 0; i < listColumName.size(); i++) {
+                sheet.addCell(new Label(i, 0, listColumName.get(i)));
+            }
+            int row = 1;
             while (curCSV.moveToNext()) {
                 List<String> value = getListData(curCSV);
-                csvWrite.writeNext(value.toArray(new String[value.size()]));
+                for (int colum = 0; colum < listColumName.size(); colum++) {
+                    sheet.addCell(new Label(colum, row, value.get(colum)));
+                }
+                row++;
             }
+
+
+            curCSV = db.rawQuery("SELECT * FROM Topic", null);
+            sheet = workbook.createSheet("Topic", 0);
+            listColumName = Arrays.asList(curCSV.getColumnNames());
+            for (int i = 0; i < listColumName.size(); i++) {
+                sheet.addCell(new Label(i, 0, listColumName.get(i)));
+            }
+            row = 1;
+            while (curCSV.moveToNext()) {
+                List<String> value = getListData(curCSV);
+                for (int colum = 0; colum < listColumName.size(); colum++) {
+                    sheet.addCell(new Label(colum, row, value.get(colum)));
+                }
+                row++;
+            }
+
+            curCSV = db.rawQuery("SELECT * FROM Word", null);
+            sheet = workbook.createSheet("Word", 0);
+            listColumName = Arrays.asList(curCSV.getColumnNames());
+            for (int i = 0; i < listColumName.size(); i++) {
+                sheet.addCell(new Label(i, 0, listColumName.get(i)));
+            }
+            row = 1;
+            while (curCSV.moveToNext()) {
+                List<String> value = getListData(curCSV);
+                for (int colum = 0; colum < listColumName.size(); colum++) {
+                    sheet.addCell(new Label(colum, row, value.get(colum)));
+                }
+                row++;
+            }
+
+            workbook.write();
+            workbook.close();
+            curCSV.close();
+            db.close();
+
 
         } catch (Exception ex) {
             Log.d(TAG, "exportDB: " + ex.getLocalizedMessage());
         }
-    }
 
+
+    }
 
 
     private List<String> getListData(Cursor curCSV) {
@@ -93,6 +127,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return listString;
     }
+
     private void copyDataBase() throws IOException {
 
         try {
