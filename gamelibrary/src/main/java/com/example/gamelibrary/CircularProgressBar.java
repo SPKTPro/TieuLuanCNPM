@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
 
+import com.example.rinnv.R;
+
 /**
  * Created by rinnv on 25/10/2016.
  */
@@ -71,6 +73,7 @@ public class CircularProgressBar extends ProgressBar {
 
         TypedArray a = getContext().obtainStyledAttributes(attrs,
                 R.styleable.CircularProgressBar, style, 0);
+
 
         String color;
         Resources res = getResources();
