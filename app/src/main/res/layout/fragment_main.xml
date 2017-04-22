@@ -85,8 +85,6 @@
             android:src="@android:drawable/ic_menu_edit"
             fab:fab_label="Game chính tả"
             fab:fab_size="mini" />
-
-
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/action4"
             android:visibility="gone"
@@ -95,6 +93,7 @@
             android:src="@drawable/fab_add"
             fab:fab_label="Thêm Word"
             fab:fab_size="mini" />
+
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/action5"
             android:layout_width="wrap_content"

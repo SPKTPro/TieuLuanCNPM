@@ -1,4 +1,4 @@
-package com.example.rinnv;
+package com.example.gamelibrary;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -13,7 +13,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;

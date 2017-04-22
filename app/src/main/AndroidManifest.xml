@@ -63,7 +63,6 @@
             android:name=".LockScreenService"
             android:enabled="true"
             android:exported="true" />
-
         <receiver
             android:name=".LockScreenReceiver"
             android:enabled="true"

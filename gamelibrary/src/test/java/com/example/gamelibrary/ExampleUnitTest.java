@@ -1,4 +1,4 @@
-package com.example.rinnv;
+package com.example.gamelibrary;
 
 import org.junit.Test;
 

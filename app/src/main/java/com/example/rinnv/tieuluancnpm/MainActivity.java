@@ -29,6 +29,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    private static SQLiteDataController db;
+    public static SQLiteDataController db;
     final Context context = this;
     static View rootView;
     private static GridView listView_Maintopic;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         db = new SQLiteDataController(this);
 
         CheckTTS();
-       
+
 
         Intent intent = new Intent(MainActivity.this, LockScreenService.class);
         startService(intent);
@@ -271,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 final FloatingActionMenu materialDesignFAM;
                 final com.github.clans.fab.FloatingActionButton floatingActionButton1,
                         floatingActionButton2, floatingActionButton3, floatingActionButton4,
-                        floatingActionButton5;
+                        floatingActionButton5, floatingActionButton6;
 
 
                 materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
@@ -280,7 +281,9 @@ public class MainActivity extends AppCompatActivity {
                 floatingActionButton3 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action3);
                 floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
                 floatingActionButton5 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action5);
+                floatingActionButton6 = (FloatingActionButton) rootView.findViewById(R.id.action6);
                 floatingActionButton4.setVisibility(View.VISIBLE);
+                floatingActionButton6.setVisibility(View.VISIBLE);
 
                 floatingActionButton1.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -381,10 +384,10 @@ public class MainActivity extends AppCompatActivity {
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         String strName = finalListResult1.get(which).getWord_Title().toString();
                                                         String strMean = finalListResult1.get(which).getWord_Title_VN().toString();
-                                                        String mainTopic ="Main topic: " +finalListResult1.get(which).getExample().toString();
-                                                        String Topic = "Topic:" +finalListResult1.get(which).getExample_VN().toString();
+                                                        String mainTopic = "Main topic: " + finalListResult1.get(which).getExample().toString();
+                                                        String Topic = "Topic:" + finalListResult1.get(which).getExample_VN().toString();
                                                         AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
-                                                        builderInner.setMessage(strMean +"\n"+ mainTopic+"\n" +Topic);
+                                                        builderInner.setMessage(strMean + "\n" + mainTopic + "\n" + Topic);
                                                         builderInner.setTitle(strName);
                                                         builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                             @Override
@@ -509,6 +512,16 @@ public class MainActivity extends AppCompatActivity {
 
                         // show it
                         alertDialog.show();
+                    }
+                });
+
+
+                floatingActionButton6.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        materialDesignFAM.close(false);
+                        ExportDatabaseCSVTask task = new ExportDatabaseCSVTask();
+                        task.execute();
                     }
                 });
 

@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rinnv.CircularProgressBar;
+import com.example.gamelibrary.CircularProgressBar;
 
 import java.util.ArrayList;
 
