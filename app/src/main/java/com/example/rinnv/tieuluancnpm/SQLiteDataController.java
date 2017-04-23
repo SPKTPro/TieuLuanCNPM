@@ -9,7 +9,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,16 +29,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.read.biff.BiffException;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by rinnv on 25/10/2016.
@@ -48,7 +53,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         this.mContext = context;
     }
 
-    public boolean exportDB() {
+   /* public boolean exportDB() {
         File sd = Environment.getExternalStorageDirectory();
         File backupDB = new File(sd, "vocabulary.xls");
         try {
@@ -114,51 +119,285 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception ex) {
             return false;
         }
-    }
+    }*/
 
-    public boolean importDB(String filePath) {
-        File file = new File(filePath);
+    public boolean exportDB() {
+
         try {
-            Workbook workbook = Workbook.getWorkbook(file);
-            Sheet MainTopicsheet = workbook.getSheet("MainTopic");
-            for (int i = 1; i < MainTopicsheet.getRows(); i++) {
-                List<String> value = new ArrayList<>();
-                for (int j = 0; j < MainTopicsheet.getColumns(); j++) {
-                    value.add(MainTopicsheet.getCell(j, i).getContents());
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor curCSV = db.rawQuery("SELECT * FROM MainTopic", null);
+            String fileName = "TEST.xls";
+            Workbook wb = new HSSFWorkbook();
+            Cell cell = null;
+            //New Sheet
+            Sheet sheet1 = null;
+            // Create MainTopic Sheel
+            sheet1 = wb.createSheet("MainTopic");
+            List<String> listColumName = Arrays.asList(curCSV.getColumnNames());
+            Row row = sheet1.createRow(0);
+            for (int i = 0; i < listColumName.size(); i++) {
+                row.createCell(i).setCellValue(listColumName.get(i));
+            }
+            int rowID = 1;
+            while (curCSV.moveToNext()) {
+                List<String> value = getListData(curCSV);
+                row = sheet1.createRow(rowID);
+                for (int colum = 0; colum < listColumName.size(); colum++) {
+                    row.createCell(colum).setCellValue(value.get(colum));
                 }
-                if (!isMainTopicExist(value.get(1)))
-                {
-                   insertMaintopic(value.get(1),value.get(2));
-                }
+                rowID++;
             }
 
-            Sheet Topicsheet = workbook.getSheet("Topic");
-            for (int i = 1; i < Topicsheet.getRows(); i++) {
-                //Get value in one row
-                List<String> value = new ArrayList<>();
-                for (int j = 0; j < Topicsheet.getColumns(); j++) {
-                    value.add(Topicsheet.getCell(j, i).getContents());
-                }
-
-                if (!isTopicExist(value.get(0),value.get(1),value.get(2)))
-                {
-
-
-
-                    insertTopic(value.get(2),value.get(3), Integer.parseInt(value.get(1)));
-                }
+            for (int i = 0; i < listColumName.size(); i++) {
+                sheet1.setColumnWidth(i, (15 * 500));
             }
 
 
+            //Create Topic Sheet
+            curCSV = db.rawQuery("SELECT * FROM Topic", null);
+            sheet1 = wb.createSheet("Topic");
+            listColumName = Arrays.asList(curCSV.getColumnNames());
+            row = sheet1.createRow(0);
+            for (int i = 0; i < listColumName.size(); i++) {
+                row.createCell(i).setCellValue(listColumName.get(i));
+            }
+            rowID = 1;
+            while (curCSV.moveToNext()) {
+                List<String> value = getListData(curCSV);
+                row = sheet1.createRow(rowID);
+                for (int colum = 0; colum < listColumName.size(); colum++) {
+                    row.createCell(colum).setCellValue(value.get(colum));
+                }
+                rowID++;
+            }
+
+            for (int i = 0; i < listColumName.size(); i++) {
+                sheet1.setColumnWidth(i, (15 * 500));
+            }
+
+            //Create Word Sheet
+            curCSV = db.rawQuery("SELECT * FROM Word", null);
+            sheet1 = wb.createSheet("Word");
+            listColumName = Arrays.asList(curCSV.getColumnNames());
+            row = sheet1.createRow(0);
+            for (int i = 0; i < listColumName.size(); i++) {
+                row.createCell(i).setCellValue(listColumName.get(i));
+            }
+            rowID = 1;
+            while (curCSV.moveToNext()) {
+                List<String> value = getListData(curCSV);
+                row = sheet1.createRow(rowID);
+                for (int colum = 0; colum < listColumName.size(); colum++) {
+                    row.createCell(colum).setCellValue(value.get(colum));
+                }
+                rowID++;
+            }
+
+            for (int i = 0; i < listColumName.size(); i++) {
+                sheet1.setColumnWidth(i, (15 * 500));
+            }
+
+            // Create a path where we will place our List of objects on external storage
+            File file = new File(Environment.getExternalStorageDirectory(), fileName);
+            FileOutputStream os = null;
+            os = new FileOutputStream(file);
+            wb.write(os);
             return true;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            return false;
         }
-        return false;
+    }
 
+
+    public boolean importDB(String filePath) {
+        try {
+            File file = new File(filePath);
+            FileInputStream myInput = new FileInputStream(file);
+            // Create a POIFSFileSystem object
+            POIFSFileSystem myFileSystem = new POIFSFileSystem(myInput);
+
+            // Create a workbook using the File System
+            HSSFWorkbook myWorkBook = new HSSFWorkbook(myFileSystem);
+
+
+            //IMPORT MAINTOPIC SHEET
+            // Get the first sheet from workbook
+            HSSFSheet mySheetMainTopic = myWorkBook.getSheet("MainTopic");
+
+            /** We now need something to iterate through the cells.**/
+            Iterator<Row> rowIter = mySheetMainTopic.rowIterator();
+            // Skip header row
+            rowIter.next();
+            while (rowIter.hasNext()) {
+                HSSFRow myRow = (HSSFRow) rowIter.next();
+                Iterator<Cell> cellIter = myRow.cellIterator();
+                List<String> value = new ArrayList<>();
+                while (cellIter.hasNext()) {
+                    HSSFCell myCell = (HSSFCell) cellIter.next();
+                    value.add(myCell.toString());
+                }
+                if (!isMainTopicExist(value.get(1))) {
+                    Log.d(TAG, "importDB: begin import");
+                    insertMaintopic(value.get(1), value.get(2));
+                   
+                }
+            }
+
+
+            //IMPORT TOPIC SHEET
+            HSSFSheet mySheetTopic = myWorkBook.getSheet("Topic");
+            rowIter = mySheetTopic.rowIterator();
+            // Skip header row
+            rowIter.next();
+            while (rowIter.hasNext()) {
+                HSSFRow myRow = (HSSFRow) rowIter.next();
+                Iterator<Cell> cellIter = myRow.cellIterator();
+                // Lấy list gia tri cua row
+                List<String> value = new ArrayList<>();
+                while (cellIter.hasNext()) {
+                    HSSFCell myCell = (HSSFCell) cellIter.next();
+                    value.add(myCell.toString());
+                }
+                // lấy row maintopc trong sheet maintopic
+                Row MaintopicRow = findMainTopicRow(mySheetMainTopic, value.get(0));
+                String MainTopicSting = MaintopicRow.getCell(1).getStringCellValue();
+
+                if (!isTopicExist(MainTopicSting, value.get(2))) {
+                    importTopic(value.get(2), value.get(3), value.get(0), mySheetMainTopic);
+
+                }
+
+            }
+
+
+            //IMPOER WORD SHEET
+            HSSFSheet mySheetWord = myWorkBook.getSheet("Word");
+            rowIter = mySheetWord.rowIterator();
+            // Skip header row
+            rowIter.next();
+            while (rowIter.hasNext()) {
+                HSSFRow myRow = (HSSFRow) rowIter.next();
+                Iterator<Cell> cellIter = myRow.cellIterator();
+                // Lấy list gia tri cua row
+                List<String> value = new ArrayList<>();
+                while (cellIter.hasNext()) {
+                    HSSFCell myCell = (HSSFCell) cellIter.next();
+                    value.add(myCell.toString());
+                }
+
+                // lấy row maintopc trong sheet maintopic
+                Row TopicRow = findTopicRow(mySheetTopic, value.get(0));
+                String TopicSting = TopicRow.getCell(2).getStringCellValue();
+
+                if (!isWordExist(TopicSting, value.get(2))) {
+                    importWord(value.get(2), value.get(3), value.get(0), mySheetTopic, mySheetMainTopic);
+                }
+
+            }
+
+
+        } catch (Exception ex) {
+            Log.d(TAG, "importDB: " + ex.getLocalizedMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private void importTopic(String topicEN, String topicVN, String Maintopicid, HSSFSheet mySheetMainTopic) {
+        Row rowFilter = null;
+        rowFilter = findMainTopicRow(mySheetMainTopic, Maintopicid);
+        if (rowFilter != null) {
+            String MainTopic = rowFilter.getCell(1).getStringCellValue();
+
+            if (isMainTopicExist(MainTopic)) {
+                int MaintopicID = GetMaintopicID(MainTopic);
+                if (MaintopicID != 0)
+                    insertTopic(topicEN, topicVN, MaintopicID);
+                else {
+                    insertMaintopic(rowFilter.getCell(2).getStringCellValue(), rowFilter.getCell(3).getStringCellValue());
+                    MaintopicID = GetMaintopicID(MainTopic);
+                    insertTopic(topicEN, topicVN, MaintopicID);
+                }
+            }
+        }
+
+    }
+
+    private void importWord(String wordEN, String WordVN, String TopicID, HSSFSheet mySheetTopic, HSSFSheet mySheetMainTopic) {
+        Row rowFilter = null;
+        rowFilter = findTopicRow(mySheetTopic, TopicID);
+        if (rowFilter != null) {
+            //topic name and maintopic id
+            String TopicEN = rowFilter.getCell(2).getStringCellValue();
+            String TopicVN = rowFilter.getCell(3).getStringCellValue();
+            String MainTopicID = rowFilter.getCell(0).getStringCellValue();
+
+            Row maintopicRow = findMainTopicRow(mySheetMainTopic, MainTopicID);
+            String MainTopic = maintopicRow.getCell(1).getStringCellValue();
+            if (isTopicExist(MainTopic, TopicEN)) {
+                String topicID = getTopicID(TopicEN, MainTopic);
+                insertWord(topicID, wordEN, WordVN);
+            } else {
+                int maintopicID = GetMaintopicID(MainTopic);
+                insertTopic(TopicEN, TopicVN, maintopicID);
+                String topicId = getTopicID(TopicEN, MainTopic);
+                insertWord(topicId, wordEN, WordVN);
+            }
+        }
+
+    }
+
+    private String getTopicID(String topic, String maintopic) {
+        try {
+            openDataBase();
+            String query = "select * from Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Topic_Title = "
+                    + '"' + topic.toUpperCase() + '"' + " and MainTopic_Title = " + '"' + maintopic + '"';
+            Cursor cs = database.rawQuery(query, null);
+            cs.moveToNext();
+            return cs.getString(1);
+
+        } catch (SQLException e) {
+
+            return "";
+        } finally {
+            close();
+        }
+    }
+
+    private int GetMaintopicID(String maintopic) {
+        try {
+            openDataBase();
+            String query = "select * from MainTopic where MainTopic_Title = " + '"' + maintopic.toUpperCase() + '"';
+            Cursor cs = database.rawQuery(query, null);
+            cs.moveToNext();
+            return cs.getInt(0);
+        } catch (SQLException e) {
+
+            return 0;
+        } finally {
+            close();
+        }
+    }
+
+    private static Row findMainTopicRow(HSSFSheet sheet, String cellContent) {
+        for (Row row : sheet) {
+            if (row.getCell(0).getRichStringCellValue().getString().equals(cellContent)) {
+                return row;
+            }
+        }
+        return null;
+    }
+
+    private static Row findTopicRow(HSSFSheet sheet, String cellContent) {
+        for (Row row : sheet) {
+            if (row.getCell(1).getRichStringCellValue().getString().equals(cellContent)) {
+                return row;
+            }
+        }
+        return null;
     }
 
     private boolean isExternalStorageReadOnly() {
@@ -219,8 +458,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
         return x;
     }
@@ -238,18 +475,16 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
         return x;
     }
-    public boolean isTopicExist(String mainTopicID, String topicID, String topicTitle)
-    {
-              boolean x = false;
+
+    public boolean isTopicExist(String mainTopic, String topicTitle) {
+        boolean x = false;
         try {
             openDataBase();
-            String query = "select * from Topic where Topic_Title = " + '"' + topicTitle.toUpperCase() + '"'+
-                    " and MainTopic_ID = "+'"'+mainTopicID+'"'+" and Topic_Id = "+'"'+topicID+'"';
+            String query = "select * from Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Topic_Title = " + '"' + topicTitle.toUpperCase() + '"' +
+                    " and MainTopic_Title = " + '"' + mainTopic + '"';
             Cursor cs = database.rawQuery(query, null);
             if (cs.getCount() != 0) {
                 x = true;
@@ -258,8 +493,25 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
+        }
+        return x;
+    }
+
+    public boolean isWordExist(String topic, String word) {
+        boolean x = false;
+        try {
+            openDataBase();
+            String query = "SELECT * FROM Topic,Word where Topic.Topic_Id = Word.Topic_Id and Word_Title = "
+                    + '"' + word.toUpperCase() + '"' +
+                    " and Topic_Title = " + '"' + topic.toUpperCase() + '"';
+            Cursor cs = database.rawQuery(query, null);
+            if (cs.getCount() != 0) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return x;
     }
@@ -367,8 +619,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
 
 
@@ -437,8 +687,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
     }
 
@@ -452,8 +700,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
     }
 
@@ -470,8 +716,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
 
         Collections.sort(list, new Comparator<Word>() {
@@ -497,8 +741,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
 
         Collections.sort(list, new Comparator<Word>() {
@@ -524,8 +766,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
         Collections.sort(list, new Comparator<Word>() {
             @Override
@@ -629,8 +869,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (Exception e) {
             Log.d("Tag", "getListWord: " + e.getLocalizedMessage());
-        } finally {
-            close();
         }
 
         Collections.sort(list, new Comparator<Word>() {
@@ -671,8 +909,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
 
         return list;
@@ -692,8 +928,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
 
 
@@ -720,18 +954,17 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             values.put("MainTopic_Title_VN", MainTopic_VN);
             values.put("MainTopic_Process", 0);
 
-            long rs = database.insert("Maintopic", null, values);
 
+            long rs = database.insert("Maintopic", null, values);
+            Log.d(TAG, "insertMaintopic: complete");
             if (rs > 0) {
                 result = true;
                 Log.d("Tag", "insertMaintopic: compele");
             }
 
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            close();
+        } catch (Exception e) {
+            Log.d(TAG, "insertMaintopic: "+e.getLocalizedMessage());
         }
         return result;
     }
@@ -783,8 +1016,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
         return result;
     }
@@ -816,8 +1047,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (SQLException e) {
             Log.d("Tag", "insertWord: " + e.getMessage());
-        } finally {
-            close();
         }
 
         return result;
@@ -842,8 +1071,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
 
         Collections.sort(list, new Comparator<Word>() {
@@ -874,8 +1101,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close();
         }
         return result;
     }

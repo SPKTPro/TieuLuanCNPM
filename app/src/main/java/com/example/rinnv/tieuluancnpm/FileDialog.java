@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -59,10 +58,9 @@ public class FileDialog {
                 } else {
                     //fireFileSelectedEvent(chosenFile);
                     Intent intent = new Intent();
-                    intent.putExtra("FilePath",chosenFile.getAbsolutePath());
+                    intent.putExtra("FilePath", chosenFile.getAbsolutePath());
                     intent.setAction("FileChoose");
                     activity.sendBroadcast(intent);
-                    Toast.makeText(activity.getApplicationContext(), "Send inten", Toast.LENGTH_SHORT).show();
                 }
             }
         });

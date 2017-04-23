@@ -1,6 +1,5 @@
 package com.example.rinnv.tieuluancnpm;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -25,14 +24,16 @@ public class ImportDatabaseCSVTask extends AsyncTask<String, String, String> {
 
     protected String doInBackground(final String... args) {
         return MainActivity.db.importDB(filePath) ? "" : "Error";
+
     }
 
-    @SuppressLint("NewApi")
     @Override
     protected void onPostExecute(final String success) {
-
         if (this.dialog.isShowing()) {
             this.dialog.dismiss();
+            MainActivity.adapterMaintopic = new Adapter_Maintopic(MainActivity.rootView.getContext(),
+                    MainActivity.db.getListMainTopic());
+            MainActivity.listView_Maintopic.setAdapter(MainActivity.adapterMaintopic);
         }
         if (success.isEmpty()) {
             Toast.makeText(MainActivity.rootView.getContext(), "Export successful!", Toast.LENGTH_SHORT).show();

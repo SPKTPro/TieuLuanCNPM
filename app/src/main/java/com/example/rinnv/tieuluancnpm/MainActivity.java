@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     public static SQLiteDataController db;
     final Context context = this;
-    static View rootView;
-    private static GridView listView_Maintopic;
-    private static Adapter_Maintopic adapterMaintopic;
+     static View rootView;
+    public static GridView listView_Maintopic;
+    public static Adapter_Maintopic adapterMaintopic;
 
     private static final int SPEECH_API_CHECK = 0;
     private static final int REQUEST_CHOOSER = 1234;
@@ -231,13 +231,13 @@ public class MainActivity extends AppCompatActivity {
                 listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
                 adapterMaintopic = new Adapter_Maintopic(getContext(), db.getListMainTopic());
                 listView_Maintopic.setAdapter(adapterMaintopic);
+
                 listView_Maintopic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                         Maintopic maintopic = (Maintopic) listView_Maintopic.getItemAtPosition(position);
                         SaveObject.saveMaintopic = maintopic;
-
                         Intent intent = new Intent(getContext(), Topic_Activity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
