@@ -21,8 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import jxl.Cell;
-import jxl.CellType;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -55,14 +53,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         File backupDB = new File(sd, "vocabulary.xls");
         try {
             backupDB.createNewFile();
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor curCSV = db.rawQuery("SELECT * FROM MainTopic", null);
+
 
             WorkbookSettings wbSettings = new WorkbookSettings();
             wbSettings.setLocale(new Locale("en", "EN"));
             WritableWorkbook workbook = Workbook.createWorkbook(backupDB, wbSettings);
             WritableSheet sheet = workbook.createSheet("MainTopic", 0);
-            SQLiteDatabase db = getReadableDatabase();
-            Cursor curCSV = db.rawQuery("SELECT * FROM MainTopic", null);
-
             List<String> listColumName = Arrays.asList(curCSV.getColumnNames());
             for (int i = 0; i < listColumName.size(); i++) {
                 sheet.addCell(new Label(i, 0, listColumName.get(i)));
@@ -119,49 +117,51 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
     public boolean importDB(String filePath) {
-       /* if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
-            Log.e(TAG, "Storage not available or read only");
-            return;
-        }
-        try {
-            // Creating Input Stream
-            File file = new File(mContext.getExternalFilesDir(null), filename);
-            FileInputStream myInput = new FileInputStream(file);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return;*/
         File file = new File(filePath);
         try {
             Workbook workbook = Workbook.getWorkbook(file);
-            Sheet sheet = workbook.getSheet("MainTopic");
-
-            for (int i = 0; i < sheet.getRows(); i++) {
-                for (int j = 0; j < sheet.getColumns(); j++) {
-                    Cell cell = sheet.getCell(j, i);
-                    CellType type = cell.getType();
-                    if (type == CellType.LABEL) {
-                        System.out.println("I got a label "
-                                + cell.getContents());
-                    }
+            Sheet MainTopicsheet = workbook.getSheet("MainTopic");
+            for (int i = 1; i < MainTopicsheet.getRows(); i++) {
+                List<String> value = new ArrayList<>();
+                for (int j = 0; j < MainTopicsheet.getColumns(); j++) {
+                    value.add(MainTopicsheet.getCell(j, i).getContents());
+                }
+                if (!isMainTopicExist(value.get(1)))
+                {
+                   insertMaintopic(value.get(1),value.get(2));
                 }
             }
 
+            Sheet Topicsheet = workbook.getSheet("Topic");
+            for (int i = 1; i < Topicsheet.getRows(); i++) {
+                //Get value in one row
+                List<String> value = new ArrayList<>();
+                for (int j = 0; j < Topicsheet.getColumns(); j++) {
+                    value.add(Topicsheet.getCell(j, i).getContents());
+                }
+
+                if (!isTopicExist(value.get(0),value.get(1),value.get(2)))
+                {
+
+
+
+                    insertTopic(value.get(2),value.get(3), Integer.parseInt(value.get(1)));
+                }
+            }
+
+
+            return true;
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
             e.printStackTrace();
         }
-
-        return true;
+        return false;
 
     }
 
-    private  boolean isExternalStorageReadOnly() {
+    private boolean isExternalStorageReadOnly() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
             return true;
@@ -169,7 +169,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return false;
     }
 
-    private  boolean isExternalStorageAvailable() {
+    private boolean isExternalStorageAvailable() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
             return true;
@@ -211,6 +211,45 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
             String query = "select * from Word where Word_Title = " + '"' +
                     word.toUpperCase() + '"' + " and Topic_Id = " + '"' + topicID + '"';
+            Cursor cs = database.rawQuery(query, null);
+            if (cs.getCount() != 0) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return x;
+    }
+
+    public boolean isMainTopicExist(String maintopic) {
+        boolean x = false;
+        try {
+            openDataBase();
+            String query = "select * from MainTopic where MainTopic_Title = " + '"' + maintopic.toUpperCase() + '"';
+            Cursor cs = database.rawQuery(query, null);
+            if (cs.getCount() != 0) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return x;
+    }
+    public boolean isTopicExist(String mainTopicID, String topicID, String topicTitle)
+    {
+              boolean x = false;
+        try {
+            openDataBase();
+            String query = "select * from Topic where Topic_Title = " + '"' + topicTitle.toUpperCase() + '"'+
+                    " and MainTopic_ID = "+'"'+mainTopicID+'"'+" and Topic_Id = "+'"'+topicID+'"';
             Cursor cs = database.rawQuery(query, null);
             if (cs.getCount() != 0) {
                 x = true;
@@ -673,9 +712,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
 
             openDataBase();
+            if (isMainTopicExist(MainTopic_EN))
+                return false;
 
             ContentValues values = new ContentValues();
-
             values.put("MainTopic_Title", MainTopic_EN);
             values.put("MainTopic_Title_VN", MainTopic_VN);
             values.put("MainTopic_Process", 0);
