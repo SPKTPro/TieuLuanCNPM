@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context="com.example.rinnv.tieuluancnpm.Word_Activity">
+    tools:context="com.example.rinnv.tieuluancnpm.Activity.Word_Activity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

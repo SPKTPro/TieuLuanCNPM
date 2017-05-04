@@ -62,5 +62,12 @@
         android:text="aa" />
 
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_detail"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/pronoun"
+        android:layout_marginEnd="14dp"/>
 
 </RelativeLayout>
