@@ -67,7 +67,7 @@
         android:layout_alignParentStart="true"
         android:textSize="34sp" />
 
-    <com.example.rinnv.CircularProgressBar
+    <com.example.gamelibrary.CircularProgressBar
         android:id="@+id/circularprogressbar2"
         style="@style/Widget.ProgressBar.Holo.CircularProgressBar"
         android:layout_width="180dip"
