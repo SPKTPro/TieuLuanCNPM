@@ -41,8 +41,6 @@ public class Game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_game);
-
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String level = bundle.getString("level");
@@ -55,7 +53,7 @@ public class Game extends AppCompatActivity {
 
          startQuiz = 0;
         if (level.equals("maintopic")) {
-            Maintopic m = SaveObject.saveMaintopic;
+            Maintopic m = SaveObject.currentMaintopic;
             listWord = db.getListWord(m);
 
         } else {
@@ -69,10 +67,8 @@ public class Game extends AppCompatActivity {
                 } else {
 
                     if ((level.equals("all"))) {
-
                         listWord = db.getListWord();
                     } else {
-
                         Toast.makeText(this, "There are some problem", Toast.LENGTH_SHORT).show();
                     }
                 }

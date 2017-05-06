@@ -33,9 +33,6 @@
         android:layout_gravity="end|bottom"
          android:layout_marginRight="12dp"
         android:layout_marginBottom="27dp"
-
-
-
         fab:menu_animationDelayPerItem="55"
         fab:menu_backgroundColor="@android:color/transparent"
         fab:menu_buttonSpacing="0dp"
@@ -74,23 +71,6 @@
             android:src="@android:drawable/ic_menu_compass"
             fab:fab_label="Game Anh-Việt"
             fab:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/action2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_compass"
-            fab:fab_label="Game Việt-Anh"
-            fab:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/action3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_edit"
-            fab:fab_label="Game chính tả"
-            fab:fab_size="mini" />
-
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/action4"

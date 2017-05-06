@@ -59,7 +59,7 @@ public class Test extends AppCompatActivity {
         // level = maintopic thi lay tat ca cac tu trong maintopic do
         startQuiz = 0;
         if (level.equals("maintopic")) {
-            Maintopic m = SaveObject.saveMaintopic;
+            Maintopic m = SaveObject.currentMaintopic;
             listWord = db.getListWord(m);
 
         } else {

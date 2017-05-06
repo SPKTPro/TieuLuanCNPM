@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 
 public class SaveObject {
-    public static Maintopic saveMaintopic;
+    public static Maintopic currentMaintopic;
     public static Topic saveTopic;
     public static boolean allowAInsert;
 
@@ -21,3 +21,4 @@ public class SaveObject {
     public static TextToSpeech mTts;
 
 }
+
