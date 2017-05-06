@@ -71,7 +71,7 @@
         android:layout_below="@+id/hint"
         android:layout_alignParentStart="true" />
 
-    <com.example.rinnv.CircularProgressBar
+    <com.example.rinnv.tieuluancnpm.FrameWork.CircularProgressBar
         android:id="@+id/circularprogressbar2"
         style="@style/Widget.ProgressBar.Holo.CircularProgressBar"
         android:layout_gravity="center_horizontal"
