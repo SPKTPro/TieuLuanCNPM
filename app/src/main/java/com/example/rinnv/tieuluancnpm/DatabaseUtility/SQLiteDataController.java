@@ -216,6 +216,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     public boolean importDB(String filePath) {
         try {
+            getReadableDatabase();
             File file = new File(filePath);
             FileInputStream myInput = new FileInputStream(file);
             // Create a POIFSFileSystem object
@@ -244,7 +245,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 if (!isMainTopicExist(value.get(1))) {
                     Log.d(TAG, "importDB: begin import");
                     insertMaintopic(value.get(1), value.get(2));
-                   
+
                 }
             }
 
@@ -632,7 +633,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             }
         });
-
+        close();
         return listMainTopic;
     }
 
@@ -967,7 +968,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
 
         } catch (Exception e) {
-            Log.d(TAG, "insertMaintopic: "+e.getLocalizedMessage());
+            Log.d(TAG, "insertMaintopic: " + e.getLocalizedMessage());
         }
         return result;
     }
@@ -1113,15 +1114,15 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         try {
             openDataBase();
-            String query = "Select * from Relationship where Root = "+'"' +wordId+'"';
+            String query = "Select * from Relationship where Root = " + '"' + wordId + '"';
             Cursor cs = database.rawQuery(query, null);
-                       WordRelationShip word;
+            WordRelationShip word;
             while (cs.moveToNext()) {
                 word = new WordRelationShip(cs.getInt(0), cs.getString(1), cs.getString(2));
                 list.add(word);
             }
 
-            Log.d(TAG, "onClick: list "+query);
+            Log.d(TAG, "onClick: list " + query);
 
         } catch (SQLException e) {
             e.printStackTrace();

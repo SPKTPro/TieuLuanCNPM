@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -22,6 +23,8 @@ import com.example.rinnv.tieuluancnpm.Activity.Word_Activity;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Maintopic;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Topic;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Word;
+import com.example.rinnv.tieuluancnpm.DatabaseUtility.ExportDatabaseCSVTask;
+import com.example.rinnv.tieuluancnpm.DatabaseUtility.FileDialog;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
@@ -278,6 +281,51 @@ public class MenuPracticeFragment {
                             }
                         });
         alertDialogBuilder.create().show();
+    }
+
+    public void createMenuImpot_Export(final Context context) {
+        CharSequence[] array = {"Import database", "Export database"};
+        final int[] selectedItem = {0};
+        new AlertDialog.Builder(context)
+                .setTitle("Choose game")
+                .setSingleChoiceItems(array, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        selectedItem[0] = i;
+                    }
+                })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        switch (selectedItem[0]) {
+                            case 0:
+                                FileDialog fileDialog = new FileDialog((Activity)context,
+                                        Environment.getExternalStorageDirectory().getAbsolutePath());
+                                fileDialog.setFileEndsWith("xls");
+                                fileDialog.showDialog();
+
+                                break;
+                            case 1:
+                                ExportDatabaseCSVTask task = new ExportDatabaseCSVTask();
+                                task.execute();
+                                break;
+
+                            default:
+                                Toast.makeText(context, "Error: Please select agian", Toast.LENGTH_SHORT).show();
+                                break;
+
+                        }
+
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).create()
+                .show();
+
     }
 
     private void createItem(final Context context, final String ITemEN, final String ITemVN, int level) {

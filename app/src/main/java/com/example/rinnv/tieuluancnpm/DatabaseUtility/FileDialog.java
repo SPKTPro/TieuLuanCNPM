@@ -44,7 +44,6 @@ public class FileDialog {
     public Dialog createFileDialog() {
         Dialog dialog = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
         builder.setTitle(currentPath.getPath());
         builder.setItems(fileList, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

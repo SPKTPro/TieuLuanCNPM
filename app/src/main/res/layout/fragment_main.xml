@@ -1,14 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-    android:background="@drawable/bg4"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.rinnv.tieuluancnpm.Activity.MainActivity$PlaceholderFragment">
+                android:background="@drawable/bg4"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context="com.example.rinnv.tieuluancnpm.Activity.MainActivity$PlaceholderFragment">
 
     <GridView
         android:id="@+id/list_item"
@@ -19,13 +19,16 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:numColumns="1"
-        android:verticalSpacing="10dp" />
+        android:verticalSpacing="10dp"/>
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/material_design_android_floating_action_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/list_item"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
+        android:layout_marginEnd="13dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
         fab:menu_animationDelayPerItem="55"
@@ -57,10 +60,7 @@
         fab:menu_shadowRadius="4dp"
         fab:menu_shadowXOffset="1dp"
         fab:menu_shadowYOffset="4dp"
-        fab:menu_showShadow="true"
-        android:layout_marginEnd="13dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/list_item">
+        fab:menu_showShadow="true">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/action1"
@@ -68,16 +68,16 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_compass"
             fab:fab_label="Practice"
-            fab:fab_size="mini" />
+            fab:fab_size="mini"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/action4"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
+            android:visibility="gone"
             fab:fab_label="Thêm Word"
-            fab:fab_size="mini" />
+            fab:fab_size="mini"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/action5"
@@ -85,24 +85,17 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_search"
             fab:fab_label="Tra từ"
-            fab:fab_size="mini" />
+            fab:fab_size="mini"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/action6"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_agenda"
+            android:visibility="gone"
             fab:fab_label="Export database"
-            fab:fab_size="mini" />
+            fab:fab_size="mini"/>
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/action7"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_agenda"
-            fab:fab_label="Import database"
-            fab:fab_size="mini" />
+
     </com.github.clans.fab.FloatingActionMenu>
 </RelativeLayout>

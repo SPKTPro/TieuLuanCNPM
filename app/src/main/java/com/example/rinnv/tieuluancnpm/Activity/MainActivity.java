@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -25,8 +24,6 @@ import android.widget.GridView;
 
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Maintopic;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Remember;
-import com.example.rinnv.tieuluancnpm.DatabaseUtility.ExportDatabaseCSVTask;
-import com.example.rinnv.tieuluancnpm.DatabaseUtility.FileDialog;
 import com.example.rinnv.tieuluancnpm.DatabaseUtility.SQLiteDataController;
 import com.example.rinnv.tieuluancnpm.Entity.Maintopic;
 import com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType;
@@ -54,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
     public static Adapter_Maintopic adapterMaintopic;
 
     private static final int SPEECH_API_CHECK = 0;
-    private static final int REQUEST_CHOOSER = 1234;
-    public String TAG = "Tag";
 
     public void CheckTTS() {
 
@@ -281,10 +276,8 @@ public class MainActivity extends AppCompatActivity {
                 floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
                 floatingActionButton5 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action5);
                 floatingActionButton6 = (FloatingActionButton) rootView.findViewById(R.id.action6);
-                floatingActionButton7 = (FloatingActionButton) rootView.findViewById(R.id.action7);
-                floatingActionButton4.setVisibility(View.VISIBLE);
+                 floatingActionButton4.setVisibility(View.VISIBLE);
                 floatingActionButton6.setVisibility(View.VISIBLE);
-                floatingActionButton7.setVisibility(View.VISIBLE);
 
                 //nut lam practice
                 floatingActionButton1.setOnClickListener(new View.OnClickListener() {
@@ -317,22 +310,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         materialDesignFAM.close(false);
-                        ExportDatabaseCSVTask task = new ExportDatabaseCSVTask();
-                        task.execute();
-                    }
-                });
-
-                floatingActionButton7.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        materialDesignFAM.close(false);
-                        FileDialog dialog = new FileDialog(getActivity(),
-                                Environment.getExternalStorageDirectory().getAbsolutePath());
-                        dialog.setFileEndsWith("xls");
-                        dialog.showDialog();
+                        new MenuPracticeFragment().createMenuImpot_Export(container.getContext());
 
                     }
                 });
+
+
 
 
             } else {
