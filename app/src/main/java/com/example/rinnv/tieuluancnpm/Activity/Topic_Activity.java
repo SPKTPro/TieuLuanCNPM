@@ -26,7 +26,7 @@ import com.github.clans.fab.FloatingActionMenu;
 public class Topic_Activity extends AppCompatActivity {
 
     FloatingActionMenu materialDesignFAM;
-    FloatingActionButton floatingActionButton1;
+    FloatingActionButton floatingActionButton1,floatingActionButton5;
     FloatingActionButton floatingActionButton4;
     final Context context = this;
 
@@ -93,6 +93,7 @@ public class Topic_Activity extends AppCompatActivity {
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
         floatingActionButton1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
         floatingActionButton4 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item4);
+        floatingActionButton5 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item5);
 
 
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +112,14 @@ public class Topic_Activity extends AppCompatActivity {
             }
         });
 
+        floatingActionButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                materialDesignFAM.close(false);
+                new MenuPracticeFragment().createMenuSearchWord(Topic_Activity.this);
+
+            }
+        });
 
     }
 

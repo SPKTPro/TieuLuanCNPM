@@ -48,7 +48,7 @@ public class Word_Activity extends AppCompatActivity {
     public static GridView listView_Word;
 
     FloatingActionMenu materialDesignFAM;
-    FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3, floatingActionButton4;
+    FloatingActionButton floatingActionButton1, floatingActionButton5, floatingActionButton4;
     final Context context = this;
     SQLiteDataController db;
 
@@ -229,6 +229,7 @@ public class Word_Activity extends AppCompatActivity {
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
         floatingActionButton1 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.action1);
         floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.action4);
+        floatingActionButton5 = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.action5);
 
 
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +247,14 @@ public class Word_Activity extends AppCompatActivity {
 
             }
         });
+        floatingActionButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                materialDesignFAM.close(false);
+                new MenuPracticeFragment().createMenuSearchWord(Word_Activity.this);
 
+            }
+        });
 
     }
 

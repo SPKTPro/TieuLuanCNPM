@@ -153,8 +153,8 @@ public class Adapter_Word extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(parentActivity);
+                dialogBuilder.setTitle("Detail: ");
                 LayoutInflater inflater = parentActivity.getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.custom_detail_dialog, null);
                 List<WordRelationShip> wordRelationShips = db.GetRalationShipWord(item.getWord_Id());
