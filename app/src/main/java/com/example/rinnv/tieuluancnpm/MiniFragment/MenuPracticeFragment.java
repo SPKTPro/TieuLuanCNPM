@@ -50,19 +50,13 @@ import static com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType.Topic;
 public class MenuPracticeFragment {
     public void createMenuPractice(final Context context, final String level) {
         CharSequence[] array = {"Game 1", "Game 2", "Game chinh ta"};
-        final int[] selectedItem = {0};
         new AlertDialog.Builder(context)
                 .setTitle("Choose game")
-                .setSingleChoiceItems(array, 0, new DialogInterface.OnClickListener() {
+                .setItems(array, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        selectedItem[0] = i;
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context, Game.class);
-                        switch (selectedItem[0]) {
+                        switch (i) {
                             case 0:
                                 intent.putExtra("type", 1);
                                 break;
@@ -152,8 +146,8 @@ public class MenuPracticeFragment {
                                         String strMean = finalListResult1.get(which).getWord_Title_VN().toString();
                                         String mainTopic = "", Topics = "";
                                         if (finalListResult1.get(which).getExample().toString().length() > 0) {
-                                             mainTopic = "Main topic: " + finalListResult1.get(which).getExample().toString();
-                                             Topics = "Topic:" + finalListResult1.get(which).getExample_VN().toString();
+                                            mainTopic = "Main topic: " + finalListResult1.get(which).getExample().toString();
+                                            Topics = "Topic:" + finalListResult1.get(which).getExample_VN().toString();
                                             strMean = strMean + "\n" + mainTopic + "\n" + Topics;
                                         }
                                         AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
@@ -290,21 +284,14 @@ public class MenuPracticeFragment {
 
     public void createMenuImpot_Export(final Context context) {
         CharSequence[] array = {"Import database", "Export database"};
-        final int[] selectedItem = {0};
         new AlertDialog.Builder(context)
                 .setTitle("Choose game")
-                .setSingleChoiceItems(array, 0, new DialogInterface.OnClickListener() {
+                .setItems(array, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        selectedItem[0] = i;
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        switch (selectedItem[0]) {
+                        switch (i) {
                             case 0:
-                                FileDialog fileDialog = new FileDialog((Activity)context,
+                                FileDialog fileDialog = new FileDialog((Activity) context,
                                         Environment.getExternalStorageDirectory().getAbsolutePath());
                                 fileDialog.setFileEndsWith("xls");
                                 fileDialog.showDialog();
@@ -320,15 +307,13 @@ public class MenuPracticeFragment {
                                 break;
 
                         }
-
                     }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                }).create()
+            }
+        }).create()
                 .show();
 
     }

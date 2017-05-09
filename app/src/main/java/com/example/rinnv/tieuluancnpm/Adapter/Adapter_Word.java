@@ -189,7 +189,7 @@ public class Adapter_Word extends BaseAdapter {
 
     private void showDialog(final Word word)
     {
-        final String[] commandArray=new String[] {"See detail","Add relationship","Delete","Download"};
+        final String[] commandArray=new String[] {"See detail","Add relationship","Delete"};
         android.app.AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
         builder.setTitle("Single Choice");
         builder.setItems(commandArray, new DialogInterface.OnClickListener() {
@@ -209,7 +209,6 @@ public class Adapter_Word extends BaseAdapter {
                     default:
                         break;
                 }
-
                 dialog.dismiss();
             }
         });
