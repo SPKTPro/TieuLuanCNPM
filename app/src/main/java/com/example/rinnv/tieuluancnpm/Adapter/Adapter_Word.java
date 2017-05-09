@@ -201,7 +201,7 @@ public class Adapter_Word extends BaseAdapter {
                         new MenuWordFragment().createDetailView(mContext,parentActivity,word);
                         break;
                     case 1:
-                        new MenuWordFragment().createAddRelationShipView(mContext);
+                        new MenuWordFragment().createAddRelationShipView(mContext,word);
                         break;
                     case 2:
                         new MenuWordFragment().createDeleteWordView(mContext,word);

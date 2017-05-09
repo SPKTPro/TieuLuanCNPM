@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Maintopic;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Word;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.Entity.WordRelationShip;
@@ -21,7 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.adapterMaintopic;
 import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.db;
+import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.listView_Maintopic;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.adapterWord;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.listView_Word;
 
@@ -60,11 +64,38 @@ public class MenuWordFragment {
         dialogBuilder.setCancelable(true).setView(dialogView).create().show();
     }
 
-    public void createAddRelationShipView(final Context context) {
-        Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+    public void createAddRelationShipView(final Context context, final Word word) {
+        LayoutInflater li = LayoutInflater.from(context);
+        View promptsView = li.inflate(R.layout.layout_add_word, null);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+        final EditText EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
+        final EditText VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
+        final EditText Type = (EditText) promptsView.findViewById(R.id.loaitu);
+        alertDialogBuilder.setView(promptsView).setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final String englis = EN.getText().toString().trim() + "(" + Type.getText().toString().trim() + ")";
+                        boolean x = db.insertRelationship(word.getWord_Id(), englis, VN.getText().toString().trim());
+
+                        adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
+                        listView_Maintopic.setAdapter(adapterMaintopic);
+                        listView_Maintopic.invalidate();
+                        Toast.makeText(context, x ? "Thêm thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                }).create().show();
+
+
     }
-    public void createDeleteWordView(final  Context context,final Word word)
-    {
+
+    public void createDeleteWordView(final Context context, final Word word) {
         new AlertDialog.Builder(context)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Xóa từ vựng")

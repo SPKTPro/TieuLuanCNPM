@@ -1060,6 +1060,50 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
+    public boolean insertRelationship(int wordID, String WordTittle_EN, String WordTittle_VN )
+    {
+        boolean result = false;
+        try {
+
+            openDataBase();
+            if (isRelationshipExist(WordTittle_EN))
+                return false;
+
+            ContentValues values = new ContentValues();
+            values.put("Root", wordID);
+            values.put("Word_Title", WordTittle_EN.toUpperCase());
+            values.put("Word_Title_VN", WordTittle_VN);
+
+            long rs = database.insert("Relationship", null, values);
+
+            if (rs > 0) {
+                result = true;
+            }
+
+        } catch (SQLException e) {
+            Log.d("Tag", "insertWord: " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    private boolean isRelationshipExist(String wordTittle_en) {
+        boolean x = false;
+        try {
+            openDataBase();
+            String query = "select * from Relationship where Word_Title = " + '"' + wordTittle_en.toUpperCase() + '"';
+            Cursor cs = database.rawQuery(query, null);
+            if (cs.getCount() != 0) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return x;
+    }
+
     public ArrayList<Word> SearchWord(String s) {
         ArrayList<Word> list = new ArrayList<>();
 
