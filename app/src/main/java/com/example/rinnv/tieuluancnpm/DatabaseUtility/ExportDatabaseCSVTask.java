@@ -21,7 +21,7 @@ public class ExportDatabaseCSVTask extends AsyncTask<String, String, String> {
     }
 
     protected String doInBackground(final String... args) {
-        return MainActivity.db.exportDB() ? "" : "Error";
+        return MainActivity.db.exportDB();
     }
 
     @SuppressLint("NewApi")
@@ -31,10 +31,6 @@ public class ExportDatabaseCSVTask extends AsyncTask<String, String, String> {
         if (this.dialog.isShowing()) {
             this.dialog.dismiss();
         }
-        if (success.isEmpty()) {
-            Toast.makeText(MainActivity.rootView.getContext(), "Export successful!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(MainActivity.rootView.getContext(), "Export failed!", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(MainActivity.rootView.getContext(), success, Toast.LENGTH_SHORT).show();
     }
 }
