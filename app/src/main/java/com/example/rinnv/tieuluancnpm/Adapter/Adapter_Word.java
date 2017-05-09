@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,22 +15,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rinnv.tieuluancnpm.Activity.Word_Activity;
 import com.example.rinnv.tieuluancnpm.DatabaseUtility.SQLiteDataController;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
-import com.example.rinnv.tieuluancnpm.Entity.WordRelationShip;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
+import com.example.rinnv.tieuluancnpm.MiniFragment.MenuWordFragment;
 import com.example.rinnv.tieuluancnpm.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -152,34 +149,7 @@ public class Adapter_Word extends BaseAdapter {
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(parentActivity);
-                dialogBuilder.setTitle("Detail: ");
-                LayoutInflater inflater = parentActivity.getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.custom_detail_dialog, null);
-                List<WordRelationShip> wordRelationShips = db.GetRalationShipWord(item.getWord_Id());
-
-                TextView textEN = (TextView) dialogView.findViewById(R.id.example_EN);
-                textEN.setText("EX English: " + item.getExample());
-
-                TextView textVN = (TextView) dialogView.findViewById(R.id.example_VN);
-                textVN.setText("EX Viet nam: " + item.getExample_VN());
-
-                ListView listView = (ListView) dialogView.findViewById(R.id.lst_relationship);
-                List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
-                for (int i = 0; i < wordRelationShips.size(); i++) {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("Word_Title", wordRelationShips.get(i).getWord_Title());
-                    map.put("Word_Title_VN", wordRelationShips.get(i).getWord_Title_VN());
-                    fillMaps.add(map);
-                }
-
-                if (fillMaps.size() > 0) {
-                    listView.setAdapter(new SimpleAdapter(mContext, fillMaps, R.layout.item_detail_word_layoout,
-                            new String[]{"Word_Title", "Word_Title_VN"}, new int[]{R.id.relationshipEN, R.id.relationshipVN}));
-                }
-
-                dialogBuilder.setCancelable(true).setView(dialogView).create().show();
+                showDialog(item);
             }
         });
 
@@ -217,6 +187,41 @@ public class Adapter_Word extends BaseAdapter {
         dialog.show();
     }
 
+    private void showDialog(final Word word)
+    {
+        final String[] commandArray=new String[] {"See detail","Add relationship","Delete","Download"};
+        android.app.AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle("Single Choice");
+        builder.setItems(commandArray, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which)
+                {
+                    case 0:
+                        new MenuWordFragment().createDetailView(mContext,parentActivity,word);
+                        break;
+                    case 1:
+                        new MenuWordFragment().createAddRelationShipView(mContext);
+                        break;
+                    case 2:
+                        new MenuWordFragment().createDeleteWordView(mContext,word);
+                        break;
+                    default:
+                        break;
+                }
+
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 }
 

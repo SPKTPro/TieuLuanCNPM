@@ -126,7 +126,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
     }*/
 
-    public boolean exportDB() {
+    public String exportDB() {
 
         try {
             SQLiteDatabase db = getReadableDatabase();
@@ -207,10 +207,14 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             FileOutputStream os = null;
             os = new FileOutputStream(file);
             wb.write(os);
-            return true;
+
+
+
+            return "Export successful! File location is: "+file.getAbsolutePath();
 
         } catch (Exception ex) {
-            return false;
+
+              return "Export fail with error: "+ex.getLocalizedMessage();
         }
     }
 

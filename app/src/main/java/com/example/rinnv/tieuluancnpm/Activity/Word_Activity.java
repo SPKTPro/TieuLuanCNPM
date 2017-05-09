@@ -2,7 +2,6 @@ package com.example.rinnv.tieuluancnpm.Activity;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -205,21 +203,7 @@ public class Word_Activity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final Word word = (Word) listView_Word.getItemAtPosition(position);
-                new AlertDialog.Builder(context)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Xóa từ vựng")
-                        .setMessage("Bạn có chắc muốn xóa từ vựng này không?")
-                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                db.deleteWord(word);
-                                listView_Word.setAdapter(adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), Word_Activity.this));
-                                listView_Word.invalidate();
-                            }
 
-                        })
-                        .setNegativeButton("Hủy", null)
-                        .show();
 
                 return true;
             }
@@ -257,6 +241,7 @@ public class Word_Activity extends AppCompatActivity {
         });
 
     }
+
 
 
 }
