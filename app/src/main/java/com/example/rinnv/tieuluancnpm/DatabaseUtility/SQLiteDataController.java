@@ -1061,14 +1061,22 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         try {
             openDataBase();
-            Cursor cs = database.rawQuery("Select * from ( SELECT Word.Topic_ID, Word.Word_Id, Word.Word_Title, Word.Word_Title_VN,Word.Word_check" +
+            String query = "Select * from ( SELECT Word.Topic_ID, Word.Word_Id, Word.Word_Title, Word.Word_Title_VN,Word.Word_check" +
                     " , MainTopic.MainTopic_Title,Topic.Topic_Title , Word.Word_check " +
                     "FROM Word,Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Word.Topic_Id = Topic.Topic_Id ) Where Word_Title LIKE '%" + s
-                    + "%'  or Word_Title_VN like  '%" + s + "%'", null);
+                    + "%'  or Word_Title_VN like  '%" + s + "%'";
+            Cursor cs = database.rawQuery(query, null);
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
                         cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), 0, 0);
+                list.add(word);
+            }
+            query = "Select * from Relationship Where Word_Title LIKE '%" + s + "%'  or Word_Title_VN like  '%" + s + "%'";
+            cs = database.rawQuery(query, null);
+            while (cs.moveToNext())
+            {
+                word = new Word("",0,cs.getString(1).toUpperCase(),cs.getString(2),0,"","",0,0);
                 list.add(word);
             }
 

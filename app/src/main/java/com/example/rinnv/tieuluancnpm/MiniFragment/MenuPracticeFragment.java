@@ -41,6 +41,7 @@ import static com.example.rinnv.tieuluancnpm.Activity.Topic_Activity.adapter_top
 import static com.example.rinnv.tieuluancnpm.Activity.Topic_Activity.listView_Topic;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.adapterWord;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.listView_Word;
+import static com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType.Topic;
 
 /**
  * Created by rinnv on 5/6/2017.
@@ -149,10 +150,14 @@ public class MenuPracticeFragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         String strName = finalListResult1.get(which).getWord_Title().toString();
                                         String strMean = finalListResult1.get(which).getWord_Title_VN().toString();
-                                        String mainTopic = "Main topic: " + finalListResult1.get(which).getExample().toString();
-                                        String Topic = "Topic:" + finalListResult1.get(which).getExample_VN().toString();
+                                        String mainTopic = "", Topics = "";
+                                        if (finalListResult1.get(which).getExample().toString().length() > 0) {
+                                             mainTopic = "Main topic: " + finalListResult1.get(which).getExample().toString();
+                                             Topics = "Topic:" + finalListResult1.get(which).getExample_VN().toString();
+                                            strMean = strMean + "\n" + mainTopic + "\n" + Topics;
+                                        }
                                         AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
-                                        builderInner.setMessage(strMean + "\n" + mainTopic + "\n" + Topic);
+                                        builderInner.setMessage(strMean);
                                         builderInner.setTitle(strName);
                                         builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             @Override
@@ -213,7 +218,7 @@ public class MenuPracticeFragment {
                             return;
                         }
 
-                        if (itemType == CreateItemType.Maintopic || itemType == CreateItemType.Topic) {
+                        if (itemType == CreateItemType.Maintopic || itemType == Topic) {
                             createSnackBar(context, rootView, Maintopic_EN.getText().toString().trim(),
                                     Maintopic_VN.getText().toString().trim(), itemType);
                             return;
@@ -340,7 +345,7 @@ public class MenuPracticeFragment {
             Toast.makeText(context, x ? "Thêm main topic thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
 
         }
-        if (level == CreateItemType.Topic) {
+        if (level == Topic) {
             boolean x = db.insertTopic(ITemEN, ITemVN, SaveObject.currentMaintopic.getMaintopic_ID());
             adapter_topic = new Adapter_Topic(context, db.getListTopic(SaveObject.currentMaintopic));
             listView_Topic.setAdapter(adapter_topic);
