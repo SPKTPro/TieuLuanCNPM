@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_compass"
-            fab:fab_label="Practice"
+            fab:fab_label="Game"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -80,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_search"
-            fab:fab_label="Tra từ"
+            fab:fab_label="Search"
             fab:fab_size="mini"/>
 
 
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
-            fab:fab_label="Thêm Topic"
+            fab:fab_label="Add Topic"
             fab:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>
