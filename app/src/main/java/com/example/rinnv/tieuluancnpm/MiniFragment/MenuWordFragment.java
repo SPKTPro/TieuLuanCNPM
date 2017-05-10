@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Maintopic;
+import com.example.rinnv.tieuluancnpm.Adapter.Adapter_RelationshipWord;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Word;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.Entity.WordRelationShip;
@@ -39,7 +39,7 @@ public class MenuWordFragment {
         dialogBuilder.setTitle("Detail: ");
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.custom_detail_dialog, null);
-        List<WordRelationShip> wordRelationShips = db.GetRalationShipWord(item.getWord_Id());
+        ArrayList<WordRelationShip> wordRelationShips = db.GetRalationShipWord(item.getWord_Id());
 
         TextView textEN = (TextView) dialogView.findViewById(R.id.example_EN);
         textEN.setText("EX English: " + item.getExample());
@@ -57,8 +57,8 @@ public class MenuWordFragment {
         }
 
         if (fillMaps.size() > 0) {
-            listView.setAdapter(new SimpleAdapter(context, fillMaps, R.layout.item_detail_word_layoout,
-                    new String[]{"Word_Title", "Word_Title_VN"}, new int[]{R.id.relationshipEN, R.id.relationshipVN}));
+            Adapter_RelationshipWord adapter_relationshipWord = new Adapter_RelationshipWord(context,wordRelationShips);
+            listView.setAdapter(adapter_relationshipWord);
         }
 
         dialogBuilder.setCancelable(true).setView(dialogView).create().show();
@@ -113,4 +113,6 @@ public class MenuWordFragment {
                 .setNegativeButton("Hủy", null)
                 .show();
     }
+
+
 }

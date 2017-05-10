@@ -209,12 +209,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             wb.write(os);
 
 
-
-            return "Export successful! File location is: "+file.getAbsolutePath();
+            return "Export successful! File location is: " + file.getAbsolutePath();
 
         } catch (Exception ex) {
 
-              return "Export fail with error: "+ex.getLocalizedMessage();
+            return "Export fail with error: " + ex.getLocalizedMessage();
         }
     }
 
@@ -786,12 +785,37 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     }
 
+    public void deleteRelationShip(WordRelationShip wordRelationShip) {
+        try {
+
+            openDataBase();
+            String query = "delete from Relationship  Where Word_Title = '" + wordRelationShip.getWord_Title() + "'";
+            database.execSQL(query);
+            List cs = GetRalationShipWord(wordRelationShip.getWord_Root());
+
+
+        } catch (Exception e) {
+
+            Log.d(TAG, "deleteRelationShop: " + e.getMessage());
+        }
+    }
+
+    private void deleteRelationshipByRootId(int rootId) {
+        try {
+            openDataBase();
+            database.execSQL("delete from Relationship  Where Root = '" + rootId + "'");
+
+        } catch (Exception e) {
+            Log.d(TAG, "deleteRelationShop: " + e.getMessage());
+        }
+    }
+
     public void deleteWord(Word word) {
         try {
             openDataBase();
+
             database.execSQL("delete from  Word where word.Word_Id = '" + word.getWord_Id() + "'");
-
-
+            deleteRelationshipByRootId(word.getWord_Id());
             Cursor cs = database.rawQuery("select * from Word where word.Topic_Id ='" + word.getTopic_Id().toString() + "'", null);
             int x = cs.getCount();
 
@@ -1060,8 +1084,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean insertRelationship(int wordID, String WordTittle_EN, String WordTittle_VN )
-    {
+    public boolean insertRelationship(int wordID, String WordTittle_EN, String WordTittle_VN) {
         boolean result = false;
         try {
 
@@ -1122,9 +1145,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
             query = "Select * from Relationship Where Word_Title LIKE '%" + s + "%'  or Word_Title_VN like  '%" + s + "%'";
             cs = database.rawQuery(query, null);
-            while (cs.moveToNext())
-            {
-                word = new Word("",0,cs.getString(1).toUpperCase(),cs.getString(2),0,"","",0,0);
+            while (cs.moveToNext()) {
+                word = new Word("", 0, cs.getString(1).toUpperCase(), cs.getString(2), 0, "", "", 0, 0);
                 list.add(word);
             }
 

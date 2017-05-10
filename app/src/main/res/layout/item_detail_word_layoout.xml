@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
+              android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/relationshipEN"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="123"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/relationshipEN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="123"/>
 
-    <TextView
-        android:id="@+id/relationshipVN"
+        <TextView
+            android:id="@+id/relationshipVN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="456"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/delete"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="456"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
