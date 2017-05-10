@@ -202,6 +202,30 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 sheet1.setColumnWidth(i, (15 * 500));
             }
 
+
+            //Create RalationShip Word Sheet
+            curCSV = db.rawQuery("SELECT * FROM Relationship", null);
+            sheet1 = wb.createSheet("Relationship");
+            listColumName = Arrays.asList(curCSV.getColumnNames());
+            row = sheet1.createRow(0);
+            for (int i = 0; i < listColumName.size(); i++) {
+                row.createCell(i).setCellValue(listColumName.get(i));
+            }
+            rowID = 1;
+            while (curCSV.moveToNext()) {
+                List<String> value = getListData(curCSV);
+                row = sheet1.createRow(rowID);
+                for (int colum = 0; colum < listColumName.size(); colum++) {
+                    row.createCell(colum).setCellValue(value.get(colum));
+                }
+                rowID++;
+            }
+
+            for (int i = 0; i < listColumName.size(); i++) {
+                sheet1.setColumnWidth(i, (15 * 500));
+            }
+
+
             // Create a path where we will place our List of objects on external storage
             File file = new File(Environment.getExternalStorageDirectory(), fileName);
             FileOutputStream os = null;
@@ -213,7 +237,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
         } catch (Exception ex) {
 
-            return "Export fail with error: " + ex.getLocalizedMessage();
+            return "Export fail with error: " + ex.getMessage();
         }
     }
 
