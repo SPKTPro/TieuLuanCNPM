@@ -76,12 +76,8 @@ public class MenuWordFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        final String englis = EN.getText().toString().trim() + "(" + Type.getText().toString().trim() + ")";
-                        boolean x = db.insertRelationship(word.getWord_Id(), englis, VN.getText().toString().trim());
-
-                        adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
-                        listView_Maintopic.setAdapter(adapterMaintopic);
-                        listView_Maintopic.invalidate();
+                        final String english = EN.getText().toString().trim() + "(" + Type.getText().toString().trim() + ")";
+                        boolean x = db.insertRelationship(word.getWord_Id(), english, VN.getText().toString().trim());
                         Toast.makeText(context, x ? "Thêm thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
                     }
                 })

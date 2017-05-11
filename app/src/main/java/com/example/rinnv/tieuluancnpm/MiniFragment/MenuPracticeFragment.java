@@ -196,11 +196,19 @@ public class MenuPracticeFragment {
 
     public void createMenuAddItem(final Context context, final View rootView, final int itemType) {
         LayoutInflater li = LayoutInflater.from(context);
-        View promptsView = li.inflate(R.layout.layout_add_maintopic, null);
+        View promptsView = li.inflate(R.layout.layout_add_word, null);
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
         final EditText Maintopic_EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
         final EditText Maintopic_VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
+        final EditText Type = (EditText) promptsView.findViewById(R.id.loaitu);
+        if (itemType == CreateItemType.Maintopic || itemType == Topic) {
+            {
+                Type.setHeight(0);
+                Type.setHint("");
+                Type.setClickable(false);
+            }
+        }
         // set dialog message
         alertDialogBuilder.setView(promptsView).setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -236,14 +244,14 @@ public class MenuPracticeFragment {
                                                 new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        final String word = suggestWord.get(i);
+                                                        final String word = suggestWord.get(i)+"("+Type.getText()+")";
                                                         createItem(context, word, Maintopic_VN.getText().toString().trim(), CreateItemType.Word);
                                                     }
                                                 }).create().show();
 
                             } else {
                                 if (suggestWord.contains(ITemEN)) {
-                                    createSnackBar(context, rootView, ITemEN, Maintopic_VN.getText().toString().trim(), CreateItemType.Word);
+                                    createSnackBar(context, rootView, ITemEN+"("+Type.getText()+")", Maintopic_VN.getText().toString().trim(), CreateItemType.Word);
                                 } else {
                                     if (suggestWord.size() == 0) {
                                         String message = "This word may be misspelled. Are you sure to save ?";
@@ -254,7 +262,7 @@ public class MenuPracticeFragment {
                                                 .setMessage(message)
                                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        createSnackBar(context, rootView, Maintopic_EN.getText().toString().trim(),
+                                                        createSnackBar(context, rootView, Maintopic_EN.getText().toString().trim()+"("+Type.getText()+")",
                                                                 Maintopic_VN.getText().toString().trim(), CreateItemType.Word);
                                                     }
                                                 })

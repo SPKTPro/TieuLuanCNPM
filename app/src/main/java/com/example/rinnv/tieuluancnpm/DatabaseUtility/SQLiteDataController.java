@@ -1034,8 +1034,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             openDataBase();
             ContentValues values = new ContentValues();
+            int i = WordTittle_EN.indexOf("(");
+            String type = WordTittle_EN.substring(i).toLowerCase();
+            String eng = WordTittle_EN.substring(0,i).toUpperCase();
             values.put("Topic_Id", topicID);
-            values.put("Word_Title", WordTittle_EN.toUpperCase());
+            values.put("Word_Title", eng+type);
             values.put("Word_Title_VN", WordTittle_VN);
 
             long rs = database.insert("Word", null, values);
