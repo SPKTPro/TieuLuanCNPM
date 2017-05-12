@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,12 +77,8 @@ public class MenuWordFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        final String englis = EN.getText().toString().trim() + "(" + Type.getText().toString().trim() + ")";
-                        boolean x = db.insertRelationship(String.valueOf(word.getWord_Id()), englis, VN.getText().toString().trim());
-
-                        adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
-                        listView_Maintopic.setAdapter(adapterMaintopic);
-                        listView_Maintopic.invalidate();
+                        final String english = EN.getText().toString().trim() + "(" + Type.getText().toString().trim() + ")";
+                        boolean x = db.insertRelationship(word.getWord_Id(), english, VN.getText().toString().trim());
                         Toast.makeText(context, x ? "Thêm thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
                     }
                 })
@@ -113,6 +110,4 @@ public class MenuWordFragment {
                 .setNegativeButton("Hủy", null)
                 .show();
     }
-
-
 }

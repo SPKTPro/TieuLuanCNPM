@@ -86,15 +86,15 @@ public class Adapter_Word extends BaseAdapter {
 
         final TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
         TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
-        TextView score = (TextView) Layout.findViewById(R.id.pronoun);
+      //  TextView score = (TextView) Layout.findViewById(R.id.pronoun);
         ImageButton btnCheckSpell = (ImageButton) Layout.findViewById(R.id.btnCheckSpell);
-        Button btnDetail = (Button) Layout.findViewById(R.id.btn_detail);
+        ImageButton btnDetail = (ImageButton) Layout.findViewById(R.id.btn_detail);
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
         final Word item = items.get(position);
         titleView.setText(item.getWord_Title());
         titleView2.setText(item.getWord_Title_VN());
-        score.setText("" + item.getWord_Pronoun());
+       // score.setText("" + item.getWord_Pronoun());
 
 
         CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
