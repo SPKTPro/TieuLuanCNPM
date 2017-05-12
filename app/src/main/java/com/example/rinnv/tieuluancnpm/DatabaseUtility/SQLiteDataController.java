@@ -1073,8 +1073,11 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 return false;
 
             ContentValues values = new ContentValues();
+            int i = WordTittle_EN.indexOf("(");
+            String type = WordTittle_EN.substring(i).toLowerCase();
+            String eng = WordTittle_EN.substring(0,i).toUpperCase();
             values.put("Root", wordID);
-            values.put("Word_Title", WordTittle_EN.toUpperCase());
+            values.put("Word_Title", eng+type);
             values.put("Word_Title_VN", WordTittle_VN);
 
             long rs = database.insert("Relationship", null, values);
