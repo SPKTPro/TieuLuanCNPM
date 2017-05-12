@@ -21,7 +21,7 @@ public class ImportDatabaseCSVTask extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPreExecute() {
-        this.dialog.setMessage("Exporting database...");
+        this.dialog.setMessage("Importing database...");
         this.dialog.show();
     }
 

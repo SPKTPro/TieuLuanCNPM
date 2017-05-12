@@ -58,74 +58,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         this.mContext = context;
     }
 
-   /* public boolean exportDB() {
-        File sd = Environment.getExternalStorageDirectory();
-        File backupDB = new File(sd, "vocabulary.xls");
-        try {
-            backupDB.createNewFile();
-            SQLiteDatabase db = getReadableDatabase();
-            Cursor curCSV = db.rawQuery("SELECT * FROM MainTopic", null);
-
-
-            WorkbookSettings wbSettings = new WorkbookSettings();
-            wbSettings.setLocale(new Locale("en", "EN"));
-            WritableWorkbook workbook = Workbook.createWorkbook(backupDB, wbSettings);
-            WritableSheet sheet = workbook.createSheet("MainTopic", 0);
-            List<String> listColumName = Arrays.asList(curCSV.getColumnNames());
-            for (int i = 0; i < listColumName.size(); i++) {
-                sheet.addCell(new Label(i, 0, listColumName.get(i)));
-            }
-            int row = 1;
-            while (curCSV.moveToNext()) {
-                List<String> value = getListData(curCSV);
-                for (int colum = 0; colum < listColumName.size(); colum++) {
-                    sheet.addCell(new Label(colum, row, value.get(colum)));
-                }
-                row++;
-            }
-
-
-            curCSV = db.rawQuery("SELECT * FROM Topic", null);
-            sheet = workbook.createSheet("Topic", 0);
-            listColumName = Arrays.asList(curCSV.getColumnNames());
-            for (int i = 0; i < listColumName.size(); i++) {
-                sheet.addCell(new Label(i, 0, listColumName.get(i)));
-            }
-            row = 1;
-            while (curCSV.moveToNext()) {
-                List<String> value = getListData(curCSV);
-                for (int colum = 0; colum < listColumName.size(); colum++) {
-                    sheet.addCell(new Label(colum, row, value.get(colum)));
-                }
-                row++;
-            }
-
-            curCSV = db.rawQuery("SELECT * FROM Word", null);
-            sheet = workbook.createSheet("Word", 0);
-            listColumName = Arrays.asList(curCSV.getColumnNames());
-            for (int i = 0; i < listColumName.size(); i++) {
-                sheet.addCell(new Label(i, 0, listColumName.get(i)));
-            }
-            row = 1;
-            while (curCSV.moveToNext()) {
-                List<String> value = getListData(curCSV);
-                for (int colum = 0; colum < listColumName.size(); colum++) {
-                    sheet.addCell(new Label(colum, row, value.get(colum)));
-                }
-                row++;
-            }
-
-            workbook.write();
-            workbook.close();
-            curCSV.close();
-            db.close();
-            return true;
-
-        } catch (Exception ex) {
-            return false;
-        }
-    }*/
-
     public String exportDB() {
 
         try {
@@ -228,11 +160,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             // Create a path where we will place our List of objects on external storage
             File file = new File(Environment.getExternalStorageDirectory(), fileName);
-            FileOutputStream os = null;
-            os = new FileOutputStream(file);
+            FileOutputStream os = new FileOutputStream(file);
             wb.write(os);
-
-
             return "Export successful! File location is: " + file.getAbsolutePath();
 
         } catch (Exception ex) {
@@ -319,7 +248,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 }
 
                 // lấy row maintopc trong sheet maintopic
-                Row TopicRow = findTopicRow(mySheetTopic, value.get(0));
+                Row TopicRow = findTopicOrWordRow(mySheetTopic, value.get(0));
                 String TopicSting = TopicRow.getCell(2).getStringCellValue();
 
                 if (!isWordExist(TopicSting, value.get(2))) {
@@ -328,6 +257,25 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             }
 
+
+            HSSFSheet mySheetRelationShip = myWorkBook.getSheet("Relationship");
+            rowIter = mySheetRelationShip.rowIterator();
+            rowIter.next();
+            while (rowIter.hasNext()) {
+                HSSFRow myRow = (HSSFRow) rowIter.next();
+                Iterator<Cell> cellIter = myRow.cellIterator();
+                // Lấy list gia tri cua row
+                List<String> value = new ArrayList<>();
+                while (cellIter.hasNext()) {
+                    HSSFCell myCell = (HSSFCell) cellIter.next();
+                    value.add(myCell.toString());
+                }
+
+                if (!isRelationExist(value.get(1), value.get(0))) {
+                    importRelationWord(value.get(1),value.get(2),value.get(0),mySheetWord);
+                }
+
+            }
 
         } catch (Exception ex) {
             Log.d(TAG, "importDB: " + ex.getLocalizedMessage());
@@ -359,7 +307,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     private void importWord(String wordEN, String WordVN, String TopicID, HSSFSheet mySheetTopic, HSSFSheet mySheetMainTopic) {
         Row rowFilter = null;
-        rowFilter = findTopicRow(mySheetTopic, TopicID);
+        rowFilter = findTopicOrWordRow(mySheetTopic, TopicID);
         if (rowFilter != null) {
             //topic name and maintopic id
             String TopicEN = rowFilter.getCell(2).getStringCellValue();
@@ -377,6 +325,42 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 String topicId = getTopicID(TopicEN, MainTopic);
                 insertWord(topicId, wordEN, WordVN);
             }
+        }
+
+    }
+
+    private void importRelationWord(String wordEn, String wordVn, String rootId, HSSFSheet myWordSheet) {
+        Row WordRowFilter = null;
+        WordRowFilter = findTopicOrWordRow(myWordSheet, rootId);
+        if (WordRowFilter != null) {
+            //get word title
+            String WordEN = WordRowFilter.getCell(2).getStringCellValue();
+            String WordVN = WordRowFilter.getCell(3).getStringCellValue();
+            String TopicID = WordRowFilter.getCell(0).getStringCellValue();
+
+            if (isWordExist(WordRowFilter.getCell(0).getStringCellValue(), WordEN)) {
+                String wordID = getWordID(WordEN, WordRowFilter.getCell(0).getStringCellValue());
+                insertRelationship(wordID, wordEn, wordVn);
+            } else {
+                insertWord(TopicID, WordEN, WordVN);
+                String wordId = getWordID(WordEN, TopicID);
+                insertRelationship(wordId, wordEn, wordVn);
+            }
+        }
+    }
+
+    private String getWordID(String word, String topicID) {
+        try {
+            openDataBase();
+            String query = "SELECT * FROM Topic,Word where Topic.Topic_Id = Word.Topic_Id and Word_Title = "
+                    + '"' + word.toUpperCase() + '"' +
+                    " and Topic_Id = " + '"' + topicID + '"';
+            Cursor cs = database.rawQuery(query, null);
+            cs.moveToNext();
+            return cs.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
 
     }
@@ -422,7 +406,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return null;
     }
 
-    private static Row findTopicRow(HSSFSheet sheet, String cellContent) {
+    private static Row findTopicOrWordRow(HSSFSheet sheet, String cellContent) {
         for (Row row : sheet) {
             if (row.getCell(1).getRichStringCellValue().getString().equals(cellContent)) {
                 return row;
@@ -535,6 +519,23 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             String query = "SELECT * FROM Topic,Word where Topic.Topic_Id = Word.Topic_Id and Word_Title = "
                     + '"' + word.toUpperCase() + '"' +
                     " and Topic_Title = " + '"' + topic.toUpperCase() + '"';
+            Cursor cs = database.rawQuery(query, null);
+            if (cs.getCount() != 0) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return x;
+    }
+
+    public boolean isRelationExist(String relationWord, String WordID) {
+        boolean x = false;
+        try {
+            openDataBase();
+            String query = "Select * from Relationship where Root = '" + WordID + "'" + " and Word_Title = ' " + relationWord + "'";
             Cursor cs = database.rawQuery(query, null);
             if (cs.getCount() != 0) {
                 x = true;
@@ -1108,7 +1109,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean insertRelationship(int wordID, String WordTittle_EN, String WordTittle_VN) {
+    public boolean insertRelationship(String wordID, String WordTittle_EN, String WordTittle_VN) {
         boolean result = false;
         try {
 

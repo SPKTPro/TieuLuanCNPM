@@ -77,7 +77,7 @@ public class MenuWordFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final String englis = EN.getText().toString().trim() + "(" + Type.getText().toString().trim() + ")";
-                        boolean x = db.insertRelationship(word.getWord_Id(), englis, VN.getText().toString().trim());
+                        boolean x = db.insertRelationship(String.valueOf(word.getWord_Id()), englis, VN.getText().toString().trim());
 
                         adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
                         listView_Maintopic.setAdapter(adapterMaintopic);
