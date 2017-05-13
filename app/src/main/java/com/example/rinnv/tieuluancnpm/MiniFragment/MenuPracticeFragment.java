@@ -407,9 +407,10 @@ public class MenuPracticeFragment {
 
             boolean x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), ITemEN,
                     ITemVN);
-            adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), (Activity) context);
+            ArrayList<Word> words = db.getListWord(SaveObject.saveTopic);
+            adapterWord = new Adapter_Word(context, words, (Activity) context);
             listView_Word.setAdapter(adapterWord);
-            listView_Word.invalidateViews();
+            listView_Word.invalidate();
             Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
         }
 
