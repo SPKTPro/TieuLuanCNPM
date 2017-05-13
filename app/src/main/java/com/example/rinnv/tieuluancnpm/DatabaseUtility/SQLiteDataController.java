@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.rinnv.tieuluancnpm.Entity.Maintopic;
@@ -25,6 +26,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -164,16 +166,26 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             }
             curCSV.close();
 
-
-            // Create a path where we will place our List of objects on external storage
-            File file = new File(Environment.getExternalStorageDirectory(), fileName);
-            FileOutputStream os = new FileOutputStream(file);
-            wb.write(os);
-            return "Export successful! File location is: " + file.getAbsolutePath();
+            try {
+                // Create a path where we will place our List of objects on external storage
+                File file = new File(Environment.getExternalStorageDirectory(), fileName);
+                FileOutputStream os = new FileOutputStream(file);
+                wb.write(os);
+                return "Export successful! File location is: " + file.getAbsolutePath();
+            } catch (FileNotFoundException ex) {
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+                FileOutputStream os = new FileOutputStream(file);
+                wb.write(os);
+                return "Export successful! File location is: " + file.getAbsolutePath();
+            }finally {
+                wb.close();
+            }
 
         } catch (Exception ex) {
+            Log.e(TAG, "exportDB: ", ex);
             return "Export fail with error: " + ex.getMessage();
         } finally {
+
             curCSV.close();
             close();
         }
@@ -279,7 +291,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 }
 
                 if (!isRelationExist(value.get(1), value.get(0))) {
-                    importRelationWord(value.get(1), value.get(2), value.get(0), mySheetWord);
+                    importRelationWord(value.get(1), value.get(2), value.get(0), value.get(3), mySheetWord);
                 }
             }
 
@@ -320,17 +332,18 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 String TopicEN = rowFilter.getCell(2).getStringCellValue();
                 String TopicVN = rowFilter.getCell(3).getStringCellValue();
                 String MainTopicID = rowFilter.getCell(0).getStringCellValue();
+                String WordType = rowFilter.getCell(9).getStringCellValue();
 
                 Row maintopicRow = findMainTopicRow(mySheetMainTopic, MainTopicID);
                 String MainTopic = maintopicRow.getCell(1).getStringCellValue();
                 if (isTopicExist(MainTopic, TopicEN)) {
                     String topicID = getTopicID(TopicEN, MainTopic);
-                    insertWord(topicID, wordEN, WordVN);
+                    insertWord(topicID, wordEN, WordVN, WordType);
                 } else {
                     int maintopicID = GetMaintopicID(MainTopic);
                     insertTopic(TopicEN, TopicVN, maintopicID);
                     String topicId = getTopicID(TopicEN, MainTopic);
-                    insertWord(topicId, wordEN, WordVN);
+                    insertWord(topicId, wordEN, WordVN, WordType);
                 }
             }
         } catch (Exception e) {
@@ -338,7 +351,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
     }
 
-    private void importRelationWord(String wordEn, String wordVn, String rootId, HSSFSheet myWordSheet) {
+    private void importRelationWord(String wordEn, String wordVn, String rootId, @Nullable String wordType, HSSFSheet myWordSheet) {
         Log.d(TAG, "importRelationWord " + wordEn + "|" + wordVn + "|" + rootId);
         Row WordRowFilter = null;
         WordRowFilter = findTopicOrWordRow(myWordSheet, rootId);
@@ -347,14 +360,15 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             String WordEN = WordRowFilter.getCell(2).getStringCellValue();
             String WordVN = WordRowFilter.getCell(3).getStringCellValue();
             String TopicID = WordRowFilter.getCell(0).getStringCellValue();
+            String WordType = WordRowFilter.getCell(9).getStringCellValue();
 
             if (isWordExist(WordRowFilter.getCell(0).getStringCellValue(), WordEN)) {
                 String wordID = getWordID(WordEN, WordRowFilter.getCell(0).getStringCellValue());
-                insertRelationship(wordID, wordEn, wordVn);
+                insertRelationship(wordID, wordEn, wordVn, wordType);
             } else {
-                insertWord(TopicID, WordEN, WordVN);
+                insertWord(TopicID, WordEN, WordVN, WordType);
                 String wordId = getWordID(WordEN, TopicID);
-                insertRelationship(wordId, wordEn, wordVn);
+                insertRelationship(wordId, wordEn, wordVn, wordType);
             }
         }
     }
@@ -822,7 +836,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
+                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
                 list.add(topic);
             }
         } catch (Exception e) {
@@ -854,7 +868,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
+                        cs.getString(3), cs.getInt(4), cs.getString(5),
+                        cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
                 list.add(topic);
             }
         } catch (Exception e) {
@@ -884,11 +899,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word topic;
             while (cs.moveToNext()) {
                 topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
+                        cs.getString(3), cs.getInt(4), cs.getString(5),
+                        cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
                 list.add(topic);
             }
         } catch (Exception e) {
-            Log.e(TAG, "getListWord: ",e );
+            Log.e(TAG, "getListWord: ", e);
         } finally {
             if (cs != null)
                 cs.close();
@@ -900,7 +916,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 return o1.getWord_Title().toLowerCase().compareToIgnoreCase(o2.getWord_Title());
             }
         });
-        Log.d(TAG, "getListWord: "+list.size());
+        Log.d(TAG, "getListWord: " + list.size());
         return list;
 
     }
@@ -975,7 +991,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
+                        cs.getString(3), cs.getInt(4), cs.getString(5),
+                        cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
                 list.add(word);
             }
 
@@ -1043,7 +1060,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
+                        cs.getString(3), cs.getInt(4), cs.getString(5),
+                        cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
                 list.add(word);
             }
 
@@ -1087,7 +1105,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 Word word;
                 while (cs.moveToNext()) {
                     word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                            cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), cs.getInt(7), cs.getInt(8));
+                            cs.getString(3), cs.getInt(4), cs.getString(5),
+                            cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
                     list.add(word);
                 }
             }
@@ -1176,10 +1195,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor cs = null;
         try {
 
-            {
-                openDataBase();
-            }
-
+            openDataBase();
             Log.d("Tag", "insertTopic: " + MainTopic_Id);
             cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + MainTopic_Id + "'", null);
             cs.moveToPosition(cs.getCount() - 1);
@@ -1227,18 +1243,16 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean insertWord(String topicID, String WordTittle_EN, String WordTittle_VN) {
+    public boolean insertWord(String topicID, String WordTittle_EN, String WordTittle_VN, String wordType) {
         boolean result = false;
         Cursor cs = null;
         try {
             openDataBase();
             ContentValues values = new ContentValues();
-            int i = WordTittle_EN.indexOf("(");
-            String type = WordTittle_EN.substring(i).toLowerCase();
-            String eng = WordTittle_EN.substring(0, i).toUpperCase();
             values.put("Topic_Id", topicID);
-            values.put("Word_Title", eng + type);
+            values.put("Word_Title", WordTittle_EN);
             values.put("Word_Title_VN", WordTittle_VN);
+            values.put("Type_Word", wordType);
             long rs = database.insert("Word", null, values);
             if (rs > 0) {
                 result = true;
@@ -1261,20 +1275,16 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    public boolean insertRelationship(String wordID, String WordTittle_EN, String WordTittle_VN) {
+    public boolean insertRelationship(String wordID, String WordTittle_EN, String WordTittle_VN, @Nullable String wordType) {
         boolean result = false;
         try {
             openDataBase();
             ContentValues values = new ContentValues();
-            int i = WordTittle_EN.indexOf("(");
-            String type = WordTittle_EN.substring(i).toLowerCase();
-            String eng = WordTittle_EN.substring(0, i).toUpperCase();
             values.put("Root", wordID);
-            values.put("Word_Title", eng + type);
+            values.put("Word_Title", WordTittle_EN);
             values.put("Word_Title_VN", WordTittle_VN);
-
+            values.put("Type_Word", wordType);
             long rs = database.insert("Relationship", null, values);
-
             if (rs > 0) {
                 result = true;
             }
@@ -1314,30 +1324,33 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         ArrayList<Word> list = new ArrayList<>();
         Cursor cs = null;
         try {
-            {
-                openDataBase();
-            }
+            openDataBase();
+
             String query = "Select * from ( SELECT Word.Topic_ID, Word.Word_Id, Word.Word_Title, Word.Word_Title_VN,Word.Word_check" +
-                    " , MainTopic.MainTopic_Title,Topic.Topic_Title , Word.Word_check " +
+                    " , MainTopic.MainTopic_Title,Topic.Topic_Title , Word.Type_Word " +
                     "FROM Word,Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Word.Topic_Id = Topic.Topic_Id ) Where Word_Title LIKE '%" + s
                     + "%'  or Word_Title_VN like  '%" + s + "%'";
             cs = database.rawQuery(query, null);
+
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
-                        cs.getString(3), cs.getInt(4), cs.getString(5), cs.getString(6), 0, 0);
+                        cs.getString(3), cs.getInt(4), cs.getString(5),
+                        cs.getString(6), 0, 0, cs.getString(7));
                 list.add(word);
             }
             query = "Select * from Relationship Where Word_Title LIKE '%" + s + "%'  or Word_Title_VN like  '%" + s + "%'";
             cs = database.rawQuery(query, null);
+            Log.d(TAG, "SearchWord: " + query);
             while (cs.moveToNext()) {
-                word = new Word("", 0, cs.getString(1).toUpperCase(), cs.getString(2), 0, "", "", 0, 0);
+                word = new Word("", 0, cs.getString(1).toUpperCase(),
+                        cs.getString(2), 0, "", "", 0, 0, cs.getString(3));
                 list.add(word);
             }
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "SearchWord: ", e);
         } finally {
             if (cs != null)
                 cs.close();
@@ -1392,12 +1405,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             cs = database.rawQuery(query, null);
             WordRelationShip word;
             while (cs.moveToNext()) {
-                word = new WordRelationShip(cs.getInt(0), cs.getString(1), cs.getString(2));
+                word = new WordRelationShip(cs.getInt(0), cs.getString(1), cs.getString(2), cs.getString(3));
                 list.add(word);
             }
-
-            Log.d(TAG, "onClick: list " + query);
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

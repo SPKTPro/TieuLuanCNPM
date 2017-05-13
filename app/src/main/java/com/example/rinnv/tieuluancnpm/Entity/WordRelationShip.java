@@ -9,17 +9,20 @@ public class WordRelationShip {
     private int Root;
     private String Word_Title;
     private String Word_Title_VN;
+    private String WordType;
 
 
     public WordRelationShip(
             int Root,
             String Word_Title,
-            String Word_Title_VN
+            String Word_Title_VN,
+            String WordType
     ) {
 
         this.Word_Title = Word_Title;
         this.Word_Title_VN = Word_Title_VN;
         this.Root = Root;
+        this.WordType =WordType;
     }
 
 
@@ -35,5 +38,11 @@ public class WordRelationShip {
     public int getWord_Root() {
 
         return Root;
+    }
+
+    public String getWordType() {
+        if (WordType != null)
+            return "("+WordType+")";
+        else return "";
     }
 }

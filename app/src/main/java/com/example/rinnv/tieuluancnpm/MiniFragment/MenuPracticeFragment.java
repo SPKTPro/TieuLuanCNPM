@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -257,7 +258,7 @@ public class MenuPracticeFragment {
 
                         if (itemType == CreateItemType.Maintopic || itemType == Topic) {
                             createSnackBar(context, rootView, Maintopic_EN.getText().toString().trim(),
-                                    Maintopic_VN.getText().toString().trim(), itemType);
+                                    Maintopic_VN.getText().toString().trim(), null,itemType);
                             return;
                         }
                         //add word function
@@ -279,14 +280,16 @@ public class MenuPracticeFragment {
                                                 new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        final String word = suggestWord.get(i)+"("+Type.getText()+")";
-                                                        createItem(context, word, Maintopic_VN.getText().toString().trim(), CreateItemType.Word);
+                                                        final String wordEN = suggestWord.get(i);
+                                                        createItem(context, wordEN, ITemVN.trim(),Type.getText().toString().trim()
+                                                                , CreateItemType.Word);
                                                     }
                                                 }).create().show();
 
                             } else {
                                 if (suggestWord.contains(ITemEN)) {
-                                    createSnackBar(context, rootView, ITemEN+"("+Type.getText()+")", Maintopic_VN.getText().toString().trim(), CreateItemType.Word);
+                                    createSnackBar(context, rootView, ITemEN, Maintopic_VN.getText().toString().trim(),
+                                            Type.getText().toString().trim() ,CreateItemType.Word);
                                 } else {
                                     if (suggestWord.size() == 0) {
                                         String message = "This word may be misspelled. Are you sure to save ?";
@@ -297,8 +300,8 @@ public class MenuPracticeFragment {
                                                 .setMessage(message)
                                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        createSnackBar(context, rootView, Maintopic_EN.getText().toString().trim()+"("+Type.getText()+")",
-                                                                Maintopic_VN.getText().toString().trim(), CreateItemType.Word);
+                                                        createSnackBar(context, rootView, ITemEN,
+                                                                ITemVN,Type.getText().toString().trim(), CreateItemType.Word);
                                                     }
                                                 })
                                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -383,7 +386,7 @@ public class MenuPracticeFragment {
 
     }
 
-    private void createItem(final Context context, final String ITemEN, final String ITemVN, int level) {
+    private void createItem(final Context context, final String ITemEN, final String ITemVN, @Nullable String wordType, int level) {
 
         if (level == CreateItemType.Maintopic) {
             boolean x = db.insertMaintopic(ITemEN,
@@ -405,8 +408,7 @@ public class MenuPracticeFragment {
         }
         if (level == CreateItemType.Word) {
 
-            boolean x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), ITemEN,
-                    ITemVN);
+            boolean x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), ITemEN, ITemVN,wordType);
             ArrayList<Word> words = db.getListWord(SaveObject.saveTopic);
             adapterWord = new Adapter_Word(context, words, (Activity) context);
             listView_Word.setAdapter(adapterWord);
@@ -416,7 +418,7 @@ public class MenuPracticeFragment {
 
     }
 
-    private void createSnackBar(final Context context, View rootView, final String ITemEN, final String ITemVN, final int level) {
+    private void createSnackBar(final Context context, View rootView, final String ITemEN, final String ITemVN, @Nullable final String WordType, final int level) {
         Snackbar.make(rootView, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
                 .setCallback(new Snackbar.Callback() {
                     @Override
@@ -426,7 +428,7 @@ public class MenuPracticeFragment {
                                 Toast.makeText(context, "Hủy thao tác", Toast.LENGTH_LONG).show();
                                 break;
                             case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
-                                createItem(context, ITemEN, ITemVN, level);
+                                createItem(context, ITemEN, ITemVN,WordType, level);
                                 break;
                         }
                     }

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -94,7 +93,7 @@ public class Adapter_Word extends BaseAdapter {
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
         final Word item = items.get(position);
-        titleView.setText(item.getWord_Title());
+        titleView.setText(item.getWord_Title()+item.getWord_Type());
         titleView2.setText(item.getWord_Title_VN());
        // score.setText("" + item.getWord_Pronoun());
 

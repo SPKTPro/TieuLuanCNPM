@@ -24,7 +24,6 @@ import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType;
 import com.example.rinnv.tieuluancnpm.FrameWork.PracticeType;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
-import com.example.rinnv.tieuluancnpm.FrameWork.Utility;
 import com.example.rinnv.tieuluancnpm.MiniFragment.MenuPracticeFragment;
 import com.example.rinnv.tieuluancnpm.R;
 import com.github.clans.fab.FloatingActionButton;
@@ -195,7 +194,7 @@ public class Word_Activity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Word word = (Word) listView_Word.getItemAtPosition(position);
-                mTts.speak(new Utility().SeparateWord(word).WordString.trim(), TextToSpeech.QUEUE_FLUSH, null);
+                mTts.speak(word.getWord_Title().trim(), TextToSpeech.QUEUE_FLUSH, null);
 
 
             }

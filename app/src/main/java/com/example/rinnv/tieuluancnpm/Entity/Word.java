@@ -14,28 +14,30 @@ public class Word {
     private int Word_Pronoun;
     private String Example;
     private String Example_VN;
+    private String Word_Type;
 
     public Word(
-             String Topic_Id,
-             int Word_Id,
-             String Word_Title,
-             String Word_Title_VN,
-             int Word_check,
-             String Example,
-             String Example_VN,
-             int Word_Remind,
-             int Word_Pronoun
-    )
-    {
-        this.Topic_Id =Topic_Id;
-        this.Word_Id=Word_Id;
-        this.Word_Title=Word_Title;
-        this.Word_Title_VN=Word_Title_VN;
-        this.Word_check=Word_check;
-        this.Example=Example;
-        this.Example_VN=Example_VN;
-        this.Word_Remind=Word_Remind;
-        this.Word_Pronoun=Word_Pronoun;
+            String Topic_Id,
+            int Word_Id,
+            String Word_Title,
+            String Word_Title_VN,
+            int Word_check,
+            String Example,
+            String Example_VN,
+            int Word_Remind,
+            int Word_Pronoun,
+            String Word_Type
+    ) {
+        this.Topic_Id = Topic_Id;
+        this.Word_Id = Word_Id;
+        this.Word_Title = Word_Title;
+        this.Word_Title_VN = Word_Title_VN;
+        this.Word_check = Word_check;
+        this.Example = Example;
+        this.Example_VN = Example_VN;
+        this.Word_Remind = Word_Remind;
+        this.Word_Pronoun = Word_Pronoun;
+        this.Word_Type = Word_Type;
     }
 
 
@@ -45,12 +47,13 @@ public class Word {
 
     public boolean getWord_check() {
 
-        return (Word_check==1) ? true: false;
+        return (Word_check == 1) ? true : false;
     }
 
     public int getWord_Id() {
         return Word_Id;
     }
+
     public int getWord_Pronoun() {
         return Word_Pronoun;
     }
@@ -71,9 +74,15 @@ public class Word {
         return Word_Title_VN;
     }
 
-
     public boolean getWord_Remind() {
-
-        return (Word_Remind==1) ? true: false;
+        return (Word_Remind == 1) ? true : false;
     }
+
+    public String getWord_Type() {
+
+        if (Word_Type != null)
+            return "("+Word_Type+")";
+        else return "";
+    }
+
 }
