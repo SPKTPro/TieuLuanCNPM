@@ -202,39 +202,7 @@ public class Adapter_Word extends BaseAdapter {
     }
     private void showDialog(final Word word)
     {
-        /*
-        final String[] commandArray=new String[] {"See relationship","Add relationship","Delete this word"};
-        android.app.AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-        builder.setTitle("Single Choice");
-        builder.setItems(commandArray, new DialogInterface.OnClickListener() {
 
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which)
-                {
-                    case 0:
-                        new MenuWordFragment().createDetailView(mContext,parentActivity,word);
-                        break;
-                    case 1:
-                        new MenuWordFragment().createAddRelationShipView(mContext,word);
-                        break;
-                    case 2:
-                        new MenuWordFragment().createDeleteWordView(mContext,word);
-                        break;
-                    default:
-                        break;
-                }
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton("cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-*/
         final Item[] items = {
                 new Item("See relationship", R.drawable.detail2),
                 new Item("Add relationship", R.drawable.add),
@@ -255,21 +223,9 @@ public class Adapter_Word extends BaseAdapter {
                 tv.setText(items[position].text);
                 img.setBackgroundResource(items[position].icon);
 
-
-
-
                 return v;
             }
         };
-
-/*
-        new AlertDialog.Builder(mContext)
-                .setTitle("Share Appliction")
-                .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-
-                    }
-                }).show();*/
 
         android.app.AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
         builder.setTitle("Single Choice");

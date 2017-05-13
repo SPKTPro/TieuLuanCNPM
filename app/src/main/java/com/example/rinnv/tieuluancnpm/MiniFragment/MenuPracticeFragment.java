@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,11 +50,44 @@ import static com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType.Topic;
  */
 
 public class MenuPracticeFragment {
+    public static class Item{
+        public final String text;
+        public final int icon;
+        public Item(String text, Integer icon) {
+            this.text = text;
+            this.icon = icon;
+        }
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
     public void createMenuPractice(final Context context, final String level) {
-        CharSequence[] array = {"Game 1", "Game 2", "Game chinh ta"};
-        new AlertDialog.Builder(context)
-                .setTitle("Choose game")
-                .setItems(array, new DialogInterface.OnClickListener() {
+     //   CharSequence[] array = {"Game 1", "Game 2", "Game chinh ta"};
+        final Adapter_Word.Item[] items = {
+                new Adapter_Word.Item("Game trắc nghiệm E-V", R.drawable.game1),
+                new Adapter_Word.Item("Game trắc nghiệm V-E", R.drawable.game2),
+                new Adapter_Word.Item("Game điền từ", R.drawable.game3),//no icon for this one
+        };
+        ListAdapter adapter = new ArrayAdapter<Adapter_Word.Item>(
+                context,
+                R.layout.dialog_single_choice,
+                R.id.text1,
+                items){
+            public View getView(int position, View convertView, ViewGroup parent) {
+                //Use super class to create the View
+                View v = super.getView(position, convertView, parent);
+                TextView tv = (TextView)v.findViewById(R.id.text1);
+                ImageView img = (ImageView)v.findViewById(R.id.img1);
+                //Put the image on the TextView
+                tv.setText(items[position].text);
+                img.setBackgroundResource(items[position].icon);
+                return v;
+            }
+        };
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setTitle("Single Choice");
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener()  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(context, Game.class);
@@ -291,10 +326,32 @@ public class MenuPracticeFragment {
     }
 
     public void createMenuImpot_Export(final Context context) {
-        CharSequence[] array = {"Import database", "Export database"};
-        new AlertDialog.Builder(context)
-                .setTitle("Choose game")
-                .setItems(array, new DialogInterface.OnClickListener() {
+      //  CharSequence[] array = {"Import database", "Export database"};
+        final Adapter_Word.Item[] items = {
+                new Adapter_Word.Item("Import data", R.drawable.import1),
+                new Adapter_Word.Item("Export data", R.drawable.export),
+        };
+        ListAdapter adapter = new ArrayAdapter<Adapter_Word.Item>(
+                context,
+                R.layout.dialog_single_choice,
+                R.id.text1,
+                items){
+            public View getView(int position, View convertView, ViewGroup parent) {
+                //Use super class to create the View
+                View v = super.getView(position, convertView, parent);
+                TextView tv = (TextView)v.findViewById(R.id.text1);
+                ImageView img = (ImageView)v.findViewById(R.id.img1);
+                //Put the image on the TextView
+                tv.setText(items[position].text);
+                img.setBackgroundResource(items[position].icon);
+
+                return v;
+            }
+        };
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setTitle("Single Choice");
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {

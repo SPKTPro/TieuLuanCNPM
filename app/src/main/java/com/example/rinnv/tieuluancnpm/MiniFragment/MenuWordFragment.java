@@ -42,12 +42,6 @@ public class MenuWordFragment {
         View dialogView = inflater.inflate(R.layout.custom_detail_dialog, null);
         ArrayList<WordRelationShip> wordRelationShips = db.GetRalationShipWord(item.getWord_Id());
 
-        TextView textEN = (TextView) dialogView.findViewById(R.id.example_EN);
-        textEN.setText("EX English: " + item.getExample());
-
-        TextView textVN = (TextView) dialogView.findViewById(R.id.example_VN);
-        textVN.setText("EX Viet nam: " + item.getExample_VN());
-
         ListView listView = (ListView) dialogView.findViewById(R.id.lst_relationship);
         List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
         for (int i = 0; i < wordRelationShips.size(); i++) {
@@ -73,12 +67,13 @@ public class MenuWordFragment {
         final EditText EN = (EditText) promptsView.findViewById(R.id.mainTopic_EN);
         final EditText VN = (EditText) promptsView.findViewById(R.id.mainTopic_VN);
         final EditText Type = (EditText) promptsView.findViewById(R.id.loaitu);
+        final String id= ""+word.getWord_Id();
         alertDialogBuilder.setView(promptsView).setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final String english = EN.getText().toString().trim() + "(" + Type.getText().toString().trim() + ")";
-                        boolean x = db.insertRelationship(word.getWord_Id(), english, VN.getText().toString().trim());
+                        boolean x = db.insertRelationship(id, english, VN.getText().toString().trim());
                         Toast.makeText(context, x ? "Thêm thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
                     }
                 })
