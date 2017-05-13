@@ -39,9 +39,9 @@ public class ImportDatabaseCSVTask extends AsyncTask<String, String, String> {
             MainActivity.listView_Maintopic.setAdapter(MainActivity.adapterMaintopic);
         }
         if (success.isEmpty()) {
-            Toast.makeText(MainActivity.rootView.getContext(), "Export successful!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.rootView.getContext(), "Import successful!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(MainActivity.rootView.getContext(), "Export failed!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.rootView.getContext(), "Import failed!", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -168,7 +168,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             try {
                 // Create a path where we will place our List of objects on external storage
-                File file = new File(Environment.getExternalStorageDirectory(), fileName);
+                //File file = new File(Environment.getExternalStorageDirectory(), fileName);
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), fileName);
                 FileOutputStream os = new FileOutputStream(file);
                 wb.write(os);
                 return "Export successful! File location is: " + file.getAbsolutePath();
@@ -177,7 +178,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 FileOutputStream os = new FileOutputStream(file);
                 wb.write(os);
                 return "Export successful! File location is: " + file.getAbsolutePath();
-            }finally {
+            } finally {
                 wb.close();
             }
 
@@ -376,20 +377,18 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     private String getWordID(String word, String topicID) {
         Cursor cs = null;
         try {
-            {
-                openDataBase();
-            }
-            String query = "SELECT * FROM Topic,Word where Topic.Topic_Id = Word.Topic_Id and Word_Title = "
+            openDataBase();
+            String query = "SELECT Word.Word_Id FROM Topic,Word where Topic.Topic_Id = Word.Topic_Id and UPPER( Word_Title )= "
                     + '"' + word.toUpperCase() + '"' +
-                    " and Topic_Id = " + '"' + topicID + '"';
+                    " and Word.Topic_Id = " + '"' + topicID + '"';
             cs = database.rawQuery(query, null);
             cs.moveToNext();
-            return cs.getString(1);
+            return cs.getString(0);
         } catch (Exception e) {
             if (cs != null)
                 cs.close();
             close();
-            e.printStackTrace();
+            Log.e(TAG, "getWordID: ",e );
             return null;
         }
 
