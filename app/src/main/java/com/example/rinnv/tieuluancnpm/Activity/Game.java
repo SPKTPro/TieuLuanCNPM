@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 
 public class Game extends AppCompatActivity {
+    private static final String TAG =   "Gamexxx" ;
     private ArrayList<Word> listWord = new ArrayList<>();
     private int Clicked = 0, Score = 0;
     private Button btn1, btn2, btnStart;
@@ -282,8 +283,6 @@ public class Game extends AppCompatActivity {
         word1 = listWord.get(x1);
         word2 = listWord.get(x2);
 
-        Log.d("Tag", "CreatQuiz: " + word1.getWord_Title() + "|||" + word1.getWord_Title_VN());
-
         //typeQuiz=1, Quiz Anh Viet
         //typeQuiz=2, Quiz Viet Anh
         if (typeQuiz == 1) {
@@ -303,7 +302,6 @@ public class Game extends AppCompatActivity {
         } else if (typeQuiz == 2) {
             QuizQuestion = word1.getWord_Title_VN();
             RightAnswer = word1.getWord_Title();
-
             x1 = LaysoRandom(listWord, 2);
             if (x1 == 1) {
                 Answer1 = word1.getWord_Title();
@@ -330,7 +328,7 @@ public class Game extends AppCompatActivity {
     private int WaitForClic() {
         int returnValue = 0;
         if (Clicked == 1) {
-            if (RightAnswer.equals(Answer1)) {
+            if (RightAnswer.compareToIgnoreCase(Answer1)==0) {
                 returnValue = 1;
                 Score++;
                 Clicked = 0;
@@ -340,7 +338,7 @@ public class Game extends AppCompatActivity {
             }
 
         } else if (Clicked == 2) {
-            if (RightAnswer.equals(Answer2)) {
+            if (RightAnswer.compareToIgnoreCase(Answer2)==0) {
                 returnValue = 1;
                 Score++;
                 Clicked = 0;
