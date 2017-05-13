@@ -3,6 +3,9 @@ package com.example.rinnv.tieuluancnpm.FrameWork;
 import android.util.Log;
 import android.util.Xml;
 
+import com.example.rinnv.tieuluancnpm.Entity.MiniWord;
+import com.example.rinnv.tieuluancnpm.Entity.Word;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -88,8 +91,22 @@ public class Utility {
             }
         }
         // All done
-
         return messages;
     }
 
+    public static MiniWord SeparateWord(Word word)
+    {
+       MiniWord miniWord = new MiniWord();
+        String original =  word.getWord_Title();
+        int i = original.indexOf("(");
+        String type = original.substring(i).toLowerCase();
+        String eng = original.substring(0, i).toUpperCase();
+
+
+        miniWord.WordString = eng;
+        miniWord.type = type;
+
+        return miniWord;
     }
+}
+
