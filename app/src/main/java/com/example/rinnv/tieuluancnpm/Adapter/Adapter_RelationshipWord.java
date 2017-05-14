@@ -58,7 +58,7 @@ public class Adapter_RelationshipWord extends BaseAdapter {
 
 
         WordRelationShip  wordRelationShip= wordRelationShips.get(i);
-        EN.setText(wordRelationShip.getWord_Title().toUpperCase());
+        EN.setText(wordRelationShip.getWord_Title().toUpperCase() +wordRelationShip.getWordType().toLowerCase());
         VN.setText(wordRelationShip.getWord_Title_VN());
 
         delete.setOnClickListener(new View.OnClickListener() {

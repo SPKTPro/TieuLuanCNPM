@@ -8,11 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Maintopic;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_RelationshipWord;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Word;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
@@ -21,12 +18,8 @@ import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
 import com.example.rinnv.tieuluancnpm.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.adapterMaintopic;
 import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.db;
-import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.listView_Maintopic;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.adapterWord;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.listView_Word;
 
@@ -43,15 +36,8 @@ public class MenuWordFragment {
         ArrayList<WordRelationShip> wordRelationShips = db.GetRalationShipWord(item.getWord_Id());
 
         ListView listView = (ListView) dialogView.findViewById(R.id.lst_relationship);
-        List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
-        for (int i = 0; i < wordRelationShips.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put("Word_Title", wordRelationShips.get(i).getWord_Title());
-            map.put("Word_Title_VN", wordRelationShips.get(i).getWord_Title_VN());
-            fillMaps.add(map);
-        }
 
-        if (fillMaps.size() > 0) {
+        if (wordRelationShips.size() > 0) {
             Adapter_RelationshipWord adapter_relationshipWord = new Adapter_RelationshipWord(context,wordRelationShips);
             listView.setAdapter(adapter_relationshipWord);
         }
