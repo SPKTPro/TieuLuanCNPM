@@ -57,9 +57,9 @@ public class Adapter_Maintopic extends BaseAdapter {
         TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
 
         Maintopic item = items.get(position);
-        titleView.setText(item.getMaintopic_Tittle());
+        titleView.setText(item.getMaintopic_Tittle().toUpperCase());
         countView.setText(item.getCountTopic()+" Topics");
-        titleView2.setText(item.getMaintopic_Tittle_VN());
+        titleView2.setText(item.getMaintopic_Tittle_VN().toLowerCase());
         String s = item.getMaintopic_Tittle().toLowerCase();
         int imageResource = Layout.getResources().getIdentifier(s, "drawable", context.getPackageName());
         try {

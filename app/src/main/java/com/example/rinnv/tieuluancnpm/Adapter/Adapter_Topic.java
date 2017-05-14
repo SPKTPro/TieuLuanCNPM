@@ -60,10 +60,10 @@ public class Adapter_Topic extends BaseAdapter {
         TextView countView = (TextView) Layout.findViewById(R.id.count);
 
         Topic item = items.get(position);
-        titleView.setText(item.getTopic_Title());
+        titleView.setText(item.getTopic_Title().toUpperCase());
         countView.setText(item.getCountWord() +" words");
 
-        titleView2.setText(item.getTopic_Title_VN());
+        titleView2.setText(item.getTopic_Title_VN().toLowerCase());
         String s= item.getTopic_Title().toString().toLowerCase();
         int i=-1;
         while(i!=-2) {

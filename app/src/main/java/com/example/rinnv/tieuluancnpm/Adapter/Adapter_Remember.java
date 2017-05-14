@@ -62,8 +62,8 @@ public class Adapter_Remember extends BaseAdapter {
 
 
         final Word item = items.get(position);
-        titleView.setText(item.getWord_Title());
-        titleView2.setText(item.getWord_Title_VN());
+        titleView.setText(item.getWord_Title().toUpperCase()+item.getWord_Type().toLowerCase());
+        titleView2.setText(item.getWord_Title_VN().toLowerCase());
         final CheckBox checkBox = (CheckBox) Layout.findViewById(R.id.checkBox);
 
         checkBox.setFocusable(false);

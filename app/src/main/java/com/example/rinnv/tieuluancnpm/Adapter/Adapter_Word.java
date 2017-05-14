@@ -93,8 +93,8 @@ public class Adapter_Word extends BaseAdapter {
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
         final Word item = items.get(position);
-        titleView.setText(item.getWord_Title()+item.getWord_Type());
-        titleView2.setText(item.getWord_Title_VN());
+        titleView.setText(item.getWord_Title().toUpperCase()+item.getWord_Type().toLowerCase());
+        titleView2.setText(item.getWord_Title_VN().toLowerCase());
        // score.setText("" + item.getWord_Pronoun());
 
 
