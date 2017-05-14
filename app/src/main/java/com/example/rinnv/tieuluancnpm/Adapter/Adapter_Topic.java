@@ -63,7 +63,7 @@ public class Adapter_Topic extends BaseAdapter {
         titleView.setText(item.getTopic_Title().toUpperCase());
         countView.setText(item.getCountWord() +" words");
 
-        titleView2.setText(item.getTopic_Title_VN().toLowerCase());
+        titleView2.setText(item.getTopic_Title_VN());
         String s= item.getTopic_Title().toString().toLowerCase();
         int i=-1;
         while(i!=-2) {
