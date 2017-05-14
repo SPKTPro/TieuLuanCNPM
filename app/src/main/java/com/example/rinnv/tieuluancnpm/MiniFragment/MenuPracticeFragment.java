@@ -265,13 +265,7 @@ public class MenuPracticeFragment {
                         if (itemType == CreateItemType.Word) {
                             final String ITemEN = Maintopic_EN.getText().toString().trim();
                             final String ITemVN = Maintopic_VN.getText().toString().trim();
-                            boolean isExist = db.isExist(ITemEN, SaveObject.saveTopic.getTopic_Id());
-                            if (isExist) {
-                                Toast.makeText(context, "this word is exist", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
                             final List<String> suggestWord = Utility.CheckWord(ITemEN);
-
                             if (!suggestWord.contains(ITemEN) && suggestWord.size() > 0) {
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                 builder.setIconAttribute(android.R.attr.alertDialogIcon)
@@ -407,6 +401,11 @@ public class MenuPracticeFragment {
 
         }
         if (level == CreateItemType.Word) {
+            boolean isExist = db.isExist(ITemEN, SaveObject.saveTopic.getTopic_Id());
+            if (isExist) {
+                Toast.makeText(context, "this word is exist", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             boolean x = db.insertWord(SaveObject.saveTopic.getTopic_Id(), ITemEN, ITemVN,wordType);
             ArrayList<Word> words = db.getListWord(SaveObject.saveTopic);
