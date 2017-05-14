@@ -1168,8 +1168,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 return false;
 
             ContentValues values = new ContentValues();
-            values.put("MainTopic_Title", MainTopic_EN);
-            values.put("MainTopic_Title_VN", MainTopic_VN);
+            values.put("MainTopic_Title", MainTopic_EN.toUpperCase());
+            values.put("MainTopic_Title_VN", MainTopic_VN.toLowerCase());
             values.put("MainTopic_Process", 0);
 
 
@@ -1210,8 +1210,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
 
             values.put("Topic_Id", topicID);
-            values.put("Topic_Title", Topic_Title);
-            values.put("Topic_Title_VN", Topic_Title_VN);
+            values.put("Topic_Title", Topic_Title.toUpperCase());
+            values.put("Topic_Title_VN", Topic_Title_VN.toLowerCase());
             values.put("MainTopic_Id", MainTopic_Id);
             values.put("Topic_Process", 0);
 
@@ -1249,9 +1249,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
             ContentValues values = new ContentValues();
             values.put("Topic_Id", topicID);
-            values.put("Word_Title", WordTittle_EN);
-            values.put("Word_Title_VN", WordTittle_VN);
-            values.put("Type_Word", wordType);
+            values.put("Word_Title", WordTittle_EN.toUpperCase());
+            values.put("Word_Title_VN", WordTittle_VN.toLowerCase());
+            values.put("Type_Word", wordType.toLowerCase());
             long rs = database.insert("Word", null, values);
             if (rs > 0) {
                 result = true;
@@ -1280,9 +1280,9 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             openDataBase();
             ContentValues values = new ContentValues();
             values.put("Root", wordID);
-            values.put("Word_Title", WordTittle_EN);
-            values.put("Word_Title_VN", WordTittle_VN);
-            values.put("Type_Word", wordType);
+            values.put("Word_Title", WordTittle_EN.toUpperCase());
+            values.put("Word_Title_VN", WordTittle_VN.toLowerCase());
+            values.put("Type_Word", wordType.toLowerCase());
             long rs = database.insert("Relationship", null, values);
             if (rs > 0) {
                 result = true;
@@ -1295,28 +1295,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
 
         return result;
-    }
-
-    private boolean isRelationshipExist(String wordTittle_en) {
-        boolean x = false;
-        Cursor cs = null;
-        try {
-            openDataBase();
-            String query = "select * from Relationship where Word_Title = " + '"' + wordTittle_en.toUpperCase() + '"';
-            cs = database.rawQuery(query, null);
-            if (cs.getCount() != 0) {
-                x = true;
-            } else {
-                x = false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cs != null)
-                cs.close();
-            close();
-        }
-        return x;
     }
 
     public ArrayList<Word> SearchWord(String s) {
