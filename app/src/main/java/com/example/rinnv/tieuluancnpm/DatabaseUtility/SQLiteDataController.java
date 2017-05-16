@@ -41,6 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.example.rinnv.tieuluancnpm.R.id.word;
 
 /**
  * Created by rinnv on 25/10/2016.
@@ -1155,7 +1156,44 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return list;
 
     }
+    public static String VietHoa(String s)
+    {
+        if (s.isEmpty())
+            return s;
 
+        String result = "";
+
+        //lấy danh sách các từ
+
+        String[] words = s.split(" ");
+        int i=0;
+        for (String word : words)
+        {
+            if(i==0)
+            {
+                // từ nào là các khoảng trắng thừa thì bỏ
+                if (word.trim() != "")
+                {
+                    if (word.length() > 1)
+                        result += word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase() + " ";
+                    else
+                        result += word.toUpperCase() + " ";
+                }
+                i++;
+            }
+            else
+            {
+                if (word.trim() != "")
+                {
+                    if (word.length() > 1)
+                        result += word.substring(0).toLowerCase() + " ";
+                    else
+                        result += word.toLowerCase() + " ";
+                }
+            }
+        }
+        return result.trim();
+    }
     public boolean insertMaintopic(String MainTopic_EN, String MainTopic_VN) {
         Log.d(TAG, "importX: main");
         boolean result = false;
@@ -1169,7 +1207,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             ContentValues values = new ContentValues();
             values.put("MainTopic_Title", MainTopic_EN.toUpperCase());
-            values.put("MainTopic_Title_VN", MainTopic_VN.toLowerCase());
+            values.put("MainTopic_Title_VN", VietHoa(MainTopic_VN.toLowerCase()));
             values.put("MainTopic_Process", 0);
 
 
@@ -1211,7 +1249,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             values.put("Topic_Id", topicID);
             values.put("Topic_Title", Topic_Title.toUpperCase());
-            values.put("Topic_Title_VN", Topic_Title_VN.toLowerCase());
+            values.put("Topic_Title_VN", VietHoa(Topic_Title_VN.toLowerCase()));
             values.put("MainTopic_Id", MainTopic_Id);
             values.put("Topic_Process", 0);
 
@@ -1250,7 +1288,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put("Topic_Id", topicID);
             values.put("Word_Title", WordTittle_EN.toUpperCase());
-            values.put("Word_Title_VN", WordTittle_VN.toLowerCase());
+            values.put("Word_Title_VN", VietHoa(WordTittle_VN.toLowerCase()));
             values.put("Type_Word", wordType.toLowerCase());
             long rs = database.insert("Word", null, values);
             if (rs > 0) {
@@ -1281,7 +1319,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put("Root", wordID);
             values.put("Word_Title", WordTittle_EN.toUpperCase());
-            values.put("Word_Title_VN", WordTittle_VN.toLowerCase());
+            values.put("Word_Title_VN", VietHoa(WordTittle_VN.toLowerCase()));
             values.put("Type_Word", wordType.toLowerCase());
             long rs = database.insert("Relationship", null, values);
             if (rs > 0) {

@@ -15,6 +15,8 @@ import com.example.rinnv.tieuluancnpm.R;
 
 import java.util.ArrayList;
 
+import static com.example.rinnv.tieuluancnpm.Adapter.Adapter_Topic.removeCharAt;
+
 /**
  * Created by rinnv on 25/10/2016.
  */
@@ -59,17 +61,37 @@ public class Adapter_Maintopic extends BaseAdapter {
         Maintopic item = items.get(position);
         titleView.setText(item.getMaintopic_Tittle().toUpperCase());
         countView.setText(item.getCountTopic()+" Topics");
-        titleView2.setText(item.getMaintopic_Tittle_VN().toLowerCase());
-        String s = item.getMaintopic_Tittle().toLowerCase();
-        int imageResource = Layout.getResources().getIdentifier(s, "drawable", context.getPackageName());
-        try {
-            if (imageResource == 0) {
-                imageView.setImageResource(R.drawable.newtopic);
-            } else
-                imageView.setImageResource(imageResource);
-        } catch (Exception e) {
+        titleView2.setText(item.getMaintopic_Tittle_VN());
+        String s= item.getMaintopic_Tittle().toString().toLowerCase();
+        int i=-1;
+        while(i!=-2) {
+            i = s.indexOf(" ");
 
+            if(i!=-1) {
+                s = removeCharAt(s, i);
+                i=-1;
+            }
+            else
+                i=-2;
         }
+        i=-1;
+        while(i!=-2) {
+            i = s.indexOf("&");
+
+            if(i!=-1) {
+                s = removeCharAt(s, i);
+                i=-1;
+            }
+            else
+                i=-2;
+        }
+        int imageResource = Layout.getResources().getIdentifier(s, "drawable",context.getPackageName());
+        if(imageResource==0) {
+            imageView.setImageResource(R.drawable.newtopic);
+        }
+        else
+            imageView.setImageResource(imageResource);
+
         progressBar.setMax(100);
         progressBar.setProgress(item.getMaintopic_Process());
 

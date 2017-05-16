@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/itemtitle2"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:layout_below="@+id/itemtitle"
         android:layout_alignStart="@+id/itemtitle"
         android:layout_marginTop="5dp" />
@@ -29,7 +29,7 @@
         android:textStyle="bold"
         android:maxLines="1"
         android:text="English"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="18dp"
         android:textSize="20sp"
         android:textColor="@color/colorPrimaryDark"
         android:layout_alignParentTop="true"
@@ -38,21 +38,22 @@
 
     <ImageButton
         android:id="@+id/btnCheckSpell"
-        android:layout_width="wrap_content"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:text=""
         app:srcCompat="@drawable/recorder01"
-        android:layout_alignTop="@+id/checkBox"
+        android:background="#00FFFFFF"
+        android:layout_alignTop="@+id/btn_detail"
         android:layout_toStartOf="@+id/checkBox"
-        android:layout_marginTop="7dp"
-        android:background="#00FFFFFF"/>
+        android:layout_marginEnd="5dp"
+        android:layout_centerVertical="true"/>
 
     <CheckBox
         android:id="@+id/checkBox"
         style="?android:attr/starStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="5dp"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/btn_detail" />
 
@@ -61,7 +62,7 @@
         android:id="@+id/btn_detail"
         android:layout_width="20dp"
         android:layout_height="25dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="8dp"
         android:background="#00FFFFFF"
         android:src="@drawable/menu2"
         android:layout_centerVertical="true"
