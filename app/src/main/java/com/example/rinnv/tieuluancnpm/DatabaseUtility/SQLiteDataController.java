@@ -41,7 +41,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static com.example.rinnv.tieuluancnpm.R.id.word;
 
 /**
  * Created by rinnv on 25/10/2016.
@@ -894,7 +893,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor cs = null;
         try {
             openDataBase();
-            cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + t.getTopic_Id() + "'", null);
+            String query ="select * from Word where Word.Topic_Id = '" + t.getTopic_Id() + "'";
+            cs = database.rawQuery(query, null);
 
             Word topic;
             while (cs.moveToNext()) {
@@ -903,6 +903,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                         cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
                 list.add(topic);
             }
+
+            Log.d(TAG, "getListWord: "+query);
         } catch (Exception e) {
             Log.e(TAG, "getListWord: ", e);
         } finally {

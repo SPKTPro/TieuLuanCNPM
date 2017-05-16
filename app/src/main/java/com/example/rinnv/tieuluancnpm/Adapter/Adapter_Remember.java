@@ -1,20 +1,28 @@
 package com.example.rinnv.tieuluancnpm.Adapter;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.rinnv.tieuluancnpm.R;
 import com.example.rinnv.tieuluancnpm.DatabaseUtility.SQLiteDataController;
-import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
+import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
+import com.example.rinnv.tieuluancnpm.MiniFragment.MenuWordFragment;
+import com.example.rinnv.tieuluancnpm.R;
 
 import java.util.ArrayList;
 
@@ -58,6 +66,7 @@ public class Adapter_Remember extends BaseAdapter {
 
         TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
         TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
+        ImageButton detail = (ImageButton) Layout.findViewById(R.id.btn_detail);
         final SQLiteDataController db = new SQLiteDataController(parent.getContext());
 
 
@@ -115,6 +124,64 @@ public class Adapter_Remember extends BaseAdapter {
                 return true;
             }
         });
+        detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Adapter_Word.Item[] items = {
+                        new Adapter_Word.Item("See relationship", R.drawable.detail2),
+                        new Adapter_Word.Item("Add relationship", R.drawable.add),
+                        new Adapter_Word.Item("Delete this word", R.drawable.del2),//no icon for this one
+                };
+
+                ListAdapter adapter = new ArrayAdapter<Adapter_Word.Item>(
+                        parent.getContext(),
+                        R.layout.dialog_single_choice,
+                        R.id.text1,
+                        items){
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        //Use super class to create the View
+                        View v = super.getView(position, convertView, parent);
+                        TextView tv = (TextView)v.findViewById(R.id.text1);
+                        ImageView img = (ImageView)v.findViewById(R.id.img1);
+                        //Put the image on the TextView
+                        tv.setText(items[position].text);
+                        img.setBackgroundResource(items[position].icon);
+
+                        return v;
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
+                builder.setTitle("Single Choice");
+                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which)
+                        {
+                            case 0:
+                                new MenuWordFragment().createDetailView(parent.getContext(), (Activity) parent.getContext(),item);
+                                break;
+                            case 1:
+                                new MenuWordFragment().createAddRelationShipView(parent.getContext(),item);
+                                break;
+                            case 2:
+                                new MenuWordFragment().createDeleteWordView(parent.getContext(),item);
+                                break;
+                            default:
+                                break;
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                builder.create().show();
+            }
+        });
 
 
         Layout.setTag(position);
@@ -128,4 +195,5 @@ public class Adapter_Remember extends BaseAdapter {
         items.addAll(dataitems);
         notifyDataSetChanged();
     }
+
 }
