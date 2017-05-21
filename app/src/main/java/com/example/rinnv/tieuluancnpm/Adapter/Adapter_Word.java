@@ -240,7 +240,7 @@ public class Adapter_Word extends BaseAdapter {
                         new MenuWordFragment().createAddRelationShipView(mContext,word);
                         break;
                     case 2:
-                        new MenuWordFragment().createDeleteWordView(mContext,word);
+                        new MenuWordFragment().createDeleteWordView(mContext,word,false);
                         break;
                     default:
                         break;

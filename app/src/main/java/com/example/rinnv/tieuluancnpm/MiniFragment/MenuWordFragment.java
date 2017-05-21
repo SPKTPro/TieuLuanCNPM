@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_RelationshipWord;
+import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Remember;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Word;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.Entity.WordRelationShip;
@@ -19,7 +21,9 @@ import com.example.rinnv.tieuluancnpm.R;
 
 import java.util.ArrayList;
 
+import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.adapterRemember;
 import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.db;
+import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.listView_Maintopic;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.adapterWord;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.listView_Word;
 
@@ -73,7 +77,8 @@ public class MenuWordFragment {
 
     }
 
-    public void createDeleteWordView(final Context context, final Word word) {
+    public void createDeleteWordView(final Context context, final Word word, boolean fromRemidWord) {
+        final boolean RemindWord = Boolean.valueOf(fromRemidWord);
         new AlertDialog.Builder(context)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Xóa từ vựng")
@@ -82,9 +87,16 @@ public class MenuWordFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         db.deleteWord(word);
-                        adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), (Activity) context);
-                        listView_Word.setAdapter(adapterWord);
-                        listView_Word.invalidate();
+                        if (RemindWord){
+                            adapterRemember = new Adapter_Remember(context, db.getLisCheckedtWord());
+                            listView_Maintopic.setAdapter(adapterRemember);
+                            listView_Maintopic.invalidate();
+
+                        }else {
+                            adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), (Activity) context);
+                            listView_Word.setAdapter(adapterWord);
+                            listView_Word.invalidate();
+                        }
                     }
 
                 })

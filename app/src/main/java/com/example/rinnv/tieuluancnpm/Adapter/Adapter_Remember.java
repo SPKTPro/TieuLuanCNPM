@@ -165,7 +165,7 @@ public class Adapter_Remember extends BaseAdapter {
                                 new MenuWordFragment().createAddRelationShipView(parent.getContext(),item);
                                 break;
                             case 2:
-                                new MenuWordFragment().createDeleteWordView(parent.getContext(),item);
+                                new MenuWordFragment().createDeleteWordView(parent.getContext(),item,true);
                                 break;
                             default:
                                 break;

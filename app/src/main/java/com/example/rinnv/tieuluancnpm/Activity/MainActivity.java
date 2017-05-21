@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public static View rootView;
     public static GridView listView_Maintopic;
     public static Adapter_Maintopic adapterMaintopic;
+    public static Adapter_Remember adapterRemember ;
 
     private static final int SPEECH_API_CHECK = 0;
 
@@ -322,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                 if (tab == 2) {
 
                     final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
-                    Adapter_Remember adapterRemember = new Adapter_Remember(getContext(), db.getLisCheckedtWord());
+                    adapterRemember = new Adapter_Remember(getContext(), db.getLisCheckedtWord());
                     listView_Maintopic.setAdapter(adapterRemember);
 
                     final FloatingActionMenu materialDesignFAM;
