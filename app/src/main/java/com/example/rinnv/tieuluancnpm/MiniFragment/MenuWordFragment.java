@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.adapterRemember;
 import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.db;
 import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.listView_Maintopic;
+import static com.example.rinnv.tieuluancnpm.Activity.MainActivity.listView_Remember;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.adapterWord;
 import static com.example.rinnv.tieuluancnpm.Activity.Word_Activity.listView_Word;
 
@@ -89,8 +90,8 @@ public class MenuWordFragment {
                         db.deleteWord(word);
                         if (RemindWord){
                             adapterRemember = new Adapter_Remember(context, db.getLisCheckedtWord());
-                            listView_Maintopic.setAdapter(adapterRemember);
-                            listView_Maintopic.invalidate();
+                            listView_Remember.setAdapter(adapterRemember);
+                            listView_Remember.invalidate();
 
                         }else {
                             adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), (Activity) context);

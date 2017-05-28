@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public static SQLiteDataController db;
     final Context context = this;
     public static View rootView;
-    public static GridView listView_Maintopic;
+    public static GridView listView_Maintopic, listView_Remember;
     public static Adapter_Maintopic adapterMaintopic;
     public static Adapter_Remember adapterRemember ;
 
@@ -315,16 +315,12 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-
-
             } else {
                 if (tab == 2) {
 
-                    final GridView listView_Maintopic = (GridView) rootView.findViewById(R.id.list_item);
+                    listView_Remember = (GridView) rootView.findViewById(R.id.list_item);
                     adapterRemember = new Adapter_Remember(getContext(), db.getLisCheckedtWord());
-                    listView_Maintopic.setAdapter(adapterRemember);
+                    listView_Remember.setAdapter(adapterRemember);
 
                     final FloatingActionMenu materialDesignFAM;
                     com.github.clans.fab.FloatingActionButton floatingActionButton1;
