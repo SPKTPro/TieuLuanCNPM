@@ -388,7 +388,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             if (cs != null)
                 cs.close();
             close();
-            Log.e(TAG, "getWordID: ",e );
+            Log.e(TAG, "getWordID: ", e);
             return null;
         }
 
@@ -809,13 +809,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     public void CheckWordRemind(boolean ischeck, Word word) {
 
         try {
-
-            {
-                getWritableDatabase();
-            }
+            openDataBase();
             ContentValues values = new ContentValues();
             values.put("Word_Remind", ischeck ? 1 : 0);
             database.update("Word", values, "Word_Id=" + word.getWord_Id(), null);
+            Cursor cx = database.rawQuery("select * from Word where Word_Id=" + word.getWord_Id(), null);
+            Log.d(TAG, "CheckWordRemind: " + cx.getCount());
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -893,7 +893,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         Cursor cs = null;
         try {
             openDataBase();
-            String query ="select * from Word where Word.Topic_Id = '" + t.getTopic_Id() + "'";
+            String query = "select * from Word where Word.Topic_Id = '" + t.getTopic_Id() + "'";
             cs = database.rawQuery(query, null);
 
             Word topic;
@@ -904,7 +904,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 list.add(topic);
             }
 
-            Log.d(TAG, "getListWord: "+query);
+            Log.d(TAG, "getListWord: " + query);
         } catch (Exception e) {
             Log.e(TAG, "getListWord: ", e);
         } finally {
@@ -1158,8 +1158,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return list;
 
     }
-    public static String VietHoa(String s)
-    {
+
+    public static String VietHoa(String s) {
         if (s.isEmpty())
             return s;
 
@@ -1168,25 +1168,19 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         //lấy danh sách các từ
 
         String[] words = s.split(" ");
-        int i=0;
-        for (String word : words)
-        {
-            if(i==0)
-            {
+        int i = 0;
+        for (String word : words) {
+            if (i == 0) {
                 // từ nào là các khoảng trắng thừa thì bỏ
-                if (word.trim() != "")
-                {
+                if (word.trim() != "") {
                     if (word.length() > 1)
                         result += word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase() + " ";
                     else
                         result += word.toUpperCase() + " ";
                 }
                 i++;
-            }
-            else
-            {
-                if (word.trim() != "")
-                {
+            } else {
+                if (word.trim() != "") {
                     if (word.length() > 1)
                         result += word.substring(0).toLowerCase() + " ";
                     else
@@ -1196,6 +1190,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         }
         return result.trim();
     }
+
     public boolean insertMaintopic(String MainTopic_EN, String MainTopic_VN) {
         Log.d(TAG, "importX: main");
         boolean result = false;
