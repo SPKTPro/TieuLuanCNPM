@@ -3,6 +3,7 @@ package com.example.rinnv.tieuluancnpm.LockScreen;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -113,7 +114,7 @@ public class LockScreenActivity extends AppCompatActivity {
         ExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Process.killProcess(Process.myPid());
+                Process.killProcess(Process.myPid());
                 finish();
 
             }
@@ -136,6 +137,7 @@ public class LockScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 db.CheckWordRemind(false, finalX1);
+                SaveObject.remindWord = db.getListRemindWord();
                 Toast.makeText(LockScreenActivity.this, "Đã xóa khỏi danh sách nhắc từ", Toast.LENGTH_LONG).show();
             }
         });
