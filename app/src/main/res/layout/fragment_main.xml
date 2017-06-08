@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_agenda"
             android:visibility="gone"
-            fab:fab_label="Export database"
+            fab:fab_label="Import/Export"
             fab:fab_size="mini"/>
 
 
