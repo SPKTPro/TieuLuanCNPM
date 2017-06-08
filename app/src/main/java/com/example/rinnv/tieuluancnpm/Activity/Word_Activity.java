@@ -125,35 +125,37 @@ public class Word_Activity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SPEECH_RECOGNITION_CODE && resultCode == RESULT_OK) {
             final GridView listView_Word = (GridView) findViewById(R.id.list_item);
-            final Adapter_Word adapterWord = new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), Word_Activity.this);
+            try {
+                final ArrayList<String> matches_text = data
+                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (matches_text.size() > 0) {
+                    String[] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
 
-            final ArrayList<String> matches_text = data
-                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches_text.size() > 0) {
-                String[] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
+                    Toast.makeText(this.context, matches_text2[0] + " " + matches_text2[1] + " " + matches_text2[2] + " " + your_word, Toast.LENGTH_SHORT).show();
+                    int a = 0;
 
-                Toast.makeText(this.context, matches_text2[0] + " " + matches_text2[1] + " " + matches_text2[2] + " " + your_word, Toast.LENGTH_SHORT).show();
-                int a = 0;
+                    // chua bat truong hop matches_text2 khong có hoac chi co 1 2 từ
+                    if (matches_text2[0].equals(your_word.toLowerCase())) {
+                        a = 3;
+                        db.updateScorePronoun(your_word, 3);
+                    } else if (matches_text2[1].equals(your_word.toLowerCase())) {
+                        a = 2;
+                        db.updateScorePronoun(your_word, 2);
+                    } else if (matches_text2[2].equals(your_word.toLowerCase())) {
+                        a = 1;
+                        db.updateScorePronoun(your_word, 1);
+                    } else {
+                        db.updateScorePronoun(your_word, 0);
+                    }
+                    refreshDialog(a);
 
-                // chua bat truong hop matches_text2 khong có hoac chi co 1 2 từ
-                if (matches_text2[0].equals(your_word.toLowerCase())) {
-                    a = 3;
-                    db.updateScorePronoun(your_word, 3);
-                } else if (matches_text2[1].equals(your_word.toLowerCase())) {
-                    a = 2;
-                    db.updateScorePronoun(your_word, 2);
-                } else if (matches_text2[2].equals(your_word.toLowerCase())) {
-                    a = 1;
-                    db.updateScorePronoun(your_word, 1);
-                } else {
-                    db.updateScorePronoun(your_word, 0);
+                    listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), Word_Activity.this));
+                    listView_Word.invalidate();
+
+
                 }
-                refreshDialog(a);
-
-                listView_Word.setAdapter(new Adapter_Word(context, db.getListWord(SaveObject.saveTopic), Word_Activity.this));
-                listView_Word.invalidate();
-
-
+            } catch (Exception ex) {
+                Toast.makeText(this, "There are some errors, please speak again!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -241,7 +243,6 @@ public class Word_Activity extends AppCompatActivity {
         });
 
     }
-
 
 
 }
