@@ -114,7 +114,7 @@ public class LockScreenActivity extends AppCompatActivity {
         ExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Process.killProcess(Process.myPid());
+                //Process.killProcess(Process.myPid());
                 finish();
 
             }
@@ -137,7 +137,9 @@ public class LockScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 db.CheckWordRemind(false, finalX1);
+                SQLiteDataController db = new SQLiteDataController(LockScreenActivity.this);
                 SaveObject.remindWord = db.getListRemindWord();
+                Log.d(TAG, "onClick: "+SaveObject.remindWord.size());
                 Toast.makeText(LockScreenActivity.this, "Đã xóa khỏi danh sách nhắc từ", Toast.LENGTH_LONG).show();
             }
         });
