@@ -22,12 +22,15 @@ import android.widget.Toast;
 
 import com.example.rinnv.tieuluancnpm.Activity.Game;
 import com.example.rinnv.tieuluancnpm.Activity.Test;
+import com.example.rinnv.tieuluancnpm.Activity.Topic_Activity;
 import com.example.rinnv.tieuluancnpm.Activity.Word_Activity;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Maintopic;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Topic;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Word;
 import com.example.rinnv.tieuluancnpm.DatabaseUtility.ExportDatabaseCSVTask;
 import com.example.rinnv.tieuluancnpm.DatabaseUtility.FileDialog;
+import com.example.rinnv.tieuluancnpm.Entity.Maintopic;
+import com.example.rinnv.tieuluancnpm.Entity.Topic;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
@@ -177,7 +180,7 @@ public class MenuPracticeFragment {
 
                                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                    public void onClick(DialogInterface dialog, final int which) {
                                         String strName = finalListResult1.get(which).getWord_Title().toString();
                                         String strMean = finalListResult1.get(which).getWord_Title_VN().toString();
                                         String mainTopic = "", Topics = "";
@@ -186,16 +189,32 @@ public class MenuPracticeFragment {
                                             Topics = "Topic:" + finalListResult1.get(which).getExample_VN().toString();
                                             strMean = strMean + "\n" + mainTopic + "\n" + Topics;
                                         }
+
                                         AlertDialog.Builder builderInner = new AlertDialog.Builder(context);
                                         builderInner.setMessage(strMean);
                                         builderInner.setTitle(strName);
-                                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        builderInner.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
                                                 builderSingle.show();
                                             }
                                         });
+                                        builderInner.setPositiveButton("Go to topic", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Word word = finalListResult1.get(which);
+                                                Maintopic maintopic = new Maintopic(0,word.getExample(),null,0,0);
+                                                Topic topic = new Topic(0,word.getTopic_Id(),word.getExample_VN(),null,0,0);
+                                                SaveObject.currentMaintopic = maintopic;
+                                                SaveObject.saveTopic=topic;
+                                                Intent intent = new Intent(context, Word_Activity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                                                context.startActivity(intent);
+                                            }
+                                        });
+
                                         builderInner.show();
                                     }
                                 });
