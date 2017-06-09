@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                floatingActionButton4.setLabelText("Thêm chủ đề chính");
+                floatingActionButton4.setLabelText("Add Maintopic");
                 floatingActionButton4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
