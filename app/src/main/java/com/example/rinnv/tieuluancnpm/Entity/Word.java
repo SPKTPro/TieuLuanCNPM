@@ -15,6 +15,7 @@ public class Word {
     private String Example;
     private String Example_VN;
     private String Word_Type;
+    public static String Maintopic_Tile;
 
     public Word(
             String Topic_Id,

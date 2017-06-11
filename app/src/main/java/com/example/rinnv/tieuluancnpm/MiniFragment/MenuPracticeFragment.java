@@ -204,8 +204,8 @@ public class MenuPracticeFragment {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 Word word = finalListResult1.get(which);
-                                                Maintopic maintopic = new Maintopic(0,word.getExample(),null,0,0);
-                                                Topic topic = new Topic(0,word.getTopic_Id(),word.getExample_VN(),null,0,0);
+                                                Maintopic maintopic = new Maintopic(word.getWord_Pronoun(),word.getExample(),word.Maintopic_Tile,0,0);
+                                                Topic topic = new Topic(word.getWord_Pronoun(),word.getTopic_Id(),word.getExample_VN(),null,0,0);
                                                 SaveObject.currentMaintopic = maintopic;
                                                 SaveObject.saveTopic=topic;
                                                 Intent intent = new Intent(context, Word_Activity.class);
