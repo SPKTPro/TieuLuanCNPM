@@ -30,6 +30,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.rinnv.tieuluancnpm.FrameWork.SaveObject.mTts;
 
@@ -49,6 +50,7 @@ public class Word_Activity extends AppCompatActivity {
     FloatingActionButton floatingActionButton1, floatingActionButton5, floatingActionButton4;
     final Context context = this;
     SQLiteDataController db;
+    private static ArrayList<Word> wordList;
 
     public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -83,44 +85,6 @@ public class Word_Activity extends AppCompatActivity {
 
     }
 
-    /*
-        public void showDetailWord(List<WordRelationShip> wordRelationShips, String Example,String ExampleVN){
-            AlertDialog.Builder builder = new AlertDialog.Builder(Word_Activity.this);
-            builder.setTitle("Modify Customer Details");
-            LayoutInflater inflater = getLayoutInflater();
-            View view = inflater.inflate(R.layout.custom_detail_dialog,);
-            builder.setView(view);
-            builder.create().show();
-
-
-            *//*Dialog dialog = new Dialog(Word_Activity.this);
-        dialog.setTitle("Title");
-        dialog.setContentView(R.layout.custom_detail_dialog);
-        TextView textEN = (TextView) dialog.findViewById(R.id.example_EN);
-        textEN.setText(Example);
-
-        TextView textVN = (TextView) dialog.findViewById(R.id.example_VN);
-        textVN.setText(ExampleVN);
-
-
-        // prepare the list of all records
-        List<HashMap<String, String>> fillMaps = new ArrayList<HashMap<String, String>>();
-        for (int i = 0; i < wordRelationShips.size(); i++) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put("Word_Title", wordRelationShips.get(i).getWord_Title());
-            map.put("Word_Title_VN", wordRelationShips.get(i).getWord_Title_VN());
-            fillMaps.add(map);
-        }
-        if (fillMaps.size() > 0) {
-
-            ListView listView = (ListView) dialog.findViewById(R.id.lst_relationship);
-            listView.setAdapter(new SimpleAdapter(Word_Activity.this, fillMaps, R.id.lst_relationship,
-                    new String[]{"Word_Title", "Word_Title_VN"}, new int[]{R.id.example_EN, R.id.example_VN}));
-        }
-        dialog.create();
-        dialog.show();*//*
-    }
-    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SPEECH_RECOGNITION_CODE && resultCode == RESULT_OK) {
@@ -181,16 +145,37 @@ public class Word_Activity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        String fucusItem = "123";
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                fucusItem = "";
+            } else {
+                fucusItem = extras.getString("Focus");
+            }
+        } else {
+            fucusItem = (String) savedInstanceState.getSerializable("Focus");
+        }
 
+        int positionFocus = 0;
         setTitle(SaveObject.currentMaintopic.getMaintopic_Tittle());
         toolbar.setSubtitle(SaveObject.saveTopic.getTopic_Title());
 
         db = new SQLiteDataController(this);
-        adapterWord = new Adapter_Word(this, db.getListWord(SaveObject.saveTopic), Word_Activity.this);
-
+        wordList = db.getListWord(SaveObject.saveTopic);
+        if (fucusItem.length() > 0) {
+            for (Word word : wordList) {
+                if (word.getWord_Title().toLowerCase().equals(fucusItem.toLowerCase())) {
+                    positionFocus = wordList.indexOf(word);
+                    break;
+                }
+            }
+        }
+        adapterWord = new Adapter_Word(this, wordList, Word_Activity.this);
 
         listView_Word = (GridView) findViewById(R.id.list_item);
         listView_Word.setAdapter(adapterWord);
+        listView_Word.setSelection(positionFocus);
 
         listView_Word.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

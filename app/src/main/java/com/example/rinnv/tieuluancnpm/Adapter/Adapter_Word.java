@@ -27,6 +27,7 @@ import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
 import com.example.rinnv.tieuluancnpm.MiniFragment.MenuWordFragment;
 import com.example.rinnv.tieuluancnpm.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -37,7 +38,7 @@ import static android.content.ContentValues.TAG;
 
 
 public class Adapter_Word extends BaseAdapter {
-    private ArrayList<Word> items;
+    public ArrayList<Word> items;
     private LayoutInflater itemInflater;
     private Context mContext;
     private View dialogView;
@@ -67,6 +68,7 @@ public class Adapter_Word extends BaseAdapter {
         star2 = (ImageView) dialogView.findViewById(R.id.star2);
         star3 = (ImageView) dialogView.findViewById(R.id.star3);
     }
+
 
     @Override
     public long getItemId(int position) {
