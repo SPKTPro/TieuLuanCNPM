@@ -70,7 +70,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         try {
             SQLiteDatabase db = getReadableDatabase();
             curCSV = db.rawQuery("SELECT * FROM MainTopic", null);
-            String time = DateFormat.getDateTimeInstance().format(new Date()).toString();
+            CharSequence  charSequence = "";
+            String time = DateFormat.getDateTimeInstance().format(new Date()).toString().trim().replace(" ","-").replace(":","-").replace(",","-");
             String fileName = time + ".xls";
             Workbook wb = new HSSFWorkbook();
             Cell cell = null;
@@ -165,16 +166,24 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 sheet1.setColumnWidth(i, (15 * 500));
             }
             curCSV.close();
-
+            Log.d(TAG, "exportDB: "+fileName);
             try {
                 // Create a path where we will place our List of objects on external storage
                 //File file = new File(Environment.getExternalStorageDirectory(), fileName);
                 File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), fileName);
+                if (!file.exists()){
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                }
                 FileOutputStream os = new FileOutputStream(file);
                 wb.write(os);
                 return "Export successful! File location is: " + file.getAbsolutePath();
-            } catch (FileNotFoundException ex) {
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+            } catch (Exception ex) {
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), fileName);
+                if (!file.exists()){
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                }
                 FileOutputStream os = new FileOutputStream(file);
                 wb.write(os);
                 return "Export successful! File location is: " + file.getAbsolutePath();
@@ -186,7 +195,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             Log.e(TAG, "exportDB: ", ex);
             return "Export fail with error: " + ex.getMessage();
         } finally {
-
             curCSV.close();
             close();
         }
@@ -387,8 +395,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             if (cs != null)
                 cs.close();
-            close();
-            Log.e(TAG, "getWordID: ", e);
             return null;
         }
 
@@ -411,7 +417,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
         return null;
     }
@@ -432,7 +437,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
     }
 
@@ -516,7 +520,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             if (cs != null)
                 cs.close();
-            close();
             e.printStackTrace();
         }
         return x;
@@ -539,7 +542,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             if (cs != null)
                 cs.close();
-            close();
+
             e.printStackTrace();
         }
         return x;
@@ -563,7 +566,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             if (cs != null)
                 cs.close();
-            close();
+
             e.printStackTrace();
         }
         return x;
@@ -593,7 +596,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
+
         }
         return x;
     }
@@ -615,7 +618,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
+
         }
         return x;
     }
@@ -664,7 +667,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     public void openDataBase() throws Exception {
         try {
-
             database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null,
                     SQLiteDatabase.OPEN_READWRITE);
         } catch (Exception e) {
@@ -690,28 +692,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         // do nothing
     }
 
-    public int deleteData_From_Table(String tbName) {
-
-        int result = 0;
-        try {
-            {
-                openDataBase();
-            }
-            database.beginTransaction();
-            result = database.delete(tbName, null, null);
-            if (result >= 0) {
-                database.setTransactionSuccessful();
-            }
-        } catch (Exception e) {
-            database.endTransaction();
-            close();
-        } finally {
-            database.endTransaction();
-            close();
-        }
-
-        return result;
-    }
 
     public ArrayList<Maintopic> getListMainTopic() {
 
@@ -732,7 +712,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
+
         }
         Collections.sort(listMainTopic, new Comparator<Maintopic>() {
             @Override
@@ -802,7 +782,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cx != null)
                 cx.close();
-            close();
+
         }
     }
 
@@ -820,7 +800,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            close();
+
         }
     }
 
@@ -843,7 +823,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
 
         Collections.sort(list, new Comparator<Word>() {
@@ -876,7 +855,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
 
         Collections.sort(list, new Comparator<Word>() {
@@ -910,7 +888,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
         Collections.sort(list, new Comparator<Word>() {
             @Override
@@ -925,60 +902,45 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     public void deleteRelationShip(WordRelationShip wordRelationShip) {
         try {
-
-            {
                 openDataBase();
-            }
+
             String query = "delete from Relationship  Where Word_Title = '" + wordRelationShip.getWord_Title() + "'";
             database.execSQL(query);
             // List cs = GetRalationShipWord(wordRelationShip.getWord_Root());
         } catch (Exception e) {
-
             Log.d(TAG, "deleteRelationShop: " + e.getMessage());
-        } finally {
-            close();
         }
     }
 
     private void deleteRelationshipByRootId(int rootId) {
         try {
-            {
-                openDataBase();
-            }
+            openDataBase();
             database.execSQL("delete from Relationship  Where Root = '" + rootId + "'");
 
         } catch (Exception e) {
             Log.d(TAG, "deleteRelationShop: " + e.getMessage());
-        } finally {
-            close();
         }
     }
 
     public void deleteWord(Word word) {
         Cursor cs = null;
         try {
-            {
-                openDataBase();
-            }
-
+            openDataBase();
             database.execSQL("delete from  Word where word.Word_Id = '" + word.getWord_Id() + "'");
             deleteRelationshipByRootId(word.getWord_Id());
             cs = database.rawQuery("select * from Word where word.Topic_Id ='" + word.getTopic_Id().toString() + "'", null);
             int x = cs.getCount();
-
-
             ContentValues values = new ContentValues();
             values.put("Count_Word", x);
+            database.update("Topic", values, "Topic_Id='" + word.getTopic_Id() + "'", null);
 
-            int rs = database.update("Topic", values, "Topic_Id='" + word.getTopic_Id() + "'", null);
-
+            Log.d(TAG, "deleteWord: delete complete word: "+word.getWord_Title());
 
         } catch (Exception e) {
-            Log.d("Tag", "deleteWord: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
     }
 
@@ -986,9 +948,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         ArrayList<Word> list = new ArrayList<>();
         Cursor cs = null;
         try {
-            {
-                openDataBase();
-            }
+            openDataBase();
             cs = database.rawQuery("select * from Word where Word.Topic_Id = '" + topic.getTopic_Id() + "'", null);
             Word word;
             while (cs.moveToNext()) {
@@ -1013,20 +973,17 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
 
         } catch (Exception e) {
-            Log.d("Tag", "deleteWord: " + e.getMessage());
+            Log.d("Tag", "deleteWord: topic" + e.getMessage());
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
     }
 
     public void deleteMaintopic(Maintopic maintopic) {
         Cursor cs = null;
         try {
-            {
-                openDataBase();
-            }
+            openDataBase();
             ArrayList<Topic> listTopic = new ArrayList<>();
             cs = database.rawQuery("select * from Topic where Topic.MainTopic_Id = '" + maintopic.getMaintopic_ID() + "'", null);
             Topic topic;
@@ -1043,11 +1000,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("Tag", "deleteWord: maintopic " + e.getMessage());
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
     }
 

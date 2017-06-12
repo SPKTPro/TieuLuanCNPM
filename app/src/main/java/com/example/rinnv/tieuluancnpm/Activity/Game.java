@@ -213,41 +213,36 @@ public class Game extends AppCompatActivity {
             dialog.show();
      //       TextView textQues = (TextView) dialog.findViewById(R.id.txt);
 
+
+
             Button dialogButtonOK = (Button) dialog.findViewById(R.id.button);
             final Button dialogButtonOK1 = (Button) dialog1.findViewById(R.id.buttonOK);
             Button dialogButtonOK2 = (Button) dialog1.findViewById(R.id.buttonCancel);
             final int maxScore = Integer.parseInt(Max);
 
+            if (score > maxScore) {
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
+                        edit().putString("MaxScore", score + "").commit();
+                Max= PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore", "0");
+                max.setText(Max);
+            }
 
             dialogButtonOK.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (score > maxScore) {
-                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
-                                edit().putString("MaxScore", score + "").commit();
-                        Max= PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore", "0");
-                        max.setText(Max);
-                    }
                     Score = 0;
-
                     dialog1.show();
                     dialog.dismiss();
-
-
                 }
             });
             dialogButtonOK1.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     //Làm code chỗ này
-
-
                    SQLiteDataController db = new SQLiteDataController(getApplicationContext());
-
                     // them tu vao learn word
                     db.CheckWord(true,word1);
                     // them tu vao remind word
-
                     db.CheckWordRemind(true,word1);
 
                     PrepareforGame();
