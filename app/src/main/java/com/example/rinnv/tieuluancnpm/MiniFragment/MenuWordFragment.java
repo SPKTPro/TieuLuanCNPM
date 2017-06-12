@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +12,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.rinnv.tieuluancnpm.Activity.Word_Activity;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_RelationshipWord;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Remember;
 import com.example.rinnv.tieuluancnpm.Adapter.Adapter_Word;
+import com.example.rinnv.tieuluancnpm.Entity.Maintopic;
+import com.example.rinnv.tieuluancnpm.Entity.Topic;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.Entity.WordRelationShip;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
@@ -103,5 +107,23 @@ public class MenuWordFragment {
                 })
                 .setNegativeButton("Hủy", null)
                 .show();
+    }
+
+    // this is only called in remind page
+    public void createGotoWordDetail(final Context context, final Word wordinput )
+    {
+        ArrayList<Word> listResult = new ArrayList<Word>();
+        listResult = db.SearchWord(wordinput.getWord_Title().trim().toUpperCase());
+        Word detailWord = listResult.get(0);
+
+        Maintopic maintopic = new Maintopic(detailWord.getWord_Pronoun(),detailWord.getExample(),detailWord.Maintopic_Tile,0,0);
+        Topic topic = new Topic(detailWord.getWord_Pronoun(),detailWord.getTopic_Id(),detailWord.getExample_VN(),null,0,0);
+        SaveObject.currentMaintopic = maintopic;
+        SaveObject.saveTopic=topic;
+        Intent intent = new Intent(context, Word_Activity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Focus", detailWord.getWord_Title());
+        context.startActivity(intent);
+
     }
 }

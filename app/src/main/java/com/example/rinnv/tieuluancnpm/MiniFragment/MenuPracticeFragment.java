@@ -55,7 +55,7 @@ import static com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType.Topic;
  */
 
 public class MenuPracticeFragment {
-    public static class Item{
+    /*public static class Item{
         public final String text;
         public final int icon;
         public Item(String text, Integer icon) {
@@ -66,7 +66,7 @@ public class MenuPracticeFragment {
         public String toString() {
             return text;
         }
-    }
+    }*/
     public void createMenuPractice(final Context context, final String level) {
      //   CharSequence[] array = {"Game 1", "Game 2", "Game chinh ta"};
         final Adapter_Word.Item[] items = {
