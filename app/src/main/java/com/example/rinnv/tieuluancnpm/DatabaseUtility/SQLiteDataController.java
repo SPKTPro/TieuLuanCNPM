@@ -1299,8 +1299,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                     "FROM Word,Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Word.Topic_Id = Topic.Topic_Id ) Where Word_Title LIKE '%" + s
                     + "%'  or Word_Title_VN like  '%" + s + "%'";
             cs = database.rawQuery(query, null);
-            Log.d(TAG, "SearchWord: " + query);
 
+            Log.d(TAG, "SearchWord: " + query);
             Word word;
             while (cs.moveToNext()) {
                 word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
@@ -1309,12 +1309,19 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 word.Maintopic_Tile = cs.getString(8);
                 list.add(word);
             }
-            query = "Select * from Relationship Where Word_Title LIKE '%" + s + "%'  or Word_Title_VN like  '%" + s + "%'";
+
+
+            query="Select Word.Topic_ID, Relationship.Root, Relationship.Word_Title, Relationship.Word_Title_VN,MainTopic.MainTopic_Id, MainTopic.MainTopic_Title,Topic.Topic_Title , Relationship.Type_Word,MainTopic.MainTopic_Title_VN"+
+                    " from Relationship,Word,Topic,MainTopic Where (Relationship.Word_Title LIKE '%" + s + "%'  or Relationship.Word_Title_VN like  '%" + s + "%')" +
+                    " and Word.Word_Id = Relationship.Root and Topic.MainTopic_Id = MainTopic.MainTopic_Id and Word.Topic_Id = Topic.Topic_Id ";
+            Log.d(TAG, "SearchWord: " + query);
             cs = database.rawQuery(query, null);
 
             while (cs.moveToNext()) {
-                word = new Word("", 0, cs.getString(1).toUpperCase(),
-                        cs.getString(2), 0, "", "", 0, 0, cs.getString(3));
+                word = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
+                        cs.getString(3), 0, cs.getString(5),
+                        cs.getString(6), 0, cs.getInt(4), cs.getString(7));
+                word.Maintopic_Tile = cs.getString(8);
                 list.add(word);
             }
 
