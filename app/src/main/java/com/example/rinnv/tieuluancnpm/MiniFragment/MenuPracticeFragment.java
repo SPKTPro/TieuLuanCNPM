@@ -166,7 +166,7 @@ public class MenuPracticeFragment {
                                         TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                                         TextView text2 = (TextView) view.findViewById(android.R.id.text2);
 
-                                        text1.setText(finalListResult1.get(position).getWord_Title().toString());
+                                        text1.setText(finalListResult1.get(position).getWord_Title().toString()+finalListResult1.get(position).getWord_Type());
                                         text2.setText(finalListResult1.get(position).getWord_Title_VN().toString());
                                         return view;
                                     }
@@ -182,7 +182,8 @@ public class MenuPracticeFragment {
                                 builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, final int which) {
-                                        String strName = finalListResult1.get(which).getWord_Title().toString();
+                                        Word word = finalListResult1.get(which);
+                                        String strName = word.getWord_Title().toString()+word.getWord_Type();
                                         String strMean = finalListResult1.get(which).getWord_Title_VN().toString();
                                         String mainTopic = "", Topics = "";
                                         if (finalListResult1.get(which).getExample().toString().length() > 0) {
