@@ -145,16 +145,16 @@ public class Word_Activity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String fucusItem = "123";
+        int fucusItem = 0;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
-                fucusItem = "";
+                fucusItem = 0;
             } else {
-                fucusItem = extras.getString("Focus");
+                fucusItem = extras.getInt("Focus");
             }
         } else {
-            fucusItem = (String) savedInstanceState.getSerializable("Focus");
+            fucusItem = (int) savedInstanceState.getSerializable("Focus");
         }
 
         int positionFocus = 0;
@@ -163,9 +163,9 @@ public class Word_Activity extends AppCompatActivity {
 
         db = new SQLiteDataController(this);
         wordList = db.getListWord(SaveObject.saveTopic);
-        if (fucusItem.length() > 0) {
+        if (fucusItem != 0) {
             for (Word word : wordList) {
-                if (word.getWord_Title().toLowerCase().equals(fucusItem.toLowerCase())) {
+                if (word.getWord_Id() == fucusItem) {
                     positionFocus = wordList.indexOf(word);
                     break;
                 }
