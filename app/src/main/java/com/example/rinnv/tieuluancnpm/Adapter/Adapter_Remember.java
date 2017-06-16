@@ -131,7 +131,7 @@ public class Adapter_Remember extends BaseAdapter {
                         new Adapter_Word.Item("See relationship", R.drawable.detail2),
                         new Adapter_Word.Item("Add relationship", R.drawable.add),
                         new Adapter_Word.Item("Delete this word", R.drawable.del2),
-                        new Adapter_Word.Item("Go to topic",R.drawable.detail2 )
+                        new Adapter_Word.Item("Go to topic",R.drawable.goto2)
                 };
 
                 ListAdapter adapter = new ArrayAdapter<Adapter_Word.Item>(
