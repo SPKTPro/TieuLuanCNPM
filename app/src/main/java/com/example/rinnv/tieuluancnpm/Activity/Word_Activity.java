@@ -95,7 +95,7 @@ public class Word_Activity extends AppCompatActivity {
                 if (matches_text.size() > 0) {
                     String[] matches_text2 = matches_text.toArray(new String[matches_text.size()]);
 
-                    Toast.makeText(this.context, matches_text2[0] + " " + matches_text2[1] + " " + matches_text2[2] + " " + your_word, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.context, matches_text2[0] + " " + matches_text2[1] + " " + matches_text2[2], Toast.LENGTH_SHORT).show();
                     int a = 0;
 
                     // chua bat truong hop matches_text2 khong có hoac chi co 1 2 từ
