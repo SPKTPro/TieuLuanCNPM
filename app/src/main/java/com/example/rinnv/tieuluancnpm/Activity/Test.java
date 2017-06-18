@@ -253,17 +253,18 @@ public class Test extends AppCompatActivity {
             TextView text = (TextView) dialog.findViewById(R.id.textView);
             text.setText(Score + "");
             final int maxScore = Integer.parseInt(Max);
+            if (Score > maxScore) {
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
+                        edit().putString("MaxScore2", Score + "").commit();
+                Max = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore2", "0");
+                max.setText(Max);
+            }
             Button dialogButton = (Button) dialog.findViewById(R.id.button);
             // if button is clicked, close the custom dialog
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Score > maxScore) {
-                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
-                                edit().putString("MaxScore2", Score + "").commit();
-                        Max = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore2", "0");
-                        max.setText(Max);
-                    }
+
                     Score = 0;
                     PrepareforGame();
                     dialog1.show();

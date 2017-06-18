@@ -324,15 +324,24 @@ public class MainActivity extends AppCompatActivity {
 
                     final FloatingActionMenu materialDesignFAM;
                     com.github.clans.fab.FloatingActionButton floatingActionButton1;
+                    com.github.clans.fab.FloatingActionButton floatingActionButton5;
 
 
                     materialDesignFAM = (FloatingActionMenu) rootView.findViewById(R.id.material_design_android_floating_action_menu);
                     floatingActionButton1 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action1);
+                    floatingActionButton5 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action5);
 
                     floatingActionButton1.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             materialDesignFAM.close(false);
                             new MenuPracticeFragment().createMenuPractice(container.getContext(), PracticeType.onlyRemindWord);
+
+                        }
+                    });
+                    floatingActionButton5.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(final View v) {
+                            materialDesignFAM.close(false);
+                            new MenuPracticeFragment().createMenuSearchWord(container.getContext());
 
                         }
                     });
