@@ -261,6 +261,8 @@ public class MenuPracticeFragment {
         final EditText Type = (EditText) promptsView.findViewById(R.id.loaitu);
         if (itemType == CreateItemType.Maintopic || itemType == Topic) {
             {
+                Type.setHeight(0);
+                Type.setHint("");
                 Type.setVisibility(View.INVISIBLE);
             }
         }
