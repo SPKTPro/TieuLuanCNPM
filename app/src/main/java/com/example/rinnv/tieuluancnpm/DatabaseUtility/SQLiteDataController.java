@@ -55,6 +55,12 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     public SQLiteDatabase database;
     private final Context mContext;
 
+    @Override
+    protected void finalize() throws Throwable {
+        this.close();
+        super.finalize();
+    }
+
     public SQLiteDataController(Context context) {
         super(context, DB_NAME, null, 1);
         DB_PATH = String.format(DB_PATH, context.getPackageName());
@@ -281,7 +287,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 String TopicSting = TopicRow.getCell(2).getStringCellValue();
 
                 if (!isWordExist(TopicSting, value.get(2))) {
-                    importWord(value.get(2), value.get(3), value.get(0), mySheetTopic, mySheetMainTopic);
+                    importWord(value.get(2), value.get(3), value.get(0), mySheetTopic, mySheetMainTopic,value.get(9));
                 }
             }
 
@@ -331,7 +337,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     }
 
-    private void importWord(String wordEN, String WordVN, String TopicID, HSSFSheet mySheetTopic, HSSFSheet mySheetMainTopic) {
+    private void importWord(String wordEN, String WordVN, String TopicID, HSSFSheet mySheetTopic, HSSFSheet mySheetMainTopic,String WordType) {
         Log.d(TAG, "importX: word " + wordEN + "|" + WordVN + "|" + TopicID);
         try {
             Row rowFilter = null;
@@ -341,8 +347,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
                 String TopicEN = rowFilter.getCell(2).getStringCellValue();
                 String TopicVN = rowFilter.getCell(3).getStringCellValue();
                 String MainTopicID = rowFilter.getCell(0).getStringCellValue();
-                String WordType = rowFilter.getCell(9).getStringCellValue();
-
                 Row maintopicRow = findMainTopicRow(mySheetMainTopic, MainTopicID);
                 String MainTopic = maintopicRow.getCell(1).getStringCellValue();
                 if (isTopicExist(MainTopic, TopicEN)) {
@@ -576,12 +580,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         boolean x = false;
         Cursor cs = null;
         try {
-
             openDataBase();
-
-            String query = "SELECT * FROM Topic,Word where Topic.Topic_Id = Word.Topic_Id and Word_Title = "
-                    + '"' + word.toUpperCase() + '"' +
-                    " and Topic_Title = " + '"' + topic.toUpperCase() + '"';
+            String query = "SELECT * FROM Topic,Word where Topic.Topic_Id = Word.Topic_Id and Word_Title = " + '"' + word.toUpperCase() + '"' +" and Topic_Title = " + '"' + topic.toUpperCase() + '"';
             cs = database.rawQuery(query, null);
             if (cs.getCount() > 0) {
                 x = true;
@@ -667,12 +667,13 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
     public void openDataBase() throws Exception {
         try {
+            if (database.isOpen())
+                database.close();
             database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null,
                     SQLiteDatabase.OPEN_READWRITE);
         } catch (Exception e) {
             Log.d(TAG, "openDataBase: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -728,7 +729,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     public void CheckWord(boolean ischeck, Word word) {
         Cursor cx = null;
         try {
-            getReadableDatabase();
+            openDataBase();
             // thay cờ check đả học hay chưa
             ContentValues values = new ContentValues();
             values.put("Word_check", ischeck ? 1 : 0);
@@ -839,9 +840,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         ArrayList<Word> list = new ArrayList<>();
         Cursor cs = null;
         try {
-            {
-                getReadableDatabase();
-            }
+           openDataBase();
             cs = database.rawQuery("select * from Word where Word.Word_Remind = 1", null);
             Word topic;
             while (cs.moveToNext()) {
@@ -1259,7 +1258,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } finally {
             if (cs != null)
                 cs.close();
-            close();
         }
         Log.d(TAG, "insertWord: " + result);
         return result;

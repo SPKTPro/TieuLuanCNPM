@@ -52,17 +52,7 @@ public class Word_Activity extends AppCompatActivity {
     SQLiteDataController db;
     private static ArrayList<Word> wordList;
 
-    public boolean isConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo net = cm.getActiveNetworkInfo();
-        if (net != null && net.isAvailable() && net.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void startSpeechToText(String word) {
+        public void startSpeechToText(String word) {
         your_word = word;
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,

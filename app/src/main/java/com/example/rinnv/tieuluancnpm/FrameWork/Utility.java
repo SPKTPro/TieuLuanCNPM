@@ -1,5 +1,8 @@
 package com.example.rinnv.tieuluancnpm.FrameWork;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.util.Xml;
 
@@ -80,7 +83,7 @@ public class Utility {
         } catch (XmlPullParserException e) {
             Log.e(TAG, "XmlPullParserException", e);
 
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             Log.d(TAG, "InterruptedException", e);
         } finally {
             if (con != null) {
@@ -89,6 +92,15 @@ public class Utility {
         }
         // All done
         return messages;
+    }
+    public static boolean isConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        NetworkInfo net = cm.getActiveNetworkInfo();
+        if (net != null && net.isAvailable() && net.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

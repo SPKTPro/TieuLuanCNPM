@@ -122,7 +122,7 @@ public class MenuWordFragment {
         SaveObject.saveTopic=topic;
         Intent intent = new Intent(context, Word_Activity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("Focus", detailWord.getWord_Title());
+        intent.putExtra("Focus", detailWord.getWord_Id());
         context.startActivity(intent);
 
     }

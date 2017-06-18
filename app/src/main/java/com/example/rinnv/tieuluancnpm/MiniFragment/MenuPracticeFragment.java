@@ -261,9 +261,7 @@ public class MenuPracticeFragment {
         final EditText Type = (EditText) promptsView.findViewById(R.id.loaitu);
         if (itemType == CreateItemType.Maintopic || itemType == Topic) {
             {
-                Type.setHeight(0);
-                Type.setHint("");
-                Type.setClickable(false);
+                Type.setVisibility(View.INVISIBLE);
             }
         }
         // set dialog message
@@ -278,9 +276,55 @@ public class MenuPracticeFragment {
                         }
 
                         if (itemType == CreateItemType.Maintopic || itemType == Topic) {
-                            createSnackBar(context, rootView, Maintopic_EN.getText().toString().trim(),
-                                    Maintopic_VN.getText().toString().trim(), null,itemType);
-                            return;
+
+                            final String ITemEN = Maintopic_EN.getText().toString().trim();
+                            final String ITemVN = Maintopic_VN.getText().toString().trim();
+                            final List<String> suggestWord = Utility.CheckWord(ITemEN);
+                            if (!suggestWord.contains(ITemEN) && suggestWord.size() > 0) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setIconAttribute(android.R.attr.alertDialogIcon)
+                                        .setTitle("Which word do you mean ?")
+                                        .setItems(suggestWord.toArray(new String[suggestWord.size()]),
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        final String wordEN = suggestWord.get(i);
+                                                        createItem(context, wordEN, ITemVN.trim(),Type.getText().toString().trim()
+                                                                , itemType);
+                                                    }
+                                                }).create().show();
+
+                            } else {
+                                if (suggestWord.contains(ITemEN)) {
+                                    createSnackBar(context, rootView, ITemEN, Maintopic_VN.getText().toString().trim(),
+                                            Type.getText().toString().trim() ,itemType);
+                                } else {
+                                    if (suggestWord.size() == 0) {
+                                        String message = "This word may be misspelled. Are you sure to save ?";
+                                        if (!Utility.isConnected(context))
+                                            message = "There is no Internet connection. \n " + message;
+                                        new AlertDialog.Builder(context)
+                                                .setTitle("Confirm")
+                                                .setMessage(message)
+                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        createSnackBar(context, rootView, ITemEN,
+                                                                ITemVN,Type.getText().toString().trim(), itemType);
+                                                    }
+                                                })
+                                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                    }
+                                                })
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+                                    }
+                                }
+
+                            }
+
+
                         }
                         //add word function
                         if (itemType == CreateItemType.Word) {
@@ -308,7 +352,7 @@ public class MenuPracticeFragment {
                                 } else {
                                     if (suggestWord.size() == 0) {
                                         String message = "This word may be misspelled. Are you sure to save ?";
-                                        if (!((Word_Activity) context).isConnected())
+                                        if (!Utility.isConnected(context))
                                             message = "There is no Internet connection. \n " + message;
                                         new AlertDialog.Builder(context)
                                                 .setTitle("Confirm")

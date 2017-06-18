@@ -24,6 +24,7 @@ import com.example.rinnv.tieuluancnpm.Activity.Word_Activity;
 import com.example.rinnv.tieuluancnpm.DatabaseUtility.SQLiteDataController;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
+import com.example.rinnv.tieuluancnpm.FrameWork.Utility;
 import com.example.rinnv.tieuluancnpm.MiniFragment.MenuWordFragment;
 import com.example.rinnv.tieuluancnpm.R;
 
@@ -135,7 +136,7 @@ public class Adapter_Word extends BaseAdapter {
         btnPronoun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (((Word_Activity) mContext).isConnected()) {
+                if (Utility.isConnected(mContext)) {
                     ResetStar();
                     dialog.dismiss();
                     ((Word_Activity) mContext).startSpeechToText(selectedWord);
