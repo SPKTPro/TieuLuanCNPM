@@ -3,6 +3,7 @@ package com.example.rinnv.tieuluancnpm.FrameWork;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.StrictMode;
 import android.util.Log;
 import android.util.Xml;
 
@@ -26,10 +27,22 @@ public class Utility {
     public static List<String> CheckWord(String original) {
         List<String> messages = new LinkedList<>();
         HttpURLConnection con = null;
+
+
         try {
             // Check if task has been interrupted
             if (Thread.interrupted())
                 throw new InterruptedException();
+
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+            if (SDK_INT > 8)
+            {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                //your codes here
+
+            }
 
             // Build RESTful query for Google API
             String q = URLEncoder.encode(original, "UTF-8");
@@ -77,12 +90,6 @@ public class Utility {
             // Check if task has been interrupted
             if (Thread.interrupted())
                 throw new InterruptedException();
-
-        } catch (IOException e) {
-            Log.e(TAG, "IOException", e);
-        } catch (XmlPullParserException e) {
-            Log.e(TAG, "XmlPullParserException", e);
-
         } catch (Exception e) {
             Log.d(TAG, "InterruptedException", e);
         } finally {
