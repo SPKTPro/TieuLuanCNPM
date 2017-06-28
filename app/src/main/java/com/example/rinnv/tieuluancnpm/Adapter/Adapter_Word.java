@@ -209,6 +209,7 @@ public class Adapter_Word extends BaseAdapter {
                 new Item("See relationship", R.drawable.detail2),
                 new Item("Add relationship", R.drawable.add),
                 new Item("Delete this word", R.drawable.del2),//no icon for this one
+                new Item("Copy to",  R.drawable.detail2)
         };
 
         ListAdapter adapter = new ArrayAdapter<Item>(
@@ -237,13 +238,16 @@ public class Adapter_Word extends BaseAdapter {
                 switch (which)
                 {
                     case 0:
-                        new MenuWordFragment().createDetailView(mContext,parentActivity,word);
+                         MenuWordFragment.createDetailView(mContext,parentActivity,word);
                         break;
                     case 1:
-                        new MenuWordFragment().createAddRelationShipView(mContext,word);
+                         MenuWordFragment.createAddRelationShipView(mContext,word);
                         break;
                     case 2:
-                        new MenuWordFragment().createDeleteWordView(mContext,word,false);
+                         MenuWordFragment.createDeleteWordView(mContext,word,false);
+                        break;
+                    case 3:
+                        MenuWordFragment.createCopyView(mContext, word,true);
                         break;
                     default:
                         break;
