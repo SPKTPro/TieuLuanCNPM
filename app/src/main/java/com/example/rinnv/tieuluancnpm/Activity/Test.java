@@ -54,7 +54,7 @@ public class Test extends AppCompatActivity {
         String level = bundle.getString("level");
         Max= PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("MaxScore2", "0");
 
-        SQLiteDataController db = new SQLiteDataController(this);
+        SQLiteDataController db = SQLiteDataController.GetSQLController();
         // level = topic thì lấy tat ca cac từ trong topic đó,
         // level = maintopic thi lay tat ca cac tu trong maintopic do
         startQuiz = 0;
@@ -233,7 +233,7 @@ public class Test extends AppCompatActivity {
                     }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            SQLiteDataController db = new SQLiteDataController(getApplicationContext());
+                            SQLiteDataController db = SQLiteDataController.GetSQLController();
                             for (int i = 0; i < seletedItems.size(); i++) {
                                 db.CheckWord(true, listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));
                                 db.CheckWordRemind(true, listWrongWord.get(Integer.parseInt(seletedItems.get(i).toString())));

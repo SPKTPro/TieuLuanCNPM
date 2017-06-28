@@ -32,7 +32,7 @@ public class LockScreenService extends Service {
         lock.disableKeyguard();
 
 
-        SQLiteDataController db = new SQLiteDataController(this);
+        SQLiteDataController db = SQLiteDataController.GetSQLController();
         SaveObject.remindWord = db.getListRemindWord();
 
         //Start listening for the Screen On, Screen Off, and Boot completed actions

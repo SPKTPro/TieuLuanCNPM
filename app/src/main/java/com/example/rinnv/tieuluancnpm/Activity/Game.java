@@ -47,7 +47,7 @@ public class Game extends AppCompatActivity {
         String level = bundle.getString("level");
         typeQuiz = bundle.getInt("type");
 
-        SQLiteDataController db = new SQLiteDataController(this);
+        SQLiteDataController db =  SQLiteDataController.GetSQLController();
         // level = topic thì lấy tat ca cac từ trong topic đó,
         // level = maintopic thi lay tat ca cac tu trong maintopic do
 
@@ -239,7 +239,7 @@ public class Game extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //Làm code chỗ này
-                   SQLiteDataController db = new SQLiteDataController(getApplicationContext());
+                   SQLiteDataController db =  SQLiteDataController.GetSQLController();
                     // them tu vao learn word
                     db.CheckWord(true,word1);
                     // them tu vao remind word

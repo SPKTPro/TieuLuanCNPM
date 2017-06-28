@@ -86,7 +86,7 @@ public class LockScreenActivity extends AppCompatActivity {
         final TextView txtEN = (TextView) findViewById(R.id.txtEN);
 
         Word x = null;
-        final SQLiteDataController db = new SQLiteDataController(this);
+        final SQLiteDataController db = SQLiteDataController.GetSQLController();
         try {
             int Min = 1, Max = SaveObject.remindWord.size();
             int result = Min + (int) (Math.random() * ((Max - Min) + 1)) -1;
@@ -137,7 +137,7 @@ public class LockScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 db.CheckWordRemind(false, finalX1);
-                SQLiteDataController db = new SQLiteDataController(LockScreenActivity.this);
+                SQLiteDataController db = SQLiteDataController.GetSQLController();
                 SaveObject.remindWord = db.getListRemindWord();
                 Log.d(TAG, "onClick: "+SaveObject.remindWord.size());
                 Toast.makeText(LockScreenActivity.this, "Đã xóa khỏi danh sách nhắc từ", Toast.LENGTH_LONG).show();

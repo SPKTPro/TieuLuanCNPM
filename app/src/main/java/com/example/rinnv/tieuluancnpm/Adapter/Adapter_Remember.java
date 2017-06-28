@@ -67,7 +67,7 @@ public class Adapter_Remember extends BaseAdapter {
         TextView titleView = (TextView) Layout.findViewById(R.id.itemtitle);
         TextView titleView2 = (TextView) Layout.findViewById(R.id.itemtitle2);
         ImageButton detail = (ImageButton) Layout.findViewById(R.id.btn_detail);
-        final SQLiteDataController db = new SQLiteDataController(parent.getContext());
+        final SQLiteDataController db = SQLiteDataController.GetSQLController();
 
 
         final Word item = items.get(position);

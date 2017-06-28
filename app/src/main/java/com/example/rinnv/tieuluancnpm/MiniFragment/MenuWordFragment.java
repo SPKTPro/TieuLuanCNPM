@@ -136,7 +136,7 @@ public class MenuWordFragment {
             Dialog dialog = null;
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContext);
             dialogBuilder.setTitle("Maintopic: ");
-            final List<Maintopic> maintopics = new SQLiteDataController(mContext).getListMainTopic();
+            final List<Maintopic> maintopics = SQLiteDataController.GetSQLController().getListMainTopic();
             CharSequence[] ms = new CharSequence[maintopics.size()];
 
             for (int i = 0; i < maintopics.size(); i++) {
@@ -161,7 +161,7 @@ public class MenuWordFragment {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setTitle("Detail: ");
-        final List<Topic> topics = new SQLiteDataController(context).getListTopic(maintopic);
+        final List<Topic> topics = SQLiteDataController.GetSQLController().getListTopic(maintopic);
         CharSequence[] ms = new CharSequence[topics.size()];
         for (int i = 0; i < topics.size(); i++) {
             ms[i] = topics.get(i).getTopic_Title();

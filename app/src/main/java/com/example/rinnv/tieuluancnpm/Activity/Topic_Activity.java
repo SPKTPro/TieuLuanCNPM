@@ -46,7 +46,7 @@ public class Topic_Activity extends AppCompatActivity {
         setTitle(Maintopic_choosen.getMaintopic_Tittle() + " - " + Maintopic_choosen.getMaintopic_Tittle_VN());
 
 
-        final SQLiteDataController db = new SQLiteDataController(this);
+        final SQLiteDataController db = SQLiteDataController.GetSQLController();
         listView_Topic = (GridView) findViewById(R.id.list_item);
         adapter_topic = new Adapter_Topic(this, db.getListTopic(Maintopic_choosen));
         listView_Topic.setAdapter(adapter_topic);

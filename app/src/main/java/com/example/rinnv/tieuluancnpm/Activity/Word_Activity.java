@@ -151,7 +151,7 @@ public class Word_Activity extends AppCompatActivity {
         setTitle(SaveObject.currentMaintopic.getMaintopic_Tittle());
         toolbar.setSubtitle(SaveObject.saveTopic.getTopic_Title());
 
-        db = new SQLiteDataController(this);
+        db = SQLiteDataController.GetSQLController();
         wordList = db.getListWord(SaveObject.saveTopic);
         if (fucusItem != 0) {
             for (Word word : wordList) {

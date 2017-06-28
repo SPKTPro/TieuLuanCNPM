@@ -1,5 +1,6 @@
 package com.example.rinnv.tieuluancnpm.FrameWork;
 
+import android.content.Context;
 import android.speech.tts.TextToSpeech;
 
 import com.example.rinnv.tieuluancnpm.Entity.Maintopic;
@@ -19,6 +20,6 @@ public class SaveObject {
 
     public static ArrayList<Word> remindWord;
     public static TextToSpeech mTts;
-
+    public static Context rootContext;
 }
 

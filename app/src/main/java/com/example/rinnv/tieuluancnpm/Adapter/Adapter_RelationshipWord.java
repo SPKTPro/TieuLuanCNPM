@@ -73,7 +73,7 @@ public class Adapter_RelationshipWord extends BaseAdapter {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 WordRelationShip RelationShip = wordRelationShips.get(i);
-                                SQLiteDataController sqLiteDataController = new SQLiteDataController(context);
+                                SQLiteDataController sqLiteDataController = SQLiteDataController.GetSQLController();
                                 sqLiteDataController.deleteRelationShip(RelationShip);
                                 wordRelationShips= sqLiteDataController.GetRalationShipWord(RelationShip.getWord_Root());
                                 notifyDataSetChanged();

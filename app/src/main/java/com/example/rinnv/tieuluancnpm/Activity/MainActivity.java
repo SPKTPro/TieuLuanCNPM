@@ -37,6 +37,7 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.rinnv.tieuluancnpm.FrameWork.SaveObject.mTts;
 
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public static View rootView;
     public static GridView listView_Maintopic, listView_Remember;
     public static Adapter_Maintopic adapterMaintopic;
-    public static Adapter_Remember adapterRemember ;
+    public static Adapter_Remember adapterRemember;
 
     private static final int SPEECH_API_CHECK = 0;
 
@@ -110,15 +111,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SaveObject.rootContext = getApplicationContext();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().hide();
 
 
-        // test
-        createDB();
-        db = new SQLiteDataController(this);
+        db = SQLiteDataController.GetSQLController();
+
 
         CheckTTS();
 
@@ -139,17 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
         SaveObject.remindWord = db.getListRemindWord();
 
-
-    }
-
-    private void createDB() {
-        SQLiteDataController sql = new SQLiteDataController(this);
-        try {
-            sql.isCreatedDatabase();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -277,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 floatingActionButton4 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action4);
                 floatingActionButton5 = (com.github.clans.fab.FloatingActionButton) rootView.findViewById(R.id.action5);
                 floatingActionButton6 = (FloatingActionButton) rootView.findViewById(R.id.action6);
-                 floatingActionButton4.setVisibility(View.VISIBLE);
+                floatingActionButton4.setVisibility(View.VISIBLE);
                 floatingActionButton6.setVisibility(View.VISIBLE);
 
                 //nut lam practice
@@ -301,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         materialDesignFAM.close(false);
-                        new MenuPracticeFragment().createMenuAddItem(container.getContext(),rootView, CreateItemType.Maintopic);
+                        new MenuPracticeFragment().createMenuAddItem(container.getContext(), rootView, CreateItemType.Maintopic);
 
                     }
                 });

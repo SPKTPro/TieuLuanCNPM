@@ -93,7 +93,7 @@ public class Adapter_Word extends BaseAdapter {
       //  TextView score = (TextView) Layout.findViewById(R.id.pronoun);
         ImageButton btnCheckSpell = (ImageButton) Layout.findViewById(R.id.btnCheckSpell);
         ImageButton btnDetail = (ImageButton) Layout.findViewById(R.id.btn_detail);
-        final SQLiteDataController db = new SQLiteDataController(parent.getContext());
+        final SQLiteDataController db = SQLiteDataController.GetSQLController();
 
         final Word item = items.get(position);
         titleView.setText(item.getWord_Title().toUpperCase()+" "+item.getWord_Type().toLowerCase());

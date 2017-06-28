@@ -2,6 +2,7 @@ package com.example.rinnv.tieuluancnpm.DatabaseUtility;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,6 +14,7 @@ import com.example.rinnv.tieuluancnpm.Entity.Maintopic;
 import com.example.rinnv.tieuluancnpm.Entity.Topic;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.Entity.WordRelationShip;
+import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -61,14 +63,27 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         super.finalize();
     }
 
-    public SQLiteDataController(Context context) {
-        super(context, DB_NAME, null, 1);
-        DB_PATH = String.format(DB_PATH, context.getPackageName());
-        this.mContext = context;
-        if (checkExistDataBase())
-            database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null,
-                    SQLiteDatabase.OPEN_READWRITE);
+    private SQLiteDataController()  {
+        super(SaveObject.rootContext, DB_NAME, null, 1);
+
+        DB_PATH = String.format(DB_PATH, SaveObject.rootContext.getPackageName());
+        this.mContext = SaveObject.rootContext;
+        try {
+            if (isCreatedDatabase())
+             database = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null,
+                         SQLiteDatabase.OPEN_READWRITE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
+    private static  SQLiteDataController _singleton = new SQLiteDataController();
+    public static SQLiteDataController GetSQLController()
+    {
+        return _singleton;
+    }
+
 
     public String exportDB() {
 
@@ -487,7 +502,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return listString;
     }
 
-    private void copyDataBase() throws IOException {
+    private boolean copyDataBase() throws IOException {
 
         try {
             InputStream myInput = mContext.getAssets().open("vocabulary.sqlite");
@@ -501,8 +516,10 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             myOutput.flush();
             myOutput.close();
             myInput.close();
+            return true;
         } catch (Exception e) {
             Log.d("Tag", "copyDataBase: " + e.getLocalizedMessage() + "  " + DB_PATH + DB_NAME);
+            return false;
         }
     }
 
@@ -632,8 +649,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
             this.getReadableDatabase();
 
             try {
-                copyDataBase();
-                result = false;
+                result = copyDataBase();
 
             } catch (Exception e) {
                 Log.d("Tag", "abc: " + e.getMessage());
