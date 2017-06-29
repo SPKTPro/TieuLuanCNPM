@@ -1417,4 +1417,37 @@ public class SQLiteDataController extends SQLiteOpenHelper {
     }
 
 
+    public Word getWordByNameAndTopicID(String topicId, String wordEN) {
+        ArrayList<Word> list = new ArrayList<>();
+        Cursor cs = null;
+        try {
+            {
+                openDataBase();
+            }
+            String query = "select * from word where Word.Word_Title = " + '"' + wordEN + '"'+ " and Word.Topic_Id = " + '"' + topicId + '"';
+            cs = database.rawQuery(query, null);
+            Word topic;
+            while (cs.moveToNext()) {
+                topic = new Word(cs.getString(0), cs.getInt(1), cs.getString(2),
+                        cs.getString(3), cs.getInt(4), cs.getString(5),
+                        cs.getString(6), cs.getInt(7), cs.getInt(8), cs.getString(9));
+                list.add(topic);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cs != null)
+                cs.close();
+            database.close();
+        }
+
+        Collections.sort(list, new Comparator<Word>() {
+            @Override
+            public int compare(Word o1, Word o2) {
+                return o1.getWord_Title().toLowerCase().compareToIgnoreCase(o2.getWord_Title());
+            }
+        });
+        return list.get(0);
+
+    }
 }

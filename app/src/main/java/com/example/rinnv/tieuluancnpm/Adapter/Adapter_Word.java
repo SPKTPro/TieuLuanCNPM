@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -153,7 +154,7 @@ public class Adapter_Word extends BaseAdapter {
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(item);
+                showDialog(item, parent.getRootView());
             }
         });
 
@@ -202,7 +203,7 @@ public class Adapter_Word extends BaseAdapter {
             return text;
         }
     }
-    private void showDialog(final Word word)
+    private void showDialog(final Word word, @Nullable final View rootView)
     {
 
         final Item[] items = {
@@ -247,7 +248,7 @@ public class Adapter_Word extends BaseAdapter {
                          MenuWordFragment.createDeleteWordView(mContext,word,false);
                         break;
                     case 3:
-                        MenuWordFragment.createCopyView(mContext, word,true);
+                        MenuWordFragment.createCopyView(mContext, word,true,rootView);
                         break;
                     default:
                         break;

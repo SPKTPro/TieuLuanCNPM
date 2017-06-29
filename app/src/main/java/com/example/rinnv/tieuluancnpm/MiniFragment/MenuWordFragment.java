@@ -6,6 +6,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,7 @@ import com.example.rinnv.tieuluancnpm.Entity.Maintopic;
 import com.example.rinnv.tieuluancnpm.Entity.Topic;
 import com.example.rinnv.tieuluancnpm.Entity.Word;
 import com.example.rinnv.tieuluancnpm.Entity.WordRelationShip;
+import com.example.rinnv.tieuluancnpm.FrameWork.CreateItemType;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
 import com.example.rinnv.tieuluancnpm.R;
 
@@ -130,7 +134,7 @@ public class MenuWordFragment {
 
     }
 
-    public static void createCopyView(final Context mContext, final Word word, final boolean isCopy) {
+    public static void createCopyView(final Context mContext, final Word word, final boolean isCopy, final View rootView) {
 
         try {
             Dialog dialog = null;
@@ -146,7 +150,7 @@ public class MenuWordFragment {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Maintopic maintopic = maintopics.get(i);
-                    CreateChooseTopic(maintopic, mContext, word, isCopy);
+                    CreateChooseTopic(maintopic, mContext, word, isCopy, rootView);
                 }
             });
             dialog = dialogBuilder.create();
@@ -157,7 +161,7 @@ public class MenuWordFragment {
 
     }
 
-    private static void CreateChooseTopic(Maintopic maintopic, final Context context, Word word, boolean isCopy) {
+    private static void CreateChooseTopic(Maintopic maintopic, final Context context, final Word word, final boolean isCopy, final View rootView) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setTitle("Detail: ");
@@ -170,7 +174,9 @@ public class MenuWordFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Topic topic = topics.get(i);
-                Toast.makeText(context, topic.getTopic_Title(), Toast.LENGTH_SHORT).show();
+                createSnackBar(context, rootView, word.getWord_Title(), word.getWord_Title_VN(), word.getWord_Type().replace("(", "").replace(")", ""), topic, isCopy, word.getWord_Id());
+
+
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -178,6 +184,56 @@ public class MenuWordFragment {
                 dialogInterface.dismiss();
             }
         });
-         dialogBuilder.create().show();
+        dialogBuilder.create().show();
+    }
+
+    private static void createSnackBar(final Context context, View rootView, final String ITemEN, final String ITemVN, @Nullable final String WordType, final Topic topic, final boolean isCopy, final int wordId) {
+        Snackbar.make(rootView, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
+                .setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        switch (event) {
+                            case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                                Toast.makeText(context, "Hủy thao tác", Toast.LENGTH_LONG).show();
+                                break;
+                            case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                                boolean isExist = db.isExist(ITemEN, topic.getTopic_Id());
+                                if (isExist) {
+                                    Toast.makeText(context, "this word is exist", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (isCopy) {
+                                    CopyWord(context, topic.getTopic_Id(), ITemEN, ITemVN, WordType, wordId);
+                                } else {
+
+                                }
+                                break;
+                        }
+                    }
+
+                })
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                })
+                .setActionTextColor(Color.RED)
+                .show();
+    }
+
+    private static void CopyWord(Context context, String topicId, String WordEN, String WordVN, String wordType, int rootWordID) {
+        boolean x = db.insertWord(topicId, WordEN, WordVN, wordType);
+        Word word = db.getWordByNameAndTopicID(topicId, WordEN);
+        // copy relation word
+        List<WordRelationShip> wordRelationShips = db.GetRalationShipWord(rootWordID);
+        for (WordRelationShip w : wordRelationShips) {
+                x = db.insertRelationship(String.valueOf(word.getWord_Id()),w.getWord_Title(),w.getWord_Title_VN(),w.getWordType().replace("(", "").replace(")", ""));
+        }
+        if (x) {
+            Toast.makeText(context, "Copy word successfull", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
+        }
     }
 }
