@@ -176,7 +176,6 @@ public class MenuWordFragment {
                 Topic topic = topics.get(i);
                 createSnackBar(context, rootView, word.getWord_Title(), word.getWord_Title_VN(), word.getWord_Type().replace("(", "").replace(")", ""), topic, isCopy, word.getWord_Id());
 
-
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -187,7 +186,8 @@ public class MenuWordFragment {
         dialogBuilder.create().show();
     }
 
-    private static void createSnackBar(final Context context, View rootView, final String ITemEN, final String ITemVN, @Nullable final String WordType, final Topic topic, final boolean isCopy, final int wordId) {
+    private static void createSnackBar(final Context context, View rootView, final String ITemEN, final String ITemVN, @Nullable final String WordType,
+                                       final Topic topic, final boolean isCopy, final int wordId) {
         Snackbar.make(rootView, "Chọn UNDO để hủy thao tác", Snackbar.LENGTH_LONG)
                 .setCallback(new Snackbar.Callback() {
                     @Override
@@ -205,7 +205,7 @@ public class MenuWordFragment {
                                 if (isCopy) {
                                     CopyWord(context, topic.getTopic_Id(), ITemEN, ITemVN, WordType, wordId);
                                 } else {
-
+                                    MoveWord(context, topic.getTopic_Id(), wordId);
                                 }
                                 break;
                         }
@@ -222,16 +222,28 @@ public class MenuWordFragment {
                 .show();
     }
 
-    private static void CopyWord(Context context, String topicId, String WordEN, String WordVN, String wordType, int rootWordID) {
-        boolean x = db.insertWord(topicId, WordEN, WordVN, wordType);
-        Word word = db.getWordByNameAndTopicID(topicId, WordEN);
+    private static void CopyWord(Context context, String destinationTopicId, String WordEN, String WordVN, String wordType, int rootWordID) {
+        boolean x = db.insertWord(destinationTopicId, WordEN, WordVN, wordType);
+        Word word = db.getWordByNameAndTopicID(destinationTopicId, WordEN);
         // copy relation word
         List<WordRelationShip> wordRelationShips = db.GetRalationShipWord(rootWordID);
         for (WordRelationShip w : wordRelationShips) {
-                x = db.insertRelationship(String.valueOf(word.getWord_Id()),w.getWord_Title(),w.getWord_Title_VN(),w.getWordType().replace("(", "").replace(")", ""));
+            x = db.insertRelationship(String.valueOf(word.getWord_Id()), w.getWord_Title(), w.getWord_Title_VN(), w.getWordType().replace("(", "").replace(")", ""));
         }
         if (x) {
             Toast.makeText(context, "Copy word successfull", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static void MoveWord(Context context, String destinationTopicId, int rootWordID) {
+        boolean x = false;
+        String SourceTopic = SaveObject.saveTopic.getTopic_Id();
+        x = db.MoveWord(SourceTopic, rootWordID, destinationTopicId);
+
+        if (x) {
+            Toast.makeText(context, "Move word successfull", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
         }

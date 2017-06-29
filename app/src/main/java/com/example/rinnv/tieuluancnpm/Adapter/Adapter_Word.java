@@ -210,7 +210,8 @@ public class Adapter_Word extends BaseAdapter {
                 new Item("See relationship", R.drawable.detail2),
                 new Item("Add relationship", R.drawable.add),
                 new Item("Delete this word", R.drawable.del2),//no icon for this one
-                new Item("Copy to",  R.drawable.detail2)
+                new Item("Copy to",  R.drawable.detail2),
+                new Item("Move to", R.drawable.detail2)
         };
 
         ListAdapter adapter = new ArrayAdapter<Item>(
@@ -249,6 +250,9 @@ public class Adapter_Word extends BaseAdapter {
                         break;
                     case 3:
                         MenuWordFragment.createCopyView(mContext, word,true,rootView);
+                        break;
+                    case 4:
+                        MenuWordFragment.createCopyView(mContext, word,false,rootView);
                         break;
                     default:
                         break;
