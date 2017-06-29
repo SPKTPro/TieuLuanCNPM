@@ -1302,7 +1302,7 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<Word> SearchWord(String s) {
+    public ArrayList<Word> SearchWord(String s, String topicID) {
         ArrayList<Word> list = new ArrayList<>();
         Cursor cs = null;
         try {
@@ -1310,8 +1310,8 @@ public class SQLiteDataController extends SQLiteOpenHelper {
 
             String query = "Select * from ( SELECT Word.Topic_ID, Word.Word_Id, Word.Word_Title, Word.Word_Title_VN, MainTopic.MainTopic_Id " +
                     " , MainTopic.MainTopic_Title,Topic.Topic_Title , Word.Type_Word, MainTopic.MainTopic_Title_VN " +
-                    "FROM Word,Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Word.Topic_Id = Topic.Topic_Id ) Where Word_Title LIKE '%" + s
-                    + "%'  or Word_Title_VN like  '%" + s + "%'";
+                    "FROM Word,Topic,MainTopic where Topic.MainTopic_Id = MainTopic.MainTopic_Id and Word.Topic_Id = Topic.Topic_Id and Word.Topic_ID = "+'"'+topicID+'"'+" ) Where Word_Title LIKE '%" + s
+                    + "%'  or Word_Title_VN like  '%" + s + "%'" ;
             cs = database.rawQuery(query, null);
 
             Log.d(TAG, "SearchWord: " + query);

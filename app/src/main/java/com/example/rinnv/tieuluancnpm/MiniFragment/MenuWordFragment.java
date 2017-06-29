@@ -120,7 +120,7 @@ public class MenuWordFragment {
     // this is only called in remind page
     public void createGotoWordDetail(final Context context, final Word wordinput) {
         ArrayList<Word> listResult = new ArrayList<Word>();
-        listResult = db.SearchWord(wordinput.getWord_Title().trim().toUpperCase());
+        listResult = db.SearchWord(wordinput.getWord_Title().trim().toUpperCase(), wordinput.getTopic_Id().trim().toUpperCase());
         Word detailWord = listResult.get(0);
 
         Maintopic maintopic = new Maintopic(detailWord.getWord_Pronoun(), detailWord.getExample(), detailWord.Maintopic_Tile, 0, 0);
@@ -241,7 +241,10 @@ public class MenuWordFragment {
         boolean x = false;
         String SourceTopic = SaveObject.saveTopic.getTopic_Id();
         x = db.MoveWord(SourceTopic, rootWordID, destinationTopicId);
-
+        ArrayList<Word> words = db.getListWord(SaveObject.saveTopic);
+        adapterWord = new Adapter_Word(context, words, (Activity) context);
+        listView_Word.setAdapter(adapterWord);
+        listView_Word.invalidate();
         if (x) {
             Toast.makeText(context, "Move word successfull", Toast.LENGTH_SHORT).show();
         } else {
