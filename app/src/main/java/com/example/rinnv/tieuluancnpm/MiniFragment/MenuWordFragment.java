@@ -75,6 +75,11 @@ public class MenuWordFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        if (EN.getText().toString().contentEquals("") || EN.getText().toString().isEmpty()
+                                || VN.getText().toString().contentEquals("") || VN.getText().toString().isEmpty()) {
+                            Toast.makeText(context, "Please check your input", Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         boolean x = db.insertRelationship(id, EN.getText().toString().trim(), VN.getText().toString().trim(),
                                 Type.getText().toString().trim());
                         Toast.makeText(context, x ? "Thêm thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
