@@ -210,8 +210,8 @@ public class Adapter_Word extends BaseAdapter {
                 new Item("See relationship", R.drawable.detail2),
                 new Item("Add relationship", R.drawable.add),
                 new Item("Delete this word", R.drawable.del2),//no icon for this one
-                new Item("Copy to",  R.drawable.detail2),
-                new Item("Move to", R.drawable.detail2)
+                new Item("Copy to",  R.drawable.copyto),
+                new Item("Move to", R.drawable.moveto)
         };
 
         ListAdapter adapter = new ArrayAdapter<Item>(
