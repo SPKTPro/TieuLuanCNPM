@@ -281,7 +281,11 @@ public class MenuPracticeFragment {
 
                             final String ITemEN = Maintopic_EN.getText().toString().trim();
                             final String ITemVN = Maintopic_VN.getText().toString().trim();
-                            final List<String> suggestWord = Utility.CheckWord(ITemEN);
+
+                            final List<String> suggestWord=Utility.CheckWord(ITemEN);;
+                            suggestWord.add("Keep my word");
+
+
                             if (!suggestWord.contains(ITemEN) && suggestWord.size() > 0) {
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                 builder.setIconAttribute(android.R.attr.alertDialogIcon)
@@ -290,7 +294,16 @@ public class MenuPracticeFragment {
                                                 new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        final String wordEN = suggestWord.get(i);
+                                                        final String wordEN;
+                                                        if(i==suggestWord.size()-1)
+                                                        {
+                                                           wordEN =ITemEN;
+                                                        }
+                                                        else
+                                                        {
+                                                            wordEN = suggestWord.get(i);
+                                                        }
+
                                                         createItem(context, wordEN, ITemVN.trim(),Type.getText().toString().trim()
                                                                 , itemType);
                                                     }
@@ -333,6 +346,7 @@ public class MenuPracticeFragment {
                             final String ITemEN = Maintopic_EN.getText().toString().trim();
                             final String ITemVN = Maintopic_VN.getText().toString().trim();
                             final List<String> suggestWord = Utility.CheckWord(ITemEN);
+                            suggestWord.add("Keep my word");
                             if (!suggestWord.contains(ITemEN) && suggestWord.size() > 0) {
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                                 builder.setIconAttribute(android.R.attr.alertDialogIcon)
@@ -341,7 +355,15 @@ public class MenuPracticeFragment {
                                                 new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        final String wordEN = suggestWord.get(i);
+                                                        final String wordEN;
+                                                        if(i==suggestWord.size()-1)
+                                                        {
+                                                            wordEN =ITemEN;
+                                                        }
+                                                        else
+                                                        {
+                                                            wordEN = suggestWord.get(i);
+                                                        }
                                                         createItem(context, wordEN, ITemVN.trim(),Type.getText().toString().trim()
                                                                 , CreateItemType.Word);
                                                     }
@@ -432,7 +454,7 @@ public class MenuPracticeFragment {
                                 break;
 
                             default:
-                                Toast.makeText(context, "Error: Please select agian", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Error: Please select again", Toast.LENGTH_SHORT).show();
                                 break;
 
                         }
@@ -456,7 +478,7 @@ public class MenuPracticeFragment {
             adapterMaintopic = new Adapter_Maintopic(context, db.getListMainTopic());
             listView_Maintopic.setAdapter(adapterMaintopic);
             listView_Maintopic.invalidate();
-            Toast.makeText(context, x ? "Thêm main topic thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, x ? "Add maintopic successful" : "Thêm thất bại", Toast.LENGTH_LONG).show();
 
         }
         if (level == Topic) {
@@ -464,7 +486,7 @@ public class MenuPracticeFragment {
             adapter_topic = new Adapter_Topic(context, db.getListTopic(SaveObject.currentMaintopic));
             listView_Topic.setAdapter(adapter_topic);
             listView_Topic.invalidate();
-            Toast.makeText(context, x ? "Thêm topic thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, x ? "Add topic successful" : "Thêm thất bại", Toast.LENGTH_LONG).show();
 
         }
         if (level == CreateItemType.Word) {
@@ -479,7 +501,7 @@ public class MenuPracticeFragment {
             adapterWord = new Adapter_Word(context, words, (Activity) context);
             listView_Word.setAdapter(adapterWord);
             listView_Word.invalidate();
-            Toast.makeText(context, x ? "Thêm từ vựng thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, x ? "Add word successful" : "Thêm thất bại", Toast.LENGTH_LONG).show();
         }
 
     }

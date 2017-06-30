@@ -82,7 +82,7 @@ public class MenuWordFragment {
                         }
                         boolean x = db.insertRelationship(id, EN.getText().toString().trim(), VN.getText().toString().trim(),
                                 Type.getText().toString().trim());
-                        Toast.makeText(context, x ? "Thêm thành công" : "Thêm thất bại", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, x ? "Add word successful" : "Thêm thất bại", Toast.LENGTH_LONG).show();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
