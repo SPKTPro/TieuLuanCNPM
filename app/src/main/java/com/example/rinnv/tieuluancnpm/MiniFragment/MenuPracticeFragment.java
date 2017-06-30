@@ -137,7 +137,7 @@ public class MenuPracticeFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if (input.getText().toString().length() > 0) {
                             ArrayList<Word> listResult = new ArrayList<Word>();
-                            listResult = db.SearchWord(input.getText().toString().trim().toUpperCase(),SaveObject.saveTopic.getTopic_Id());
+                            listResult = db.SearchWord(input.getText().toString().trim().toUpperCase(),null);
                             if (listResult.isEmpty()) {
                                 new AlertDialog.Builder(context)
                                         .setTitle("No result")
