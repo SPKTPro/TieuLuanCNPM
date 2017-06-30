@@ -236,7 +236,7 @@ public class MenuWordFragment {
             x = db.insertRelationship(String.valueOf(word.getWord_Id()), w.getWord_Title(), w.getWord_Title_VN(), w.getWordType().replace("(", "").replace(")", ""));
         }
         if (x) {
-            Toast.makeText(context, "Copy word successfull", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Copy word successful", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
         }
@@ -251,7 +251,7 @@ public class MenuWordFragment {
         listView_Word.setAdapter(adapterWord);
         listView_Word.invalidate();
         if (x) {
-            Toast.makeText(context, "Move word successfull", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Move word successful", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Fail", Toast.LENGTH_SHORT).show();
         }
