@@ -13,6 +13,8 @@ import android.util.Log;
 import com.example.rinnv.tieuluancnpm.DatabaseUtility.SQLiteDataController;
 import com.example.rinnv.tieuluancnpm.FrameWork.SaveObject;
 
+import static android.content.ContentValues.TAG;
+
 
 public class LockScreenService extends Service {
     BroadcastReceiver receiver;
@@ -31,6 +33,7 @@ public class LockScreenService extends Service {
         KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
         lock.disableKeyguard();
 
+        SaveObject.rootContext = this;
 
         SQLiteDataController db = SQLiteDataController.GetSQLController();
         SaveObject.remindWord = db.getListRemindWord();

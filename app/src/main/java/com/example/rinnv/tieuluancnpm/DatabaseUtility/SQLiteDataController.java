@@ -75,7 +75,6 @@ public class SQLiteDataController extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static SQLiteDataController _singleton = new SQLiteDataController();

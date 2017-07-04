@@ -72,10 +72,11 @@ public class LockScreenActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        SaveObject.rootContext = getApplicationContext();
         CheckTTS();
         makeFullScreen();
         //startService(new Intent(this,LockScreenService.class));
@@ -89,7 +90,7 @@ public class LockScreenActivity extends AppCompatActivity {
         final SQLiteDataController db = SQLiteDataController.GetSQLController();
         try {
             int Min = 1, Max = SaveObject.remindWord.size();
-            int result = Min + (int) (Math.random() * ((Max - Min) + 1)) -1;
+            int result = Min + (int) (Math.random() * ((Max - Min) + 1)) - 1;
 
             x = SaveObject.remindWord.get(result);
             txtEN.setText(x.getWord_Title().toUpperCase());
@@ -139,7 +140,7 @@ public class LockScreenActivity extends AppCompatActivity {
                 db.CheckWordRemind(false, finalX1);
                 SQLiteDataController db = SQLiteDataController.GetSQLController();
                 SaveObject.remindWord = db.getListRemindWord();
-                Log.d(TAG, "onClick: "+SaveObject.remindWord.size());
+                Log.d(TAG, "onClick: " + SaveObject.remindWord.size());
                 Toast.makeText(LockScreenActivity.this, "Đã xóa khỏi danh sách nhắc từ", Toast.LENGTH_LONG).show();
             }
         });
@@ -155,7 +156,6 @@ public class LockScreenActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-
 
 
         if (Build.VERSION.SDK_INT < 19) { //View.SYSTEM_UI_FLAG_IMMERSIVE is only on API 19+
