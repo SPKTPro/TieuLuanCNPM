@@ -74,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onInit(int i) {
                         if (i == TextToSpeech.SUCCESS) {
 
-                            int result = mTts.setLanguage(Locale.getDefault());
-
+                            int result = mTts.setLanguage(Locale.US);
 
                             if (result == TextToSpeech.LANG_MISSING_DATA
                                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
