@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.speech.RecognizerIntent;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by rinnv on 4/18/2017.
@@ -54,6 +55,7 @@ public class SpeechRecognitionHelper {
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Select an application");    // user hint
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);    // setting recognition model, optimized for short phrases Ð search queries
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);    // quantity of results we want to receive
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US.toString());
         //choosing only 1st -  the most relevant
 
         // start Activity ant waiting the result
@@ -66,7 +68,7 @@ public class SpeechRecognitionHelper {
         // creating a dialog asking user if he want
         // to install the Voice Search
         Dialog dialog = new AlertDialog.Builder(ownerActivity)
-                .setMessage("For recognition itÕs necessary to install \"Google Voice Search\"")    // dialog message
+                .setMessage("For recognition it's necessary to install \"Google Voice Search\"")    // dialog message
                 .setTitle("Install Voice Search from Google Play?")    // dialog header
                 .setPositiveButton("Install", new DialogInterface.OnClickListener() {    // confirm button
 

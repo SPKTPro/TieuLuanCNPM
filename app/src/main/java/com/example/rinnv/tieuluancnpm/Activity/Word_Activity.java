@@ -31,6 +31,7 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.rinnv.tieuluancnpm.FrameWork.SaveObject.mTts;
 
@@ -54,10 +55,11 @@ public class Word_Activity extends AppCompatActivity {
 
         public void startSpeechToText(String word) {
         your_word = word;
+
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, word);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US.toString());
         intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS,
                 new Long(1000));
 
